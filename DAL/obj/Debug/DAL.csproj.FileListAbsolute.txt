@@ -1,0 +1,9 @@
+D:\Muni\Dev\DEVCIDI\DAL\bin\Debug\DAL.dll
+D:\Muni\Dev\DEVCIDI\DAL\bin\Debug\DAL.pdb
+D:\Muni\Dev\DEVCIDI\DAL\bin\Debug\System.Configuration.ConfigurationManager.dll
+D:\Muni\Dev\DEVCIDI\DAL\bin\Debug\System.Configuration.ConfigurationManager.xml
+D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.dll
+D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.pdb
+D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.csprojAssemblyReference.cache
+D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.csproj.CopyComplete

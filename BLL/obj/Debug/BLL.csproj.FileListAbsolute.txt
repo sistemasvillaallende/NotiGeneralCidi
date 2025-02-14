@@ -1,0 +1,9 @@
+D:\Muni\Dev\DEVCIDI\BLL\bin\Debug\BLL.dll
+D:\Muni\Dev\DEVCIDI\BLL\bin\Debug\BLL.pdb
+D:\Muni\Dev\DEVCIDI\BLL\bin\Debug\DAL.dll
+D:\Muni\Dev\DEVCIDI\BLL\bin\Debug\DAL.pdb
+D:\Muni\Dev\DEVCIDI\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
+D:\Muni\Dev\DEVCIDI\BLL\obj\Debug\BLL.dll
+D:\Muni\Dev\DEVCIDI\BLL\obj\Debug\BLL.pdb
+D:\Muni\Dev\DEVCIDI\BLL\obj\Debug\BLL.csprojAssemblyReference.cache
+D:\Muni\Dev\DEVCIDI\BLL\obj\Debug\BLL.csproj.CopyComplete
