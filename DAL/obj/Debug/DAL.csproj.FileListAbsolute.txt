@@ -7,3 +7,12 @@ D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.dll
 D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.pdb
 D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.csprojAssemblyReference.cache
 D:\Muni\Dev\DEVCIDI\DAL\obj\Debug\DAL.csproj.CopyComplete
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\bin\Debug\DAL.dll
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\bin\Debug\DAL.pdb
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\obj\Debug\DAL.dll
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\obj\Debug\DAL.pdb
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\juanf\Devs\NotiGeneralCidi\DAL\obj\Debug\DAL.csproj.Up2Date
