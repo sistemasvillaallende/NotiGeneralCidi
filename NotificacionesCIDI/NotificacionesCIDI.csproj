@@ -62,11 +62,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Themes\fontawesome\css\all.css" />
     <Content Include="App_Themes\fontawesome\css\all.min.css" />
     <Content Include="App_Themes\fontawesome\css\brands.css" />
@@ -2192,8 +2187,11 @@
     <Content Include="App_Themes\Main\js\jQuery-2.1.4.min.js" />
     <Content Include="App_Themes\Main\js\jquery-ui-1.10.3.min.js" />
     <Content Include="Global.asax" />
+    <Content Include="Secure\DetNotificacionesGeneral.aspx" />
     <Content Include="Secure\MasivoDeuda.aspx" />
+    <Content Include="Secure\MasivoDeudaAuto.aspx" />
     <Content Include="Secure\NotificacionesCIDI.aspx" />
+    <Content Include="Secure\NotificacionesGeneral.aspx" />
     <Content Include="Secure\Plantillas.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2203,6 +2201,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Secure\DetNotificacionesGeneral.aspx.cs">
+      <DependentUpon>DetNotificacionesGeneral.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\DetNotificacionesGeneral.aspx.designer.cs">
+      <DependentUpon>DetNotificacionesGeneral.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Secure\MasivoDeuda.aspx.cs">
       <DependentUpon>MasivoDeuda.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2210,12 +2215,26 @@
     <Compile Include="Secure\MasivoDeuda.aspx.designer.cs">
       <DependentUpon>MasivoDeuda.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Secure\MasivoDeudaAuto.aspx.cs">
+      <DependentUpon>MasivoDeudaAuto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\MasivoDeudaAuto.aspx.designer.cs">
+      <DependentUpon>MasivoDeudaAuto.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Secure\NotificacionesCIDI.aspx.cs">
       <DependentUpon>NotificacionesCIDI.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Secure\NotificacionesCIDI.aspx.designer.cs">
       <DependentUpon>NotificacionesCIDI.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\NotificacionesGeneral.aspx.cs">
+      <DependentUpon>NotificacionesGeneral.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\NotificacionesGeneral.aspx.designer.cs">
+      <DependentUpon>NotificacionesGeneral.aspx</DependentUpon>
     </Compile>
     <Compile Include="Secure\Plantillas.aspx.cs">
       <DependentUpon>Plantillas.aspx</DependentUpon>
@@ -2322,6 +2341,9 @@
       <Project>{c61fc1a6-c4ac-4d2e-ae94-10781d19bbe2}</Project>
       <Name>DAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="2.0.0" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

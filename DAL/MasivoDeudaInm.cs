@@ -48,7 +48,7 @@ namespace DAL
                         cmd.Parameters.AddWithValue("@desde", desde);
                         cmd.Parameters.AddWithValue("@hasta", hasta);
                         string codigos = string.Empty;
-                        List<CATE_DEUDA_INMUEBLE> lstCate = CATE_DEUDA_INMUEBLE.read();
+                        List<CATE_DEUDA> lstCate = CATE_DEUDA.read();
                         for (int i = 0; i < lstCate.Count; i++)
                         {
                             codigos += lstCate[i].cod_categoria;

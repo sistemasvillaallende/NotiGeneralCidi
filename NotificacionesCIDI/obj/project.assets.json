@@ -1,0 +1,386 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.7.2": {
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props": {}
+        }
+      },
+      "BLL/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win": {
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props": {}
+        }
+      },
+      "BLL/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win-arm64": {
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props": {}
+        }
+      },
+      "BLL/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win-x64": {
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props": {}
+        }
+      },
+      "BLL/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.7.2/win-x86": {
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props": {}
+        }
+      },
+      "BLL/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
+      "sha512": "Ju0kvSQ5ZKimkHQs2tDIN6/6z8ZEXJOjAoQP0drNQspUYJ1lSTPaITkl30Jgxrp/KFr989/xCXkoPVPFKXSh/w==",
+      "type": "package",
+      "path": "microsoft.codedom.providers.dotnetcompilerplatform/2.0.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.Extensions.props",
+        "build/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props",
+        "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.Extensions.props",
+        "build/net46/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props",
+        "content/net45/app.config.install.xdt",
+        "content/net45/app.config.uninstall.xdt",
+        "content/net45/web.config.install.xdt",
+        "content/net45/web.config.uninstall.xdt",
+        "content/net46/app.config.install.xdt",
+        "content/net46/app.config.uninstall.xdt",
+        "content/net46/web.config.install.xdt",
+        "content/net46/web.config.uninstall.xdt",
+        "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll",
+        "lib/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml",
+        "microsoft.codedom.providers.dotnetcompilerplatform.2.0.0.nupkg.sha512",
+        "microsoft.codedom.providers.dotnetcompilerplatform.nuspec",
+        "tools/Roslyn45/Microsoft.Build.Tasks.CodeAnalysis.dll",
+        "tools/Roslyn45/Microsoft.CSharp.Core.targets",
+        "tools/Roslyn45/Microsoft.CodeAnalysis.CSharp.Scripting.dll",
+        "tools/Roslyn45/Microsoft.CodeAnalysis.CSharp.dll",
+        "tools/Roslyn45/Microsoft.CodeAnalysis.Scripting.dll",
+        "tools/Roslyn45/Microsoft.CodeAnalysis.VisualBasic.dll",
+        "tools/Roslyn45/Microsoft.CodeAnalysis.dll",
+        "tools/Roslyn45/Microsoft.DiaSymReader.Native.amd64.dll",
+        "tools/Roslyn45/Microsoft.DiaSymReader.Native.x86.dll",
+        "tools/Roslyn45/Microsoft.VisualBasic.Core.targets",
+        "tools/Roslyn45/System.AppContext.dll",
+        "tools/Roslyn45/System.Collections.Immutable.dll",
+        "tools/Roslyn45/System.Diagnostics.StackTrace.dll",
+        "tools/Roslyn45/System.IO.FileSystem.Primitives.dll",
+        "tools/Roslyn45/System.IO.FileSystem.dll",
+        "tools/Roslyn45/System.Reflection.Metadata.dll",
+        "tools/Roslyn45/VBCSCompiler.exe",
+        "tools/Roslyn45/VBCSCompiler.exe.config",
+        "tools/Roslyn45/csc.exe",
+        "tools/Roslyn45/csc.exe.config",
+        "tools/Roslyn45/csc.rsp",
+        "tools/Roslyn45/csi.exe",
+        "tools/Roslyn45/csi.rsp",
+        "tools/Roslyn45/vbc.exe",
+        "tools/Roslyn45/vbc.exe.config",
+        "tools/Roslyn45/vbc.rsp",
+        "tools/RoslynLatest/Microsoft.Build.Tasks.CodeAnalysis.dll",
+        "tools/RoslynLatest/Microsoft.CSharp.Core.targets",
+        "tools/RoslynLatest/Microsoft.CodeAnalysis.CSharp.Scripting.dll",
+        "tools/RoslynLatest/Microsoft.CodeAnalysis.CSharp.dll",
+        "tools/RoslynLatest/Microsoft.CodeAnalysis.Scripting.dll",
+        "tools/RoslynLatest/Microsoft.CodeAnalysis.VisualBasic.dll",
+        "tools/RoslynLatest/Microsoft.CodeAnalysis.dll",
+        "tools/RoslynLatest/Microsoft.DiaSymReader.Native.amd64.dll",
+        "tools/RoslynLatest/Microsoft.DiaSymReader.Native.x86.dll",
+        "tools/RoslynLatest/Microsoft.Managed.Core.targets",
+        "tools/RoslynLatest/Microsoft.VisualBasic.Core.targets",
+        "tools/RoslynLatest/System.AppContext.dll",
+        "tools/RoslynLatest/System.Collections.Immutable.dll",
+        "tools/RoslynLatest/System.Console.dll",
+        "tools/RoslynLatest/System.Diagnostics.FileVersionInfo.dll",
+        "tools/RoslynLatest/System.Diagnostics.StackTrace.dll",
+        "tools/RoslynLatest/System.IO.Compression.dll",
+        "tools/RoslynLatest/System.IO.FileSystem.Primitives.dll",
+        "tools/RoslynLatest/System.IO.FileSystem.dll",
+        "tools/RoslynLatest/System.IO.Pipes.AccessControl.dll",
+        "tools/RoslynLatest/System.IO.Pipes.dll",
+        "tools/RoslynLatest/System.Reflection.Metadata.dll",
+        "tools/RoslynLatest/System.Security.AccessControl.dll",
+        "tools/RoslynLatest/System.Security.Claims.dll",
+        "tools/RoslynLatest/System.Security.Cryptography.Algorithms.dll",
+        "tools/RoslynLatest/System.Security.Cryptography.Encoding.dll",
+        "tools/RoslynLatest/System.Security.Cryptography.Primitives.dll",
+        "tools/RoslynLatest/System.Security.Cryptography.X509Certificates.dll",
+        "tools/RoslynLatest/System.Security.Principal.Windows.dll",
+        "tools/RoslynLatest/System.Text.Encoding.CodePages.dll",
+        "tools/RoslynLatest/System.ValueTuple.dll",
+        "tools/RoslynLatest/System.Xml.ReaderWriter.dll",
+        "tools/RoslynLatest/System.Xml.XPath.XDocument.dll",
+        "tools/RoslynLatest/System.Xml.XPath.dll",
+        "tools/RoslynLatest/System.Xml.XmlDocument.dll",
+        "tools/RoslynLatest/VBCSCompiler.exe",
+        "tools/RoslynLatest/VBCSCompiler.exe.config",
+        "tools/RoslynLatest/csc.exe",
+        "tools/RoslynLatest/csc.exe.config",
+        "tools/RoslynLatest/csc.rsp",
+        "tools/RoslynLatest/csi.exe",
+        "tools/RoslynLatest/csi.exe.config",
+        "tools/RoslynLatest/csi.rsp",
+        "tools/RoslynLatest/vbc.exe",
+        "tools/RoslynLatest/vbc.exe.config",
+        "tools/RoslynLatest/vbc.rsp",
+        "tools/net45/install.ps1",
+        "tools/net45/uninstall.ps1"
+      ]
+    },
+    "BLL/1.0.0": {
+      "type": "project",
+      "path": "../BLL/BLL.csproj",
+      "msbuildProject": "../BLL/BLL.csproj"
+    },
+    "DAL/1.0.0": {
+      "type": "project",
+      "path": "../DAL/DAL.csproj",
+      "msbuildProject": "../DAL/DAL.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.7.2": [
+      "BLL >= 1.0.0",
+      "DAL >= 1.0.0",
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform >= 2.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\fer22\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj",
+      "projectName": "NotificacionesCIDI",
+      "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj",
+      "packagesPath": "C:\\Users\\fer22\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\obj\\",
+      "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "configFilePaths": [
+        "C:\\Users\\fer22\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net472"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net472": {
+          "projectReferences": {
+            "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj": {
+              "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj"
+            },
+            "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj": {
+              "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj"
+            }
+          }
+        }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net472": {
+        "dependencies": {
+          "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
+            "target": "Package",
+            "version": "[2.0.0, )"
+          }
+        }
+      }
+    },
+    "runtimes": {
+      "win": {
+        "#import": []
+      },
+      "win-arm64": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  }
+}

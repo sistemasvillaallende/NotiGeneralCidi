@@ -67,7 +67,7 @@ namespace NotificacionesCIDI.Secure
         }
         private void fillCateDeuda()
         {
-            lstCatDeuda.DataSource = BLL.CATE_DEUDA_INMUEBLE.read();
+            lstCatDeuda.DataSource = BLL.CATE_DEUDA.readInmueble();
             lstCatDeuda.DataTextField = "des_categoria";
             lstCatDeuda.DataValueField = "cod_categoria";
             lstCatDeuda.DataBind();
