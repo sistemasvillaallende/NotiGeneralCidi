@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -2188,6 +2191,7 @@
     <Content Include="App_Themes\Main\js\jquery-ui-1.10.3.min.js" />
     <Content Include="Global.asax" />
     <Content Include="Secure\DetNotificacionesGeneral.aspx" />
+    <Content Include="Secure\Inicio.aspx" />
     <Content Include="Secure\MasivoDeuda.aspx" />
     <Content Include="Secure\MasivoDeudaAuto.aspx" />
     <Content Include="Secure\NotificacionesCIDI.aspx" />
@@ -2200,6 +2204,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="MasterPage.master.cs">
+      <DependentUpon>MasterPage.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Secure\DetNotificacionesGeneral.aspx.cs">
       <DependentUpon>DetNotificacionesGeneral.aspx</DependentUpon>
@@ -2207,6 +2215,10 @@
     </Compile>
     <Compile Include="Secure\DetNotificacionesGeneral.aspx.designer.cs">
       <DependentUpon>DetNotificacionesGeneral.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Inicio.aspx.cs">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Secure\MasivoDeuda.aspx.cs">
       <DependentUpon>MasivoDeuda.aspx</DependentUpon>
@@ -2320,6 +2332,7 @@
     <Content Include="App_Themes\fontawesome\webfonts\fa-solid-900.woff2" />
     <Content Include="App_Themes\fontawesome\webfonts\fa-v4compatibility.ttf" />
     <Content Include="App_Themes\fontawesome\webfonts\fa-v4compatibility.woff2" />
+    <Content Include="MasterPage.master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
