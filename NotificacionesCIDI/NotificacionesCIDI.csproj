@@ -2190,6 +2190,7 @@
     <Content Include="App_Themes\Main\js\jQuery-2.1.4.min.js" />
     <Content Include="App_Themes\Main\js\jquery-ui-1.10.3.min.js" />
     <Content Include="Global.asax" />
+    <Content Include="Secure\Inicio.aspx" />
     <Content Include="Secure\MasivoDeuda.aspx" />
     <Content Include="Secure\NotificacionesCIDI.aspx" />
     <Content Include="Secure\Plantillas.aspx" />
@@ -2200,7 +2201,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="MasterPage.master.cs">
+      <DependentUpon>MasterPage.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Secure\Inicio.aspx.cs">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Secure\MasivoDeuda.aspx.cs">
       <DependentUpon>MasivoDeuda.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2299,6 +2308,7 @@
     <Content Include="App_Themes\fontawesome\webfonts\fa-solid-900.woff2" />
     <Content Include="App_Themes\fontawesome\webfonts\fa-v4compatibility.ttf" />
     <Content Include="App_Themes\fontawesome\webfonts\fa-v4compatibility.woff2" />
+    <Content Include="MasterPage.master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
