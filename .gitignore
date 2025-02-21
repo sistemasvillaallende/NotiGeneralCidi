@@ -1,1 +1,14 @@
+
 /.vs
+# Ignorar carpetas bin y obj en cualquier lugar del proyecto
+**/bin/
+**/obj/
+
+# Ignorar carpetas de debug
+BLL\bin\Debug
+DAL\bin\Debug
+Entities\bin\Debug
+BLL\obj\Debug
+DAL\obj\Debug
+Entities\obj\Debug
+UpgradeLog.htm
