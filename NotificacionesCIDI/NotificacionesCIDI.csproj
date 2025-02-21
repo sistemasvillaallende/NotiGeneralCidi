@@ -2194,6 +2194,8 @@
     <Content Include="Secure\Inicio.aspx" />
     <Content Include="Secure\MasivoDeuda.aspx" />
     <Content Include="Secure\MasivoDeudaAuto.aspx" />
+    <Content Include="Secure\MasivoDeudaGeneral.aspx" />
+    <Content Include="Secure\MasivoDeudaIyC.aspx" />
     <Content Include="Secure\NotificacionesCIDI.aspx" />
     <Content Include="Secure\NotificacionesGeneral.aspx" />
     <Content Include="Secure\Plantillas.aspx" />
@@ -2220,6 +2222,9 @@
       <DependentUpon>Inicio.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Secure\Inicio.aspx.designer.cs">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Secure\MasivoDeuda.aspx.cs">
       <DependentUpon>MasivoDeuda.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2233,6 +2238,20 @@
     </Compile>
     <Compile Include="Secure\MasivoDeudaAuto.aspx.designer.cs">
       <DependentUpon>MasivoDeudaAuto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\MasivoDeudaGeneral.aspx.cs">
+      <DependentUpon>MasivoDeudaGeneral.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\MasivoDeudaGeneral.aspx.designer.cs">
+      <DependentUpon>MasivoDeudaGeneral.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\MasivoDeudaIyC.aspx.cs">
+      <DependentUpon>MasivoDeudaIyC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\MasivoDeudaIyC.aspx.designer.cs">
+      <DependentUpon>MasivoDeudaIyC.aspx</DependentUpon>
     </Compile>
     <Compile Include="Secure\NotificacionesCIDI.aspx.cs">
       <DependentUpon>NotificacionesCIDI.aspx</DependentUpon>

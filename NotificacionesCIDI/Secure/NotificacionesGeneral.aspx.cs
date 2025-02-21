@@ -10,16 +10,16 @@ namespace NotificacionesCIDI.Secure
 {
     public partial class NotificacionesGeneral : System.Web.UI.Page
     {
+        int subsistema;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                  if (!IsPostBack)
                  {
-
-                    fillGrillas();
+                    subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
+                    fillGrillas(subsistema);
                 }
-
             }
             catch (Exception ex)
             {
@@ -32,20 +32,20 @@ namespace NotificacionesCIDI.Secure
         {
 
         }
-        public void fillGrillas()
+        public void fillGrillas(int subsistema)
         {
             try
             {
-
-                List<NotificacionGeneral> lst = BLL.NotificacionGeneralBLL.readNotificacionGeneral();
+                List<NotificacionGeneral> lst = BLL.NotificacionGeneralBLL.readNotificacionBySubsistema(subsistema);
                 gvMasivosAut.DataSource = lst;
-                gvMasivosAut.DataBind();
-            
+                gvMasivosAut.DataBind();  
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+
     }
 }
