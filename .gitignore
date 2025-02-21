@@ -12,3 +12,7 @@ BLL\obj\Debug
 DAL\obj\Debug
 Entities\obj\Debug
 UpgradeLog.htm
+
+# Ignorar archivos de compilación de Debug y Release
+bin/
+obj/
