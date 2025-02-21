@@ -56,7 +56,9 @@ C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\roslyn\vbc.rsp
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\roslyn\VBCSCompiler.exe
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\roslyn\VBCSCompiler.exe.config
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\System.Configuration.ConfigurationManager.dll
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\bin\Debug\System.Configuration.ConfigurationManager.xml
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\DAL\obj\Debug\DAL.csproj.Up2Date

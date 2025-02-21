@@ -79,5 +79,49 @@ namespace DAL
         }
 
 
+        public static List<NotificacionGeneral> readBySubsistema(int subsistema)
+        {
+            try
+            {
+                List<NotificacionGeneral> lst = new List<NotificacionGeneral>();
+                NotificacionGeneral obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT * FROM CIDI_NOTIFICACION_GENERAL where Subsistema = @subsistema";
+                    cmd.Parameters.AddWithValue("@subsistema", subsistema); 
+                    cmd.Connection.Open();
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+
+                        while (dr.Read())
+                        {
+                            obj = new NotificacionGeneral();
+                            obj.Nro_Emision = dr.GetInt32(0);
+                            if (!dr.IsDBNull(1)) { obj.Fecha_Emision = dr.GetDateTime(1); }
+                            if (!dr.IsDBNull(2)) { obj.Fecha_Vencimiento = dr.GetDateTime(2); }
+                            if (!dr.IsDBNull(3)) { obj.Cod_tipo_notificacion = dr.GetInt32(3); }
+                            if (!dr.IsDBNull(4)) { obj.Descripcion = dr.GetString(4); }
+                            if (!dr.IsDBNull(5)) { obj.subsistema = dr.GetInt32(5); }
+                            if (!dr.IsDBNull(6)) { obj.Cantidad_Reg = dr.GetInt32(6); }
+                            if (!dr.IsDBNull(7)) { obj.Total = dr.GetDecimal(7); }
+                            if (!dr.IsDBNull(8)) { obj.Porcentaje = dr.GetDecimal(8); }
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

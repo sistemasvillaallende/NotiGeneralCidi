@@ -122,7 +122,8 @@
                             <div class="nav-tabs-custom" style="padding-top: 30px;">
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item"><a class="nav-link" href="MasivoDeuda.aspx">INMUEBLES</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="MasivoDeudaIndyCom.aspx">INDUSTRIA Y COMERCIO</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="MasivoDeudaGeneral.aspx">GENERAL</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="MasivoDeudaIyC.aspx">INDUSTRIA Y COMERCIO</a></li>
                                     <li class="nav-item"><a class="nav-link active" href="#tab_3" data-toggle="tab" aria-expanded="false">AUTOMOTORES</a></li>
                                     <%--<li class="pull-right">
                                         <asp:Button ID="Button1" runat="server" CssClass="btn btn-success"

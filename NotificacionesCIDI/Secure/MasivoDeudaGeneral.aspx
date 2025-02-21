@@ -1,21 +1,13 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" EnableEventValidation="false"
-    CodeBehind="MasivoDeuda.aspx.cs" Inherits="NotificacionesCIDI.Secure.MasivoDeuda" %>
-
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaGeneral.aspx.cs" Inherits="NotificacionesCIDI.Secure.MasivoDeudaGeneral" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta charset="UTF-8" />
-    <title>Masivo Deuda</title>
+    <title>Masivo Deuda Automotor</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
     <link href="../App_Themes/Main/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         .btn-outline {
@@ -128,10 +120,10 @@
                         <div class="box-body no-padding">
                             <div class="nav-tabs-custom" style="padding-top: 30px;">
                                 <ul class="nav nav-tabs">
+                                    <li class="nav-item"><a class="nav-link" href="MasivoDeuda.aspx">INMUEBLES</a></li>
                                     <li class="nav-item"><a class="nav-link" href="MasivoDeudaAuto.aspx">AUTOMOTORES</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="MasivoDeudaGeneral.aspx">GENERAL</a></li>
                                     <li class="nav-item"><a class="nav-link" href="MasivoDeudaIyC.aspx">INDUSTRIA Y COMERCIO</a></li>
-                                    <li class="nav-item"><a class="nav-link active" href="#tab_3" data-toggle="tab" aria-expanded="false">INMUEBLES</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#tab_3" data-toggle="tab" aria-expanded="false">GENERAL</a></li>
                                     <%--<li class="pull-right">
                                         <asp:Button ID="Button1" runat="server" CssClass="btn btn-success"
                                             Text="Exportar a Excel" OnClick="btnExportExcel_Click" /></li>--%>

@@ -16,3 +16,5 @@ UpgradeLog.htm
 # Ignorar archivos de compilación de Debug y Release
 bin/
 obj/
+
+NotificacionesCIDI\obj\Debug
