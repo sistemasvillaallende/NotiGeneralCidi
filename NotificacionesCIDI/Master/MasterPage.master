@@ -19,7 +19,7 @@
                 style="text-align: left; position: fixed; width: 100%; z-index: 1000; background-color: white; margin-top: -5px; height: 90px;">
                 <div class="row" style="padding-top: 20px; padding-bottom: 0px;">
                     <div class="col-4" style="padding-left: 4%;">
-                        <a href="/BackEnd/Home.aspx">
+                        <a href="/Secure/Inicio.aspx">
                             <img src="../App_Themes/Main/img/LogoPablo.png" style="height: 50px;" />
                         </a>
                     </div>
@@ -59,22 +59,19 @@
                                 </li>
                                 <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
                                     <span style="display: ruby;">CUIT: </span>
-                                    <span style="display: block; margin-left: 10px;" id="mnuPcCuit" runat="server">
-                                        23-27.173.499-9
-                                    </span>
+                                    <span style="display: block; margin-left: 10px;" id="mnuPcCuit"
+                                        runat="server">23-27.173.499-9</span>
                                 </li>
                                 <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
                                     <span style="display: block;">CIDI: </span>
-                                    <span style="display: block; margin-left: 10px;" id="mnuPcNivelCidi" runat="server">
-                                        Nivel 2
-                                    </span>
+                                    <span style="display: block; margin-left: 10px;" id="mnuPcNivelCidi"
+                                        runat="server">Nivel 2</span>
                                 </li>
                                 <li style="padding: 15px; border-top: solid 1px lightgray; margin-top: 15px;">
                                     <a class="dropdown-item" href="#" runat="server" id="btnCerraSession"
                                         onserverclick="btnCerraSession_ServerClick"
-                                        style="text-align: center; border: solid 3px lightgray; border-radius: 10px; padding: 8px;">
-                                        Cerrar Sesion
-                                    </a>
+                                        style="text-align: center; border: solid 3px lightgray; border-radius: 10px; padding: 8px;">Cerrar
+                                        Sesion</a>
                                 </li>
                             </ul>
                         </div>
@@ -94,6 +91,11 @@
                 <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
             </div>
         </form>
+        <script src="../App_Themes/Main/js/jQuery-2.1.4.min.js"></script>
+        <script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
+        <script src="../App_Themes/Main/js/bootstrap.min.js"></script>
+        <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
+        <script src="../App_Themes/fontawesome/js/all.js"></script>
     </body>
 
     </html>
