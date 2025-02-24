@@ -9,5 +9,12 @@ namespace NotificacionesCIDI
         {
             // ...existing code...
         }
+
+        protected void btnCerraSession_ServerClick(object sender, EventArgs e)
+        {
+            // Add your session closing logic here
+            Session.Abandon();
+            Response.Redirect("~/Login.aspx");
+        }
     }
 }
