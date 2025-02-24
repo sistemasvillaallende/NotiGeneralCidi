@@ -5,11 +5,6 @@
     </asp:Content>
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-        <h1>Inicio</h1>
-        <asp:Button ID="btnMasivoDeuda" runat="server" Text="Masivo Deuda" PostBackUrl="~/Secure/MasivoDeuda.aspx" />
-        <asp:Button ID="btnNotificacionesCIDI" runat="server" Text="Notificaciones CIDI"
-            PostBackUrl="~/Secure/NotificacionesCIDI.aspx" />
-        <asp:Button ID="btnPlantillas" runat="server" Text="Plantillas" PostBackUrl="~/Secure/Plantillas.aspx" />
 
         <div class="col-8">
             <div class="col-12" style="padding: 25px;">

@@ -3,34 +3,7 @@
 
     <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="server">
         <title>Masivo Deuda</title>
-        <meta charset="UTF-8" />
-        <link href="../App_Themes/Main/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="../App_Themes/fontawesome/css/all.css" rel="stylesheet" />
-        <style>
-            .btn-outline {
-                background-color: transparent;
-                border: solid darkcyan;
-                color: darkcyan;
-                font-weight: 500;
-                border-radius: 15px;
-            }
 
-            .btn-outline-danger {
-                background-color: transparent;
-                border: solid #dc2626;
-                color: #dc2626;
-                font-weight: 500;
-                border-radius: 15px;
-            }
-
-            .btn-outline-excel {
-                background-color: transparent;
-                border: solid #006e37;
-                color: #006e37;
-                font-weight: 500;
-                border-radius: 15px;
-            }
-        </style>
     </asp:Content>
 
     <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -422,14 +395,6 @@
                 </div>
             </div>
         </div>
-
-
-        <script src="../App_Themes/Main/js/jQuery-2.1.4.min.js"></script>
-        <script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
-        <script src="../App_Themes/Main/js/bootstrap.min.js"></script>
-        <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
-        <script src="../App_Themes/fontawesome/js/all.js"></script>
-
 
         <script>
 
