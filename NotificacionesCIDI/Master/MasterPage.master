@@ -11,12 +11,13 @@
         </title>
         <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../Master/styles.css" rel="stylesheet">
     </head>
 
     <body>
         <form id="form1" runat="server">
             <header class="clearfix no-mobile print"
-                style="text-align: left; position: fixed; width: 100%; z-index: 1000; background-color: white; margin-top: -5px; height: 90px;">
+                style="text-align: left; background-color: white; margin-top: -5px; height: 90px;">
                 <div class="row" style="padding-top: 20px; padding-bottom: 0px;">
                     <div class="col-4" style="padding-left: 4%;">
                         <a href="/Secure/Inicio.aspx">
@@ -89,7 +90,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-2"
-                        style="padding-top: 10px; box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 10px; min-height: 100vh; padding-left: 0; padding-right: 0;">
+                        style="padding-top: 5px; box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 10px; min-height: 100vh; padding-left: 0; padding-right: 0;">
                         <ul style="list-style: none; padding-left: 0px; margin-top: 15px;">
                             <li>
                                 <a href="#" class="div-con-borde-gradient"
@@ -98,7 +99,7 @@
                                     <span>Automotores</span>
                                 </a>
                                 <div class="container-fluid" style="background: linear-gradient(87deg, rgb(148 23 23) 0%, rgba(255,35,0,1) 41%,
-                                    rgb(255 233 0) 79%); margin-top: 5px">
+                                rgb(255 233 0) 79%); margin-top: 5px">
                                     <div class="row">
                                         <div class="col-md-12" style="padding-top: 5px;">
                                         </div>
@@ -113,7 +114,7 @@
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeudaAuto.aspx" class="a-menu" style="width: 100%; display: block; 
-    margin-left: 15px; text-decoration:none">
+margin-left: 15px; text-decoration:none">
                                     <span style="font-size: 16px !important;">Nueva notificacion</span>
                                 </a>
                             </li>
@@ -124,7 +125,7 @@
                                     <span>Ind. y Comercio</span>
                                 </a>
                                 <div class="container-fluid" style="background: linear-gradient(87deg, rgb(148 23 23) 0%, rgba(255,35,0,1) 41%,
-                                    rgb(255 233 0) 79%); margin-top: 5px">
+                                rgb(255 233 0) 79%); margin-top: 5px">
                                     <div class="row">
                                         <div class="col-md-12" style="padding-top: 5px;">
                                         </div>
@@ -133,13 +134,13 @@
                             </li>
                             <li class="li-menu" style="margin-top: 10px;">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=3" class="a-menu" style="width: 100%; display: block;
-    margin-left: 15px; text-decoration:none">
+margin-left: 15px; text-decoration:none">
                                     <span style="font-size: 16px !important;">Notificacion Ind. y Comercio</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeudaIyC.aspx" class="a-menu" style="width: 100%; display: block; 
-    margin-left: 15px; text-decoration:none">
+margin-left: 15px; text-decoration:none">
                                     <span style="font-size: 16px !important;">Nueva notificacion</span>
                                 </a>
                             </li>
@@ -150,7 +151,7 @@
                                     <span>Inmueble</span>
                                 </a>
                                 <div class="container-fluid" style="background: linear-gradient(87deg, rgb(148 23 23) 0%, rgba(255,35,0,1) 41%,
-                                    rgb(255 233 0) 79%); margin-top: 5px">
+                                rgb(255 233 0) 79%); margin-top: 5px">
                                     <div class="row">
                                         <div class="col-md-12" style="padding-top: 5px;">
                                         </div>
@@ -159,13 +160,13 @@
                             </li>
                             <li class="li-menu" style="margin-top: 10px;">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=1" class="a-menu" style="width: 100%; display: block; 
-     text-decoration:none; margin-left: 15px;">
+ text-decoration:none; margin-left: 15px;">
                                     <span style="font-size: 16px !important;">Notificacion Inmueble</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeuda.aspx" class="a-menu" style="width: 100%; display: block; 
-    margin-left: 15px;  text-decoration:none">
+margin-left: 15px;  text-decoration:none">
                                     <span style="font-size: 16px !important;">Nuevas</span>
                                 </a>
                             </li>
@@ -176,7 +177,7 @@
                                     <span>General</span>
                                 </a>
                                 <div class="container-fluid" style="background: linear-gradient(87deg, rgb(148 23 23) 0%, rgba(255,35,0,1) 41%,
-                                    rgb(255 233 0) 79%); margin-top: 5px">
+                                rgb(255 233 0) 79%); margin-top: 5px">
                                     <div class="row">
                                         <div class="col-md-12" style="padding-top: 5px;">
                                         </div>
@@ -185,19 +186,19 @@
                             </li>
                             <li class="li-menu" style="margin-top: 10px;">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=8" class="a-menu" style="width: 100%; display: block; 
-     text-decoration:none; margin-left: 15px;">
+ text-decoration:none; margin-left: 15px;">
                                     <span style="font-size: 16px !important;">Notificaciones generales</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeudaGeneral.aspx" class="a-menu" style="width: 100%; display: block; 
-    margin-left: 15px;  text-decoration:none">
+margin-left: 15px;  text-decoration:none">
                                     <span style="font-size: 16px !important;">Nuevas Notificaciones</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-10">
+                    <div class="col-10 contenido-pagina">
                         <!-- Aquí se inyectará el contenido de cada página -->
                         <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
                     </div>

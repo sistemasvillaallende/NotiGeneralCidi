@@ -1,0 +1,65 @@
+body {
+    overflow: hidden;
+}
+
+.li-menu {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 3px lightgrey;
+}
+
+.a-menu {
+    color: #343a40;
+}
+
+.title-h3 {
+    font-size: 220px !important;
+    text-align: center;
+    margin-top: 25px;
+    color: gray !important;
+    font-weight: 600 !important;
+}
+
+.btn-add {
+    font-size: 22px;
+    border-radius: 50%;
+    padding-top: 5px;
+    position: absolute;
+    padding-bottom: 5px;
+    right: 25px;
+    top: 115px;
+}
+
+td {
+    font-size: 14px !important;
+    vertical-align: middle !important;
+}
+
+.form-control {
+    font-size: 1.5rem !important;
+}
+
+label {
+    font-size: 1.5rem !important;
+}
+
+.div-con-borde-gradient {
+    color: #343a40;
+}
+
+.div-con-borde-gradient::before {
+    height: 5px;
+    /* Tamaño del borde inferior */
+    background: linear-gradient(to right, red, yellow);
+    /* Gradiente de rojo a amarillo */
+}
+
+.contenido-pagina {
+    padding: 20px;
+    overflow-x: auto;
+    /* scroll horizontal */
+    overflow-y: auto;
+    /* scroll vertical */
+    height: calc(100vh - 90px);
+    /* Adjust height to fit within the viewport */
+}
