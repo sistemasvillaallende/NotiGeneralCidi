@@ -63,3 +63,42 @@ label {
     height: calc(100vh - 90px);
     /* Adjust height to fit within the viewport */
 }
+
+.menu-master {
+    padding-top: 5px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 10px;
+    min-height: 100vh;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.menu-master ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-top: 15px;
+}
+
+.menu-master .li-menu {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 3px lightgrey;
+}
+
+.menu-master .a-menu {
+    color: #343a40;
+    width: 100%;
+    display: block;
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.menu-master .div-con-borde-gradient {
+    font-size: 18px;
+    margin-left: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.menu-master .div-con-borde-gradient i {
+    margin-right: 8px;
+}
