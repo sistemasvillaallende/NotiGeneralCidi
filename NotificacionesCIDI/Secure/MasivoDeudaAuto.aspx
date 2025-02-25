@@ -253,11 +253,11 @@
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
         <div class="wrapper">
-            <div class="content-wrapper" style="padding: 30px;">
-                <section class="content" style="margin-top: 50px;">
+            <div class="content-wrapper">
+                <section class="content">
                     <div class="row">
                         <div class="box-body no-padding">
-                            <div class="nav-tabs-custom" style="padding-top: 30px;">
+                            <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item"><a class="nav-link" href="MasivoDeuda.aspx">INMUEBLES</a></li>
                                     <li class="nav-item"><a class="nav-link" href="MasivoDeudaGeneral.aspx">GENERAL</a>

@@ -26,11 +26,11 @@
         </script>
         <asp:ScriptManager ID="ScriptManager1" ClientIDMode="AutoId" runat="server"></asp:ScriptManager>
         <div class="wrapper">
-            <div class="content-wrapper" style="padding: 30px;">
-                <section class="content" style="margin-top: 50px;">
+            <div class="content-wrapper">
+                <section class="content">
                     <div class="row">
                         <div class="box-body no-padding">
-                            <div class="nav-tabs-custom" style="padding-top: 30px;">
+                            <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item"><a class="nav-link" href="MasivoDeuda.aspx">INMUEBLES</a>
                                     </li>
