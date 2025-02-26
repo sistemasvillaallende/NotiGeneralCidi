@@ -5,10 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta charset="UTF-8" />
-    <title>Masivo Deuda Automotor</title>
+    <title>Notificador General</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
 
     <link href="../App_Themes/Main/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+
     <style>
         .btn-outline {
             background-color: transparent;
@@ -33,6 +35,29 @@
             font-weight: 500;
             border-radius: 15px;
         }
+
+        .ql-variable {
+            background-color: #f0f0f0;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            color: #000;
+            padding: 2px 4px;
+            pointer-events: none; /* Evita clics */
+            user-select: none; /* Evita selección */
+        }
+
+        #editor-container1 {
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .modal-dialog1{
+        max-width: 60%;
+        margin-top: 30vh; /* Baja el modal */
+    }
+
+
     </style>
     <link href="../App_Themes/fontawesome/css/all.css" rel="stylesheet" />
 </head>
@@ -169,90 +194,21 @@
                                                         <div class="col-md-12">
                                                             <h3 style="color: #367fa9;">Filtros</h3>
                                                         </div>
+                                                        <button type="button" runat="server" id="btnImportExcel" onserverclick="btnImportExcel_ServerClick"
+                                                                class="btn btn-outline-excel" data-toggle="modal" data-target="#page-change-name">
+                                                                <span class="fa fa-sheet-plastic"></span>&nbsp; Importar a Excel
+                                                        </button>
+                                                        <a class="btn-control excel" onclick="abrirmodalConceptos();">
+                                                            <i class="fa fa-file-excel-o"></i> Cargar Excel
+                                                        </a>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-2">
-                                                            <label>Fecha</label>
-                                                            <asp:DropDownList ID="ddlFecha" CssClass="form-control" runat="server">
-                                                                <asp:ListItem Text="Sin filtro" Value="3"></asp:ListItem>
-                                                                <asp:ListItem Text="Deuda a partir del" Value="0"></asp:ListItem>
-                                                                <asp:ListItem Text="Deuda hasta" Value="1"></asp:ListItem>
-                                                                <asp:ListItem Text="Deuda entre" Value="2">Deuda entre</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <br />
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <asp:TextBox ID="txtDesde" Enabled="false" TextMode="Date" CssClass="form-control" runat="server"></asp:TextBox>
-                                                                </div>
-                                                            </div>
-                                                            <br />
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <asp:TextBox ID="txtHasta" Enabled="false" TextMode="Date" CssClass="form-control" runat="server"></asp:TextBox>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <label>Categoria Deuda</label>
-                                                            <asp:DropDownList ID="DDLCatDeuda" CssClass="form-control" runat="server">
-                                                                <asp:ListItem Text="Toda" Value="1"></asp:ListItem>
-                                                                <asp:ListItem Text="Seleccionada" Value="2"></asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <br />
-                                                            <asp:ListBox ID="lstCatDeuda" Height="90" CssClass="form-control list-group" runat="server" SelectionMode="Multiple"></asp:ListBox>
-                                                        </div>
-
-
-                                                        <div class="col-md-2">
+                                                       
+                                                        <div class="col-md-4">
                                                             <label>Barrio</label>
                                                             <asp:ListBox ID="lstBarrios" Height="143" CssClass="form-control" runat="server" SelectionMode="Multiple"></asp:ListBox>
                                                         </div>
-                                                        <div class="col-md-1">
-                                                            <label>Zona</label>
-                                                            <asp:ListBox ID="lstZonas" Height="143" CssClass="form-control" runat="server" SelectionMode="Multiple"></asp:ListBox>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <label>Tipo Deuda</label>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>Monto</label>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <asp:ListBox ID="lstTipoDeuda" SelectionMode="Multiple"
-                                                                        Height="143" CssClass="form-control list-group" runat="server">
-                                                                        <asp:ListItem>Deuda Judicial</asp:ListItem>
-                                                                        <asp:ListItem>Deuda Pre-Judicial</asp:ListItem>
-                                                                        <asp:ListItem>Deuda Administrativa</asp:ListItem>
-                                                                        <asp:ListItem>Deuda Normal</asp:ListItem>
-                                                                    </asp:ListBox>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <asp:DropDownList ID="ddlFiltroDeuda" CssClass="form-control" runat="server">
-                                                                        <asp:ListItem Text="Sin filtro" Value="3"></asp:ListItem>
-                                                                        <asp:ListItem Text="Mayor a" Value="0"></asp:ListItem>
-                                                                        <asp:ListItem Text="Menor a" Value="1"></asp:ListItem>
-                                                                        <asp:ListItem Text="Entre" Value="2"></asp:ListItem>
-                                                                    </asp:DropDownList>
-                                                                    <br />
-                                                                    <div class="row">
-                                                                        <div class="col-md-12">
-                                                                            <asp:TextBox ID="txtMontoDesde" MIN="0" Enabled="false" TextMode="Number" CssClass="form-control" runat="server"></asp:TextBox>
-                                                                        </div>
-                                                                    </div>
-                                                                    <br />
-                                                                    <div class="row">
-                                                                        <div class="col-md-12">
-                                                                            <asp:TextBox ID="txtMontoHasta" MIN="0" Enabled="false" TextMode="Number" CssClass="form-control" runat="server"></asp:TextBox>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-
-                                                            <br />
+                                                                                                                   <br />
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -283,6 +239,9 @@
                                                 <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
                                                     <div class="row">
                                                         <div class="12" style="text-align: right">
+                                                            <a class="btn-control excel" onclick="abrirModalPlantillas();">
+                                                                <i class="fa fa-file-excel-o"></i> PLANTILLA
+                                                            </a>
                                                             <button type="button" class="btn btn-outline-danger" id="btnClearFiltros"
                                                                 runat="server" onserverclick="btnClearFiltros_ServerClick">
                                                                 <span class="fa fa-filter-circle-xmark"></span>&nbsp;Limpiar Filtros
@@ -295,10 +254,9 @@
                                                                 class="btn btn-outline-excel" data-toggle="modal" data-target="#page-change-name">
                                                                 <span class="fa fa-sheet-plastic"></span>&nbsp; Exportar a Excel
                                                             </button>
+
                                                         </div>
                                                     </div>
-
-
                                                     <div class="row" style="margin-top: 20px;">
                                                         <div class="col-md-12"
                                                             style="height: 320px; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
@@ -306,49 +264,27 @@
                                                                 AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None">
                                                                 <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
                                                                 <Columns>
-                                                                    <asp:TemplateField HeaderText="Denominación">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblNroCta" runat="server" Text=""></asp:Label>
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:BoundField DataField="titular" ControlStyle-Width="10%" HeaderText="Titular"></asp:BoundField>
-                                                                    <asp:BoundField DataField="cuil" ControlStyle-Width="10%" HeaderText="CUIT"></asp:BoundField>
+                                                                    <asp:BoundField DataField="nombre" ControlStyle-Width="10%" HeaderText="nombre"></asp:BoundField>
+                                                                    <asp:BoundField DataField="cuit" ControlStyle-Width="10%" HeaderText="CUIT"></asp:BoundField>
                                                                     <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%" HeaderText="Calle"></asp:BoundField>
                                                                     <asp:BoundField DataField="nro_dom_esp" ControlStyle-Width="10%" HeaderText="Nro"></asp:BoundField>
-                                                                    <asp:BoundField DataField="barrio" ControlStyle-Width="10%" HeaderText="Barrio"></asp:BoundField>
-                                                                    <asp:BoundField DataField="zona" ControlStyle-Width="10%" HeaderText="Zona"></asp:BoundField>
-                                                                    <asp:BoundField DataField="deudaJudicial" ControlStyle-Width="10%" DataFormatString="{0:c}" HeaderText="Judicial"></asp:BoundField>
-                                                                    <asp:BoundField DataField="deudaPreJudicial" ControlStyle-Width="10%" DataFormatString="{0:c}" HeaderText="Prejudicial"></asp:BoundField>
-                                                                    <asp:BoundField DataField="deudaAdministrativa" ControlStyle-Width="10%" DataFormatString="{0:c}" HeaderText="Administrativa"></asp:BoundField>
-                                                                    <asp:BoundField DataField="deudaNormal" ControlStyle-Width="10%" DataFormatString="{0:c}" HeaderText="Normal"></asp:BoundField>
-                                                                </Columns>
+                                                                    <asp:BoundField DataField="barrio" ControlStyle-Width="10%" HeaderText="Barrio"></asp:BoundField>                                                                </Columns>
                                                             </asp:GridView>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" style="padding-top: 20px;">
-                                                        <div class="col-md-2 form-group">
-                                                            <label>Total de registros</label>
-                                                            <asp:TextBox ID="txtRegistros" CssClass="form-control" runat="server"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-2 form-group">
-                                                            <label>Deuda Judicial</label>
-                                                            <asp:TextBox ID="txtTotJudicial" CssClass="form-control" runat="server"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-2 form-group">
-                                                            <label>Deuda Pre-Judicial</label>
-                                                            <asp:TextBox ID="txtPreJudicial" CssClass="form-control" runat="server"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-2 form-group">
-                                                            <label>Deuda Administrativa</label>
-                                                            <asp:TextBox ID="txtAdministrativa" CssClass="form-control" runat="server"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-2 form-group">
-                                                            <label>Deuda Normal</label>
-                                                            <asp:TextBox ID="txtNormal" CssClass="form-control" runat="server"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-2 form-group">
-                                                            <label>Deuda Total</label>
-                                                            <asp:TextBox ID="txtTotal" CssClass="form-control" runat="server"></asp:TextBox>
+                                                            <asp:GridView ID="gvConceptos" CssClass="table" AutoGenerateColumns="false"
+                                                                 OnRowCommand="gvConceptos_RowCommand"
+                                                                 OnRowDeleting="gvConceptos_RowDeleting"
+                                                                 DataKeyNames="cuit"
+                                                                 EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
+                                                                 ForeColor="#333333" GridLines="None">
+                                                                 <AlternatingRowStyle BackColor="White" ForeColor="#284775">
+                                                                 </AlternatingRowStyle>
+                                                                 <Columns>
+                                                                        <asp:BoundField DataField="Cuit"  ControlStyle-Width="10%" HeaderText="CUIT">
+                                                                            <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                                                                            <ItemStyle HorizontalAlign="left"></ItemStyle>
+                                                                        </asp:BoundField>                                                   
+                                                                 </Columns>                           
+                                                            </asp:GridView>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -364,8 +300,32 @@
             </div>
         </div>
 
+        <div class="modal fade in" id="modalConceptos">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Subir lista de Cuit</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Subir archivo</label>
+                            <asp:FileUpload ID="fUploadConceptos" CssClass="form-control" runat="server" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default">Cancelar</button>
+                        <asp:Button ID="btnConceptos_x_legajos" CssClass="btn btn-primary"
+                            OnClientClick="this.disabled=true;this.value = 'Procesando...'"
+                            UseSubmitBehavior="false" OnClick="btnConceptos_x_legajos_Click" runat="server"
+                            Text="Aceptar" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade in" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -401,11 +361,54 @@
         </div>
 
 
+        <div class="modal fade" id="plantillaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog1 modal-dialog">
+                <div class="modal-content1 modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Crear plantilla</h4>
+                    </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div id="editor-container" style="height: 200px; border: 1px solid #ccc; margin-left: 20px; margin-right: 20px;"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+                <div class="d-flex flex-row gap-3 mt-3 pb-3">
+                    <button type="button" class=" btn btn-primary " onclick="insertVariable('{nombre}')">Insertar Nombre</button>
+                    <button type="button" class=" btn btn-primary " onclick="insertVariable('{apellido}')">Insertar Apellido</button>
+                    <button type="button" class=" btn btn-primary " onclick="insertVariable('{cuit}')">Insertar CUIT</button>
+                    <asp:Button ID="btnGenerate" runat="server" CssClass="btn btn-success" Text="Generar Notas" OnClick="btnGenerar_Click" />
+                </div>
+                <!-- Campo oculto para almacenar el contenido -->
+                <asp:TextBox ID="hiddenInput2" runat="server" TextMode="MultiLine" Style="display: none;"></asp:TextBox>
+        
+                <!-- Botón ASP.NET para procesar el contenido -->
+              
+        
+                <!-- Contenedor para mostrar las notas generadas -->
+                <asp:Literal ID="litNotasGeneradas" runat="server"></asp:Literal>
+            </div>
+
+
+
+    </div>
+</div>
+</div>
+
         <script src="../App_Themes/Main/js/jQuery-2.1.4.min.js"></script>
         <script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
         <script src="../App_Themes/Main/js/bootstrap.min.js"></script>
         <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
         <script src="../App_Themes/fontawesome/js/all.js"></script>
+        <!-- Agregar Quill y Bootstrap JS -->
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
         <script>
@@ -528,6 +531,15 @@
                 }
             });
 
+            function abrirmodalConceptos() {
+                    $('#modalConceptos').modal('show');
+                }
+
+            function abrirModalPlantillas(){
+                $('#plantillaModal').modal('show');
+            }
+
+
             var prm = Sys.WebForms.PageRequestManager.getInstance();
 
             prm.add_endRequest(function () {
@@ -640,9 +652,42 @@
                         $("#lstCatDeuda").removeAttr("disabled");
                     }
                 });
+                
             });
         </script>
+<script>
+    let quill; // Definir la variable globalmente
 
+    // Inicializar Quill cuando el modal se muestra
+    $('#plantillaModal').on('shown.bs.modal', function () {
+        if (!quill) { // Solo inicializa si aún no se ha creado
+            quill = new Quill('#editor-container', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [['bold', 'italic', 'underline'], ['clean']]
+                }
+            });
+        }
+    });
+
+    // Función para insertar variables en el editor
+    function insertVariable(variable) {
+        const range = quill.getSelection();
+        if (range) {
+            quill.insertText(range.index, variable, {
+                'bold': true,
+                'background': '#f0f0f0'
+            });
+            quill.setSelection(range.index + variable.length);
+        }
+    }
+
+    // Copia el contenido del editor al campo oculto antes de ejecutar el evento del servidor
+    document.getElementById('<%= btnGenerate.ClientID %>').addEventListener('click', function () {
+        const content = quill.root.innerHTML; // Obtiene el contenido del editor
+        document.getElementById('<%= hiddenInput2.ClientID %>').value = content; // Lo asigna al campo oculto
+    });
+</script>
 
     </form>
 </body>

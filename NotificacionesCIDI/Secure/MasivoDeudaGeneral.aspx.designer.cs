@@ -14,7 +14,7 @@ namespace NotificacionesCIDI.Secure
     public partial class MasivoDeudaGeneral
     {
 
-       /// <summary>
+        /// <summary>
         /// Control form1.
         /// </summary>
         /// <remarks>
@@ -400,5 +400,53 @@ namespace NotificacionesCIDI.Secure
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnGenerarNoti;
+        protected global::System.Web.UI.HtmlControls.HtmlButton btnImportExcel;
+
+        /// <summary>
+        /// Control fUploadConceptos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fUploadConceptos;
+        /// <summary>
+        /// Control btnConceptos_x_legajos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConceptos_x_legajos;
+        /// <summary>
+        /// Control gvConceptos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvConceptos;
+
+        protected global::System.Web.UI.WebControls.TextBox hiddenInput2;
+        
+        /// <summary>
+        /// Control btnGenerate.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGenerate;
+        
+        /// <summary>
+        /// Control litNotasGeneradas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litNotasGeneradas;
+
+
     }
 }

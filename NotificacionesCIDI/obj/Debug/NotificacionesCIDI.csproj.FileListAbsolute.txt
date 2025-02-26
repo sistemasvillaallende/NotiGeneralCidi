@@ -107,6 +107,8 @@ C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\roslyn\vb
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\roslyn\vbc.rsp
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\roslyn\VBCSCompiler.exe
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\ClosedXML.dll
+C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\DocumentFormat.OpenXml.dll
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\BLL.dll
 C:\Users\fer22\Documents\GitHub\NotiGeneralCidi\NotificacionesCIDI\bin\DAL.dll

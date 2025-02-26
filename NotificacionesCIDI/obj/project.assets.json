@@ -2,6 +2,31 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.7.2": {
+      "ClosedXML/0.69.0": {
+        "type": "package",
+        "dependencies": {
+          "DocumentFormat.OpenXml": "1.0.0"
+        },
+        "compile": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        },
+        "runtime": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        }
+      },
       "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
         "type": "package",
         "compile": {
@@ -41,6 +66,31 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win": {
+      "ClosedXML/0.69.0": {
+        "type": "package",
+        "dependencies": {
+          "DocumentFormat.OpenXml": "1.0.0"
+        },
+        "compile": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        },
+        "runtime": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        }
+      },
       "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
         "type": "package",
         "compile": {
@@ -80,6 +130,31 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win-arm64": {
+      "ClosedXML/0.69.0": {
+        "type": "package",
+        "dependencies": {
+          "DocumentFormat.OpenXml": "1.0.0"
+        },
+        "compile": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        },
+        "runtime": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        }
+      },
       "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
         "type": "package",
         "compile": {
@@ -119,6 +194,31 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win-x64": {
+      "ClosedXML/0.69.0": {
+        "type": "package",
+        "dependencies": {
+          "DocumentFormat.OpenXml": "1.0.0"
+        },
+        "compile": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        },
+        "runtime": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        }
+      },
       "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
         "type": "package",
         "compile": {
@@ -158,6 +258,31 @@
       }
     },
     ".NETFramework,Version=v4.7.2/win-x86": {
+      "ClosedXML/0.69.0": {
+        "type": "package",
+        "dependencies": {
+          "DocumentFormat.OpenXml": "1.0.0"
+        },
+        "compile": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40-client/ClosedXML.dll": {
+            "related": ".XML"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        },
+        "runtime": {
+          "lib/DocumentFormat.OpenXml.dll": {}
+        }
+      },
       "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
         "type": "package",
         "compile": {
@@ -198,6 +323,33 @@
     }
   },
   "libraries": {
+    "ClosedXML/0.69.0": {
+      "sha512": "szERBphMoUqBrn2wQNbOiPZLC9Et97EhUHL7MfGuSN+Jgbbo8kuLyoTL6a7jTYpdjt0WymJ3JXWOs25tinY7WA==",
+      "type": "package",
+      "path": "closedxml/0.69.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "closedxml.0.69.0.nupkg.sha512",
+        "closedxml.nuspec",
+        "lib/net35-client/ClosedXML.XML",
+        "lib/net35-client/ClosedXML.dll",
+        "lib/net40-client/ClosedXML.XML",
+        "lib/net40-client/ClosedXML.dll"
+      ]
+    },
+    "DocumentFormat.OpenXml/1.0.0": {
+      "sha512": "wiY41wsdbBm883kTJtQFKJU24krRQn5Y/9ouSWJ5+iF+FmUN1cgMuTmE/L0xvRlzeHTpZLM/jVEZI17jfpzGKg==",
+      "type": "package",
+      "path": "documentformat.openxml/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "documentformat.openxml.1.0.0.nupkg.sha512",
+        "documentformat.openxml.nuspec",
+        "lib/DocumentFormat.OpenXml.dll"
+      ]
+    },
     "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/2.0.0": {
       "sha512": "Ju0kvSQ5ZKimkHQs2tDIN6/6z8ZEXJOjAoQP0drNQspUYJ1lSTPaITkl30Jgxrp/KFr989/xCXkoPVPFKXSh/w==",
       "type": "package",
@@ -312,6 +464,7 @@
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.7.2": [
       "BLL >= 1.0.0",
+      "ClosedXML >= 0.69.0",
       "DAL >= 1.0.0",
       "Microsoft.CodeDom.Providers.DotNetCompilerPlatform >= 2.0.0"
     ]
@@ -361,6 +514,10 @@
     "frameworks": {
       "net472": {
         "dependencies": {
+          "ClosedXML": {
+            "target": "Package",
+            "version": "[0.69.0, )"
+          },
           "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
             "target": "Package",
             "version": "[2.0.0, )"

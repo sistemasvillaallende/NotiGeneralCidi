@@ -80,6 +80,10 @@
       "frameworks": {
         "net472": {
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.69.0, )"
+            },
             "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
               "target": "Package",
               "version": "[2.0.0, )"
