@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaAuto.aspx.cs"
+﻿<%@ Page Title="Nueva Notificación" Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaAuto.aspx.cs"
     Inherits="NotificacionesCIDI.Secure.MasivoDeudaAuto" MasterPageFile="~/Master/MasterPage.master" %>
 
     <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
