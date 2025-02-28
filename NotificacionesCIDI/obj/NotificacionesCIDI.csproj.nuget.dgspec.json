@@ -1,19 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj": {}
+    "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj": {
+    "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\BLL\\BLL.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj",
+        "projectUniqueName": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\BLL\\BLL.csproj",
         "projectName": "BLL",
-        "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj",
+        "projectPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\BLL\\BLL.csproj",
+        "UsingMicrosoftNETSdk": false,
         "frameworks": {
           "net472": {
             "projectReferences": {
-              "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj": {
-                "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj"
+              "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj": {
+                "projectPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj"
               }
             }
           }
@@ -23,11 +24,12 @@
         "net472": {}
       }
     },
-    "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj": {
+    "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj",
+        "projectPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj",
+        "UsingMicrosoftNETSdk": false,
         "frameworks": {
           "net472": {
             "projectReferences": {}
@@ -38,18 +40,23 @@
         "net472": {}
       }
     },
-    "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj": {
+    "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj",
+        "projectUniqueName": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj",
         "projectName": "NotificacionesCIDI",
-        "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj",
-        "packagesPath": "C:\\Users\\fer22\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\NotificacionesCIDI\\obj\\",
+        "projectPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\NotificacionesCIDI\\NotificacionesCIDI.csproj",
+        "packagesPath": "C:\\Users\\juanf\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\NotificacionesCIDI\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\fer22\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\juanf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -62,11 +69,11 @@
         "frameworks": {
           "net472": {
             "projectReferences": {
-              "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj": {
-                "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\BLL\\BLL.csproj"
+              "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\BLL\\BLL.csproj": {
+                "projectPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\BLL\\BLL.csproj"
               },
-              "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj": {
-                "projectPath": "C:\\Users\\fer22\\Documents\\GitHub\\NotiGeneralCidi\\DAL\\DAL.csproj"
+              "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj": {
+                "projectPath": "C:\\Users\\juanf\\Devs\\NotiGeneralCidi\\DAL\\DAL.csproj"
               }
             }
           }

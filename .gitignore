@@ -1,3 +1,4 @@
+
 /.vs
 # Ignorar carpetas bin y obj en cualquier lugar del proyecto
 **/bin/
@@ -11,4 +12,13 @@ BLL\obj\Debug
 DAL\obj\Debug
 Entities\obj\Debug
 UpgradeLog.htm
+
+# Ignorar archivos de compilación de Debug y Release
+bin/
+obj/
+
 NotificacionesCIDI\obj\Debug
+NotificacionesCIDI/.vs/NotificacionesCIDI.csproj.dtbcache.json
+DAL/.vs/DAL.csproj.dtbcache.json
+BLL/.vs/BLL.csproj.dtbcache.json
+.vscode/settings.json

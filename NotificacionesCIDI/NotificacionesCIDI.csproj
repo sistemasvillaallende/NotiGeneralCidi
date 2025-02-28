@@ -2206,7 +2206,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="MasterPage.master.cs">
+    <Compile Include="Master\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -2351,7 +2351,7 @@
     <Content Include="App_Themes\fontawesome\webfonts\fa-solid-900.woff2" />
     <Content Include="App_Themes\fontawesome\webfonts\fa-v4compatibility.ttf" />
     <Content Include="App_Themes\fontawesome\webfonts\fa-v4compatibility.woff2" />
-    <Content Include="MasterPage.master" />
+    <Content Include="Master\MasterPage.master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
