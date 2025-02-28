@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using DAL;
 using System.Data;
 using ClosedXML.Excel;
+using BLL;
 
 namespace NotificacionesCIDI.Secure
 {
@@ -14,14 +15,16 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeudaGeneral> lstFiltrada = null;
         List<DAL.Detalle_notificaciones_generaes_cidi> lstDetalle = null;
-        Notificaciones_generales_cidi objNoti = new Notificaciones_generales_cidi();
+        DAL.Notificaciones_generales_cidi objNoti = new DAL.Notificaciones_generales_cidi();
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 fillBarrios();
+                fillNotas();
             }
+
         }
         private void fillBarrios()
         {
@@ -48,7 +51,7 @@ namespace NotificacionesCIDI.Secure
             gvDeuda.UseAccessibleHeader = true;
         }
 
-    
+
         private void ExportToExcel(string nameReport, GridView wControl)
         {
 
@@ -138,25 +141,14 @@ namespace NotificacionesCIDI.Secure
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            // if (e.Row.RowType == DataControlRowType.DataRow)
-            // {
-            //     Label lblNroCta = (Label)e.Row.FindControl("lblNroCta");
-            //     DAL.MasivoDeudaInm obj = (DAL.MasivoDeudaInm)e.Row.DataItem;
-            //     lblNroCta.Text = string.Format("{0}-{1}-{2}-{3}-{4}", obj.cir, obj.sec, obj.man, obj.par, obj.p_h);
-            // }
+
         }
-
-
 
         private List<DAL.MasivoDeudaGeneral> filtroBarrios(List<DAL.MasivoDeudaGeneral> lst, List<string> seleccionados)
         {
             try
             {
-                // lst = (from lista in lst
-                //        where seleccionados.Contains(lista.barrio)
-                //        select lista).ToList();
-                // return lst;
-                //   lst = BLL.MasivoDeudaGeneralBLL(seleccionados);
+                lst = BLL.MasivoDeudaGeneralBLL.read(seleccionados);
                 return lst;
             }
             catch (Exception ex)
@@ -164,7 +156,6 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
-
 
 
         protected void btnCerraSession_ServerClick(object sender, EventArgs e)
@@ -178,7 +169,7 @@ namespace NotificacionesCIDI.Secure
             {
                 lstFiltrada = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
 
-                Notificaciones_generales_cidi obj = new Notificaciones_generales_cidi();
+                DAL.Notificaciones_generales_cidi obj = new DAL.Notificaciones_generales_cidi();
                 List<DAL.Detalle_notificaciones_generaes_cidi> lst =
                     new List<Detalle_notificaciones_generaes_cidi>();
 
@@ -244,7 +235,7 @@ namespace NotificacionesCIDI.Secure
 
         protected void ImportExcel()
         {
-           
+
             string nombreArchivo = uploadFile(fUploadConceptos, "archivos");
             string path = Server.MapPath("archivos/" + nombreArchivo);
             using (XLWorkbook workBook = new XLWorkbook(path))
@@ -307,7 +298,7 @@ namespace NotificacionesCIDI.Secure
         private List<DAL.MasivoDeudaGeneral> pasarALstConcepto2(DataTable dt)
         {
             List<DAL.MasivoDeudaGeneral> lstConcepto = new List<DAL.MasivoDeudaGeneral>();
-              
+
             for (int i = 0; i < dt.Rows.Count; i++)
             {
 
@@ -317,9 +308,9 @@ namespace NotificacionesCIDI.Secure
                     //lst.nombre = Convert.ToString(dt.Rows[i]["nombre"]);
                     lst.cuit = Convert.ToString(dt.Rows[i]["cuit"]);
                     //lst.nom_calle = Convert.ToString(dt.Rows[i]["nom_calle"]);
-             
+
                     //lst.barrio = Convert.ToString(dt.Rows[i]["barrio"]);
-                 
+
                     lstConcepto.Add(lst);
                 }
             }
@@ -343,31 +334,91 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
-
-        // protected void gvConceptos_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        // {
-        //     gvConceptos.PageIndex = e.NewPageIndex;
-        // }
-
         protected void gvConceptos_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
 
-            // int index = Convert.ToInt32(e.RowIndex);
-            // List<Entities.Conceptos> lst = (List<Entities.Conceptos>)Session["Detalle"];
-            // lst.RemoveAt(index);
-            // Session["Detalle"] = lst;
-            // fillGrillaConceptos(lst);
+        }
+        protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            // if (e.Row.RowType == DataControlRowType.DataRow)
+            // {
+            //     // Establecer el comando para cada fila
+            //     e.Row.Attributes["onclick"] = Page.ClientScript.GetPostBackClientHyperlink(gvPlantilla, "Select$" + e.Row.RowIndex);
+            //     e.Row.ToolTip = "Haz clic para seleccionar esta fila";
+            // }
+        }
+
+        // protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
+        // {
+        //     if (e.CommandName == "Select")
+        //     {
+        //         int rowIndex = Convert.ToInt32(e.CommandArgument);
+        //         string contenidoPlantilla = gvPlantilla.DataKeys[rowIndex].Values["contenido"].ToString();
+
+        //         // Usamos JavaScript para cerrar el modal de la selección y actualizar el primer modal.
+        //         ScriptManager.RegisterStartupScript(this, GetType(), "CerrarModalYActualizar",
+        //             $"$('#plantillaModalNotas').modal('hide'); " +
+        //             $"$('#plantillaModal').modal('show'); " +
+        //             $"$('#hiddenInput2').val('{contenidoPlantilla.Replace("'", "\\'")}'); " +
+        //             $"setQuillContent('{contenidoPlantilla.Replace("'", "\\'")}');", true);
+        //     }
+        // }
+        protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Select")
+            {
+                int rowIndex = Convert.ToInt32(e.CommandArgument);
+                string contenidoPlantilla = gvPlantilla.DataKeys[rowIndex].Values["contenido"].ToString();
+
+                // Usamos JavaScript para cerrar el segundo modal y actualizar el contenido del primero
+                ScriptManager.RegisterStartupScript(this, GetType(), "CerrarModalYActualizar",
+                    "$('#plantillaModalNotas').modal('hide'); " + // Cierra el segundo modal
+                    "$('#plantillaModal').modal('show'); " + // Abre el primer modal
+                                                             // Asigna el contenido al campo oculto y al editor Quill
+                    "$('#hiddenInput2').val('" + contenidoPlantilla.Replace("'", "\\'") + "'); " +
+                    "setQuillContent('" + contenidoPlantilla.Replace("'", "\\'") + "');", true);
+            }
+        }
+
+
+        protected void btnGenerarNotas_Click(object sender, EventArgs e)
+        {
+            string contenido = hiddenInput2.Text;
+            NotasPlantillas notas = new NotasPlantillas();
+            notas.nom_plantilla = "ejemplo";
+            notas.contenido = contenido;
+            notas.id_subsistema = 8;
+            savePlantillas(notas);
+
+            fillNotas();
+        }
+
+
+        private void savePlantillas(NotasPlantillas notas)
+        {
+            int idMax = NotasPlantillasBLL.getMaxId();
+            notas.id = idMax + 1;
+            NotasPlantillasBLL.insert(notas);
 
         }
 
-/// MODAL DE LA PLANTILLA
-/// 
+      
 
-
-  protected void btnGenerar_Click(object sender, EventArgs e)
+        protected void btnCargarPlantillas_Click(object sender, EventArgs e)
         {
 
         }
+        private void fillNotas()
+        {
+            var listaNotas = BLL.NotasPlantillasBLL.read()
+                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
+                   .ToList();
+
+            gvPlantilla.DataSource = listaNotas;
+            gvPlantilla.DataBind();
+
+        }
+
 
     }
 }

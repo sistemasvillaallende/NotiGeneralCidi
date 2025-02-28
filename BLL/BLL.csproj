@@ -53,6 +53,7 @@
     <Compile Include="DetNotificacionGenetalBLL.cs" />
     <Compile Include="MasivoDeudaGeneralBLL.cs" />
     <Compile Include="MasivoDeudaInmBLL.cs" />
+    <Compile Include="NotasPlantillasBLL.cs" />
     <Compile Include="Notificaciones_generales_cidi.cs" />
     <Compile Include="NotificacionGeneralBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

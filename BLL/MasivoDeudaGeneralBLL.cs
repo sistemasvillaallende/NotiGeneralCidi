@@ -9,7 +9,7 @@ namespace BLL
 {
     public class MasivoDeudaGeneralBLL
     {
-          public static List<MasivoDeudaGeneral> read(int cod_barrio)
+        public static List<MasivoDeudaGeneral> read(int cod_barrio)
         {
             try
             {
@@ -20,5 +20,21 @@ namespace BLL
                 throw (ex);
             }
         }
+
+
+        public static List<MasivoDeudaGeneral> read(List<string> barrios)
+        {
+            try
+            {
+                return DAL.MasivoDeudaGeneral.read(barrios);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+
+
     }
 }

@@ -427,6 +427,8 @@ namespace NotificacionesCIDI.Secure
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvConceptos;
 
+        protected global::System.Web.UI.WebControls.GridView gvPlantilla;
+        
         protected global::System.Web.UI.WebControls.TextBox hiddenInput2;
         
         /// <summary>

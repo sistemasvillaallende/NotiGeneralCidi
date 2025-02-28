@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaGeneral.aspx.cs" Inherits="NotificacionesCIDI.Secure.MasivoDeudaGeneral" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaGeneral.aspx.cs" Inherits="NotificacionesCIDI.Secure.MasivoDeudaGeneral"  EnableEventValidation="false"%>
 
 <!DOCTYPE html>
 
@@ -267,8 +267,9 @@
                                                                     <asp:BoundField DataField="nombre" ControlStyle-Width="10%" HeaderText="nombre"></asp:BoundField>
                                                                     <asp:BoundField DataField="cuit" ControlStyle-Width="10%" HeaderText="CUIT"></asp:BoundField>
                                                                     <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%" HeaderText="Calle"></asp:BoundField>
-                                                                    <asp:BoundField DataField="nro_dom_esp" ControlStyle-Width="10%" HeaderText="Nro"></asp:BoundField>
-                                                                    <asp:BoundField DataField="barrio" ControlStyle-Width="10%" HeaderText="Barrio"></asp:BoundField>                                                                </Columns>
+                                                                    <asp:BoundField DataField="nro_dom" ControlStyle-Width="10%" HeaderText="Nro"></asp:BoundField>
+                                                                    <asp:BoundField DataField="barrio" ControlStyle-Width="10%" HeaderText="Barrio"></asp:BoundField>
+                                                                </Columns>                                                                
                                                             </asp:GridView>
                                                             <asp:GridView ID="gvConceptos" CssClass="table" AutoGenerateColumns="false"
                                                                  OnRowCommand="gvConceptos_RowCommand"
@@ -382,29 +383,53 @@
                     <button type="button" class=" btn btn-primary " onclick="insertVariable('{nombre}')">Insertar Nombre</button>
                     <button type="button" class=" btn btn-primary " onclick="insertVariable('{apellido}')">Insertar Apellido</button>
                     <button type="button" class=" btn btn-primary " onclick="insertVariable('{cuit}')">Insertar CUIT</button>
-                    <asp:Button ID="btnGenerate" runat="server" CssClass="btn btn-success" Text="Generar Notas" OnClick="btnGenerar_Click" />
+                    <asp:Button ID="btnGenerate" runat="server" CssClass="btn btn-success" Text="Generar Notas" OnClick="btnGenerarNotas_Click" />
+                    <button type="button" class=" btn btn-primary " onclick="abrirModalNotas()" OnClick="btnCargarPlantillas_Click" >Notas</button>
                 </div>
                 <!-- Campo oculto para almacenar el contenido -->
-                <asp:TextBox ID="hiddenInput2" runat="server" TextMode="MultiLine" Style="display: none;"></asp:TextBox>
-        
-                <!-- Botón ASP.NET para procesar el contenido -->
-              
-        
+                <asp:TextBox ID="hiddenInput2" runat="server" TextMode="MultiLine" Style="display: none;" ValidateRequestMode="Disabled"></asp:TextBox>
+                <!-- Botón ASP.NET para procesar el contenido -->       
                 <!-- Contenedor para mostrar las notas generadas -->
                 <asp:Literal ID="litNotasGeneradas" runat="server"></asp:Literal>
             </div>
+        </div>
 
+        <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog1 modal-dialog">
+                <div class="modal-content1 modal-content">
 
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Lista de planillas</h4>
+                    </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <asp:GridView ID="gvPlantilla" CssClass="table" runat="server" OnRowDataBound="gvPlantilla_RowDataBound"
+                    OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None"  
+                    DataKeyNames="id,contenido">
+                        <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
+                        <Columns>
+                            <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"  HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
+                        </Columns>
+                    </asp:GridView>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+                
+            </div>
+        </div>
 
     </div>
 </div>
-</div>
 
-        <script src="../App_Themes/Main/js/jQuery-2.1.4.min.js"></script>
-        <script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
-        <script src="../App_Themes/Main/js/bootstrap.min.js"></script>
-        <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
-        <script src="../App_Themes/fontawesome/js/all.js"></script>
+<script src="../App_Themes/Main/js/jQuery-2.1.4.min.js"></script>
+<script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
+<script src="../App_Themes/Main/js/bootstrap.min.js"></script>
+<script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
+<script src="../App_Themes/fontawesome/js/all.js"></script>
         <!-- Agregar Quill y Bootstrap JS -->
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -413,94 +438,7 @@
 
         <script>
 
-
-            $(document).ready(function () {
-                $("#lstCatDeuda").attr("disabled", true);
-            });
-            $("#btnAddFilter").click(function () {
-                $("#divBuscar").hide("slow");
-                $("#divFiltros").show("slow");
-                $("#tit").hide("slow");
-            });
-            $("#btnVolver").click(function () {
-                $("#divBuscar").show("slow");
-                $("#divFiltros").hide("slow");
-                $("#tit").show("slow");
-            });
-            $("#ddlFecha").change(function () {
-                cambioFecha();
-            });
-            function cambioFecha() {
-                var selectedVal = $('#ddlFecha option:selected').attr('value');
-                if (selectedVal == 0) {
-                    $("#txtHasta").attr("disabled", true);
-                    $("#txtDesde").removeAttr("disabled");
-                }
-                if (selectedVal == 1) {
-                    $("#txtDesde").attr("disabled", true);
-                    $("#txtHasta").removeAttr("disabled");
-                }
-                if (selectedVal == 2) {
-                    $("#txtDesde").removeAttr("disabled");
-                    $("#txtHasta").removeAttr("disabled");
-                }
-                if (selectedVal == 3) {
-                    $("#txtDesde").attr("disabled", true);
-                    $("#txtHasta").attr("disabled", true);
-                }
-                $("#txtHasta").val('');
-                $("#txtDesde").val('');
-            }
-            $("#ddlFiltroDeuda").change(function () {
-                if (document.getElementById('ddlFiltroDeuda').selectedIndex == 0) {
-                    document.getElementById('lstTipoDeuda').selectedIndex = -1;
-                    $("#txtMontoHasta").attr("disabled", true);
-                    $("#txtMontoDesde").attr("disabled", true);
-                    return;
-                }
-
-                var sel = 0;
-                $.each($('#lstTipoDeuda :selected'), function () {
-
-                    sel = 1;
-
-                });
-                if (sel == 0) {
-                    alert('Debe espesificar el tipo de deuda a filtrar');
-                    document.getElementById('ddlFiltroDeuda').selectedIndex = 0;
-                    $("#txtMontoHasta").attr("disabled", true);
-                    $("#txtMontoDesde").attr("disabled", true);
-                    return;
-                }
-                else {
-                    cambioMonto();
-                }
-            });
-            function cambioMonto() {
-                var selectedVal = $('#ddlFiltroDeuda option:selected').attr('value');
-                if (selectedVal == 0) {
-                    $("#txtMontoHasta").attr("disabled", true);
-                    $("#txtMontoDesde").removeAttr("disabled");
-                }
-                if (selectedVal == 1) {
-                    $("#txtMontoDesde").attr("disabled", true);
-                    $("#txtMontoHasta").removeAttr("disabled");
-                }
-                if (selectedVal == 2) {
-                    $("#txtMontoDesde").removeAttr("disabled");
-                    $("#txtMontoHasta").removeAttr("disabled");
-                }
-                if (selectedVal == 3) {
-                    $("#txtMontoDesde").attr("disabled", true);
-                    $("#txtMontoHasta").attr("disabled", true);
-                    //$("#lstTipoDeuda").attr("disabled", true);
-                }
-                else {
-                    //$("#lstTipoDeuda").removeAttr("disabled");
-                }
-                $("#txtMontoDesde").val('');
-                $("#txtMontoHasta").val('');
-            }
+           
             $("#btnClearFiltros").click(function () {
                 document.getElementById('ddlFecha').selectedIndex = 0;
                 document.getElementById('ddlFiltroDeuda').selectedIndex = 0;
@@ -520,16 +458,7 @@
                     $("#divNombre").show("slow");
                 }
             });
-            $("#DDLCatDeuda").change(function () {
-
-                if ($("#DDLCatDeuda").val() == "1") {
-                    $("#lstCatDeuda").attr("disabled", true);
-                    document.getElementById('lstCatDeuda').selectedIndex = -1;
-                }
-                else {
-                    $("#lstCatDeuda").removeAttr("disabled");
-                }
-            });
+            
 
             function abrirmodalConceptos() {
                     $('#modalConceptos').modal('show');
@@ -539,123 +468,26 @@
                 $('#plantillaModal').modal('show');
             }
 
+            function abrirModalNotas(){
+                $('#plantillaModalNotas').modal('show');
+            }
 
-            var prm = Sys.WebForms.PageRequestManager.getInstance();
-
-            prm.add_endRequest(function () {
-                $(document).ready(function () {
-                    $("#lstCatDeuda").attr("disabled", true);
+            document.addEventListener("DOMContentLoaded", function () {
+                var rows = document.querySelectorAll("#<%= gvPlantilla.ClientID %> tr");
+                 rows.forEach(function (row, index) {
+                    if (index > 0) { // Omitir la cabecera
+                        row.classList.add("gvRow");
+                        row.addEventListener("click", function () {
+                    __doPostBack('<%= gvPlantilla.UniqueID %>', 'Select$' + (index - 1));
+                        });
+                    }   
                 });
-                $("#btnAddFilter").click(function () {
-                    $("#divBuscar").hide("slow");
-                    $("#divFiltros").show("slow");
-                });
-                $("#btnVolver").click(function () {
-                    $("#divBuscar").show("slow");
-                    $("#divFiltros").hide("slow");
-                });
-                $("#ddlFecha").change(function () {
-                    cambioFecha();
-                });
-                function cambioFecha() {
-                    var selectedVal = $('#ddlFecha option:selected').attr('value');
-                    if (selectedVal == 0) {
-                        $("#txtHasta").attr("disabled", true);
-                        $("#txtDesde").removeAttr("disabled");
-                    }
-                    if (selectedVal == 1) {
-                        $("#txtDesde").attr("disabled", true);
-                        $("#txtHasta").removeAttr("disabled");
-                    }
-                    if (selectedVal == 2) {
-                        $("#txtDesde").removeAttr("disabled");
-                        $("#txtHasta").removeAttr("disabled");
-                    }
-                    if (selectedVal == 3) {
-                        $("#txtDesde").attr("disabled", true);
-                        $("#txtHasta").attr("disabled", true);
-                    }
-                    $("#txtHasta").val('');
-                    $("#txtDesde").val('');
-                }
-                $("#ddlFiltroDeuda").change(function () {
-                    if (document.getElementById('ddlFiltroDeuda').selectedIndex == 0) {
-                        $("#txtMontoHasta").attr("disabled", true);
-                        $("#txtMontoDesde").attr("disabled", true);
-                        document.getElementById('lstTipoDeuda').selectedIndex = -1;
-                        return;
-                    }
-
-                    var sel = 0;
-                    $.each($('#lstTipoDeuda :selected'), function () {
-
-                        sel = 1;
-
-                    });
-                    if (sel == 0) {
-                        alert('Debe espesificar el tipo de deuda a filtrar');
-                        document.getElementById('ddlFiltroDeuda').selectedIndex = 0;
-                        $("#txtMontoHasta").attr("disabled", true);
-                        $("#txtMontoDesde").attr("disabled", true);
-                        return;
-                    }
-                    else {
-                        cambioMonto();
-                    }
-                });
-                function cambioMonto() {
-                    var selectedVal = $('#ddlFiltroDeuda option:selected').attr('value');
-                    if (selectedVal == 0) {
-                        $("#txtMontoHasta").attr("disabled", true);
-                        $("#txtMontoDesde").removeAttr("disabled");
-                    }
-                    if (selectedVal == 1) {
-                        $("#txtMontoDesde").attr("disabled", true);
-                        $("#txtMontoHasta").removeAttr("disabled");
-                    }
-                    if (selectedVal == 2) {
-                        $("#txtMontoDesde").removeAttr("disabled");
-                        $("#txtMontoHasta").removeAttr("disabled");
-                    }
-                    if (selectedVal == 3) {
-                        $("#txtMontoDesde").attr("disabled", true);
-                        $("#txtMontoHasta").attr("disabled", true);
-                    }
-                    $("#txtMontoDesde").val('');
-                    $("#txtMontoHasta").val('');
-                }
-                $("#btnClearFiltros").click(function () {
-                    document.getElementById('ddlFecha').selectedIndex = 0;
-                    document.getElementById('ddlFiltroDeuda').selectedIndex = 0;
-                    cambioFecha();
-                    cambioMonto();
-                    document.getElementById('lstBarrios').selectedIndex = -1;
-                    document.getElementById('lstZonas').selectedIndex = -1;
-                });
-                $("#ddlBuscar").change(function () {
-                    if ($("#ddlBuscar").val() == "Denominacion Catastral") {
-                        $("#divCatastro").show("slow");
-                        $("#divNombre").hide("slow");
-                    }
-                    else {
-                        $("#divCatastro").hide("slow");
-                        $("#divNombre").show("slow");
-                    }
-                });
-                $("#DDLCatDeuda").change(function () {
-                    if ($("#DDLCatDeuda").val() == "1") {
-                        $("#lstCatDeuda").attr("disabled", true);
-                        document.getElementById('lstCatDeuda').selectedIndex = -1;
-
-                    }
-                    else {
-                        $("#lstCatDeuda").removeAttr("disabled");
-                    }
-                });
-                
             });
+
+                
         </script>
 <script>
+
     let quill; // Definir la variable globalmente
 
     // Inicializar Quill cuando el modal se muestra
@@ -668,7 +500,28 @@
                 }
             });
         }
+        
+        var contenido = $('#hiddenInput2').val();
+        if (contenido) {
+            setQuillContent(contenido);
+        }
     });
+
+    $('#plantillaModal').on('hidden.bs.modal', function () {
+    if (quill) {
+        quill.root.innerHTML = ''; // Limpiar el contenido de Quill
+    }
+
+    // Opcionalmente, también puedes limpiar el campo oculto
+    $('#hiddenInput2').val('');
+});
+
+    // Función para insertar contenido en Quill
+    function setQuillContent(content) {
+    if (quill) {
+        quill.root.innerHTML = content; // Asigna el contenido al editor de Quill
+    }
+}
 
     // Función para insertar variables en el editor
     function insertVariable(variable) {
