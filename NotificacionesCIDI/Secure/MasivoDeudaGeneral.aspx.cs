@@ -23,6 +23,8 @@ namespace NotificacionesCIDI.Secure
             {
                 fillBarrios();
                 fillNotas();
+                txtNombreNota.Text = "Ingrese nombre de la nota generada";
+
             }
 
         }
@@ -33,7 +35,6 @@ namespace NotificacionesCIDI.Secure
             lstBarrios.DataValueField = "cod_barrio";
             lstBarrios.DataBind();
         }
-
 
         protected void gvDeuda_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -50,7 +51,6 @@ namespace NotificacionesCIDI.Secure
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
         }
-
 
         private void ExportToExcel(string nameReport, GridView wControl)
         {
@@ -73,17 +73,6 @@ namespace NotificacionesCIDI.Secure
         protected void btnExcel_Click(object sender, EventArgs e)
         {
             ExportToExcel("Deuda General Inmueble", gvDeuda);
-        }
-
-        // boton para importar excel
-
-        private void ImportExcelToGridView(string fileP, string extension, string ishdr)
-        {
-
-        }
-        protected void btnImportExcel_ServerClick(object sender, EventArgs e)
-        {
-
         }
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
@@ -113,17 +102,19 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
         {
-            ddlFecha.SelectedIndex = 0;
-            ddlFiltroDeuda.SelectedIndex = 0;
-            lstTipoDeuda.ClearSelection();
             lstBarrios.ClearSelection();
-            lstZonas.ClearSelection();
-            txtDesde.Text = string.Empty;
-            txtHasta.Text = string.Empty;
-            txtMontoDesde.Text = string.Empty;
-            txtMontoHasta.Text = string.Empty;
             List<DAL.MasivoDeudaGeneral> lst = BLL.MasivoDeudaGeneralBLL.read(10);
             Session["LST"] = lst;
+            // Refresca la grilla con la lista completa
+            fillGrilla(lst);
+            Session["registros_notificar"] = lst;
+
+            Session["Detalle"] = null;
+            gvConceptos.DataSource = null;
+            gvConceptos.DataBind();
+            divFiltros.Visible = true;
+            divResultados.Visible = false;
+
 
         }
 
@@ -137,11 +128,8 @@ namespace NotificacionesCIDI.Secure
             ExportToExcel("Export", gvDeuda);
         }
 
-
-
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-
         }
 
         private List<DAL.MasivoDeudaGeneral> filtroBarrios(List<DAL.MasivoDeudaGeneral> lst, List<string> seleccionados)
@@ -156,7 +144,6 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
-
 
         protected void btnCerraSession_ServerClick(object sender, EventArgs e)
         {
@@ -273,8 +260,6 @@ namespace NotificacionesCIDI.Secure
                                 dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
                                 i++;
                             }
-                            //else
-                            //break;
                         }
                     }
                 }
@@ -316,9 +301,6 @@ namespace NotificacionesCIDI.Secure
             }
             return lstConcepto;
         }
-
-
-
         protected void gvConceptos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             try
@@ -340,29 +322,9 @@ namespace NotificacionesCIDI.Secure
         }
         protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            // if (e.Row.RowType == DataControlRowType.DataRow)
-            // {
-            //     // Establecer el comando para cada fila
-            //     e.Row.Attributes["onclick"] = Page.ClientScript.GetPostBackClientHyperlink(gvPlantilla, "Select$" + e.Row.RowIndex);
-            //     e.Row.ToolTip = "Haz clic para seleccionar esta fila";
-            // }
+
         }
 
-        // protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
-        // {
-        //     if (e.CommandName == "Select")
-        //     {
-        //         int rowIndex = Convert.ToInt32(e.CommandArgument);
-        //         string contenidoPlantilla = gvPlantilla.DataKeys[rowIndex].Values["contenido"].ToString();
-
-        //         // Usamos JavaScript para cerrar el modal de la selección y actualizar el primer modal.
-        //         ScriptManager.RegisterStartupScript(this, GetType(), "CerrarModalYActualizar",
-        //             $"$('#plantillaModalNotas').modal('hide'); " +
-        //             $"$('#plantillaModal').modal('show'); " +
-        //             $"$('#hiddenInput2').val('{contenidoPlantilla.Replace("'", "\\'")}'); " +
-        //             $"setQuillContent('{contenidoPlantilla.Replace("'", "\\'")}');", true);
-        //     }
-        // }
         protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "Select")
@@ -393,7 +355,6 @@ namespace NotificacionesCIDI.Secure
             fillNotas();
         }
 
-
         private void savePlantillas(NotasPlantillas notas)
         {
             int idMax = NotasPlantillasBLL.getMaxId();
@@ -401,8 +362,6 @@ namespace NotificacionesCIDI.Secure
             NotasPlantillasBLL.insert(notas);
 
         }
-
-      
 
         protected void btnCargarPlantillas_Click(object sender, EventArgs e)
         {
@@ -417,6 +376,38 @@ namespace NotificacionesCIDI.Secure
             gvPlantilla.DataSource = listaNotas;
             gvPlantilla.DataBind();
 
+        }
+
+
+        protected void btnGuardarNota_Click(object sender, EventArgs e)
+        {
+            string contenido = MyHiddenControl2.Value;
+            string nombreNota = MyHiddenControl.Value;
+            string contenido2 = hiddenInput2.Text;
+
+
+            if (string.IsNullOrWhiteSpace(nombreNota))
+            {
+                nombreNota = "Sin nombre"; // Si no ingresan nada, ponemos un nombre por defecto
+            }
+
+            NotasPlantillas notas = new NotasPlantillas();
+            notas.nom_plantilla = nombreNota;
+            notas.contenido = contenido; // Verifica si 'contenidoPlan' está correctamente inicializado
+            notas.id_subsistema = 8;
+
+            savePlantillas(notas);
+            fillNotas(); // Recargar lista
+
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "VolverAModalPrincipal",
+           @"
+        $(document).ready(function() {
+            $('#plantillaModalNombreNotas').modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('#plantillaModal').modal('show');
+        });
+        ", true);
         }
 
 

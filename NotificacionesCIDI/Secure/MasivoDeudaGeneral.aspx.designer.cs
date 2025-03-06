@@ -431,6 +431,10 @@ namespace NotificacionesCIDI.Secure
         
         protected global::System.Web.UI.WebControls.TextBox hiddenInput2;
         
+        protected global::System.Web.UI.WebControls.TextBox txtNombreNota;
+        protected global::System.Web.UI.WebControls.Button btnGuardarNota;
+        protected global::System.Web.UI.WebControls.Button  btnNotas;
+
         /// <summary>
         /// Control btnGenerate.
         /// </summary>
@@ -449,6 +453,10 @@ namespace NotificacionesCIDI.Secure
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litNotasGeneradas;
 
+         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+
+        protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl;
+        protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl2;
 
     }
 }
