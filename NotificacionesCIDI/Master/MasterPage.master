@@ -106,12 +106,12 @@
                             </li>
                             <li class="li-menu">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=4" class="a-menu">
-                                    <span style="font-size: 16px !important;">Notificacion Auto</span>
+                                    <span style="font-size: 16px !important;">Notificaciones</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeudaAuto.aspx" class="a-menu">
-                                    <span style="font-size: 16px !important;">Nueva notificacion</span>
+                                    <span style="font-size: 16px !important;">Nueva</span>
                                 </a>
                             </li>
                             <li>
@@ -129,12 +129,12 @@
                             </li>
                             <li class="li-menu">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=3" class="a-menu">
-                                    <span style="font-size: 16px !important;">Notificacion Ind. y Comercio</span>
+                                    <span style="font-size: 16px !important;">Notificaciones</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeudaIyC.aspx" class="a-menu">
-                                    <span style="font-size: 16px !important;">Nueva notificacion</span>
+                                    <span style="font-size: 16px !important;">Nueva</span>
                                 </a>
                             </li>
                             <li>
@@ -152,12 +152,12 @@
                             </li>
                             <li class="li-menu">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=1" class="a-menu">
-                                    <span style="font-size: 16px !important;">Notificacion Inmueble</span>
+                                    <span style="font-size: 16px !important;">Notificaciones</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeuda.aspx" class="a-menu">
-                                    <span style="font-size: 16px !important;">Nuevas</span>
+                                    <span style="font-size: 16px !important;">Nueva</span>
                                 </a>
                             </li>
                             <li>
@@ -175,12 +175,12 @@
                             </li>
                             <li class="li-menu">
                                 <a href="./NotificacionesGeneral.aspx?subsistema=8" class="a-menu">
-                                    <span style="font-size: 16px !important;">Notificaciones generales</span>
+                                    <span style="font-size: 16px !important;">Notificaciones</span>
                                 </a>
                             </li>
                             <li class="li-menu">
                                 <a href="./MasivoDeudaGeneral.aspx" class="a-menu">
-                                    <span style="font-size: 16px !important;">Nuevas Notificaciones</span>
+                                    <span style="font-size: 16px !important;">Nueva</span>
                                 </a>
                             </li>
                         </ul>
