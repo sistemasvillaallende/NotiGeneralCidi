@@ -51,6 +51,7 @@
     <Compile Include="CATE_DEUDA.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="DetNotificacionGenetalBLL.cs" />
+    <Compile Include="MasivoDeudaBLL.cs" />
     <Compile Include="MasivoDeudaGeneralBLL.cs" />
     <Compile Include="MasivoDeudaInmBLL.cs" />
     <Compile Include="NotasPlantillasBLL.cs" />
