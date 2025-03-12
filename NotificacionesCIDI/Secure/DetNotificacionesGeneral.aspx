@@ -1,43 +1,11 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DetNotificacionesGeneral.aspx.cs"
-    Inherits="NotificacionesCIDI.Secure.DetNotificacionesGeneral" MasterPageFile="~/Master/MasterPage.master" %>
-
-    <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-        <meta charset="UTF-8" />
-        <title>Masivo Deuda</title>
-        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
-        <link href="../App_Themes/Main/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="../App_Themes/fontawesome/css/all.css" rel="stylesheet" />
-        <style>
-            .btn-outline {
-                background-color: transparent;
-                border: solid darkcyan;
-                color: darkcyan;
-                font-weight: 500;
-                border-radius: 15px;
-            }
-
-            .btn-outline-danger {
-                background-color: transparent;
-                border: solid #dc2626;
-                color: #dc2626;
-                font-weight: 500;
-                border-radius: 15px;
-            }
-
-            .btn-outline-excel {
-                background-color: transparent;
-                border: solid #006e37;
-                color: #006e37;
-                font-weight: 500;
-                border-radius: 15px;
-            }
-        </style>
-    </asp:Content>
+    Inherits="NotificacionesCIDI.Secure.DetNotificacionesGeneral" Title="Masivo Deuda"
+    MasterPageFile="~/Master/MasterPage.master" %>
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-        <div style="padding-left: 5%; padding-right:5%;">
+        <div>
             <div class="row">
-                <div class="col-12" style="padding: 25px;">
+                <div class="col-12">
                     <h1
                         style="font-size: 36px !important; font-weight: 600 !important; margin-bottom: 5px !important; display: flex !important; align-items: start !important;">
                         <span class="fa fa-car-side"
