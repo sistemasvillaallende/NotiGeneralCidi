@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <!-- <div class="col-md-2">
                                         <label>Fecha</label>
                                         <asp:DropDownList ID="ddlFecha" CssClass="form-control" runat="server">
                                             <asp:ListItem Text="Sin filtro" Value="3"></asp:ListItem>
@@ -59,31 +59,28 @@
                                                     CssClass="form-control" runat="server"></asp:TextBox>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="col-md-3">
                                         <label>Categoria Deuda</label>
-                                        <asp:DropDownList ID="DDLCatDeuda" CssClass="form-control" runat="server">
-                                            <asp:ListItem Text="Toda" Value="1"></asp:ListItem>
-                                            <asp:ListItem Text="Seleccionada" Value="2"></asp:ListItem>
-                                        </asp:DropDownList>
+                                        
                                         <br />
-                                        <asp:ListBox ID="lstCatDeuda" Height="90" CssClass="form-control list-group"
+                                        <asp:ListBox ID="lstCatDeuda" Height="180" Width="280" CssClass="form-control list-group"
                                             runat="server" SelectionMode="Multiple"></asp:ListBox>
                                     </div>
 
                                     <div class="col-md-2">
                                         <label>Barrio</label>
-                                        <asp:ListBox ID="lstBarrios" Height="143" CssClass="form-control" runat="server"
+                                        <asp:ListBox ID="lstBarrios" Height="180" Width="280" CssClass="form-control" runat="server"
                                             SelectionMode="Multiple"></asp:ListBox>
                                     </div>
-                                    <div class="col-md-1">
+                                    <!-- <div class="col-md-1">
                                         <label>Zona</label>
                                         <asp:ListBox ID="lstZonas" Height="143" CssClass="form-control" runat="server"
                                             SelectionMode="Multiple"></asp:ListBox>
-                                    </div>
+                                    </div> -->
                                     <div class="col-md-4">
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col-md-6">
                                                 <label>Tipo Deuda</label>
                                             </div>
@@ -98,7 +95,7 @@
                                                     <asp:ListItem>Deuda Administrativa</asp:ListItem>
                                                     <asp:ListItem>Deuda Normal</asp:ListItem>
                                                 </asp:ListBox>
-                                            </div>
+                                            </div> 
                                             <div class="col-md-6">
                                                 <asp:DropDownList ID="ddlFiltroDeuda" CssClass="form-control"
                                                     runat="server">
@@ -124,7 +121,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <br />
                                     </div>
                                 </div>
@@ -180,60 +177,13 @@
                                                         <asp:Label ID="lblNroCta" runat="server" Text=""></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="titular" ControlStyle-Width="10%"
-                                                    HeaderText="Titular"></asp:BoundField>
-                                                <asp:BoundField DataField="cuil" ControlStyle-Width="10%"
-                                                    HeaderText="CUIT"></asp:BoundField>
-                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
-                                                    HeaderText="Calle"></asp:BoundField>
-                                                <asp:BoundField DataField="nro_dom_esp" ControlStyle-Width="10%"
-                                                    HeaderText="Nro"></asp:BoundField>
-                                                <asp:BoundField DataField="barrio" ControlStyle-Width="10%"
-                                                    HeaderText="Barrio"></asp:BoundField>
-                                                <asp:BoundField DataField="zona" ControlStyle-Width="10%"
-                                                    HeaderText="Zona"></asp:BoundField>
-                                                <asp:BoundField DataField="deudaJudicial" ControlStyle-Width="10%"
-                                                    DataFormatString="{0:c}" HeaderText="Judicial"></asp:BoundField>
-                                                <asp:BoundField DataField="deudaPreJudicial" ControlStyle-Width="10%"
-                                                    DataFormatString="{0:c}" HeaderText="Prejudicial"></asp:BoundField>
-                                                <asp:BoundField DataField="deudaAdministrativa" ControlStyle-Width="10%"
-                                                    DataFormatString="{0:c}" HeaderText="Administrativa">
-                                                </asp:BoundField>
-                                                <asp:BoundField DataField="deudaNormal" ControlStyle-Width="10%"
-                                                    DataFormatString="{0:c}" HeaderText="Normal"></asp:BoundField>
+                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%" HeaderText="Nombre" />
+                                                <asp:BoundField DataField="apellido" ControlStyle-Width="10%" HeaderText="Apellido" />
+                                                <asp:BoundField DataField="cuit" ControlStyle-Width="10%" HeaderText="CUIT" />
+                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%" HeaderText="Calle" />
+                                                <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%" HeaderText="Barrio" />
                                             </Columns>
                                         </asp:GridView>
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-top: 20px;">
-                                    <div class="col-md-2 form-group">
-                                        <label>Total de registros</label>
-                                        <asp:TextBox ID="txtRegistros" CssClass="form-control" runat="server">
-                                        </asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2 form-group">
-                                        <label>Deuda Judicial</label>
-                                        <asp:TextBox ID="txtTotJudicial" CssClass="form-control" runat="server">
-                                        </asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2 form-group">
-                                        <label>Deuda Pre-Judicial</label>
-                                        <asp:TextBox ID="txtPreJudicial" CssClass="form-control" runat="server">
-                                        </asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2 form-group">
-                                        <label>Deuda Administrativa</label>
-                                        <asp:TextBox ID="txtAdministrativa" CssClass="form-control" runat="server">
-                                        </asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2 form-group">
-                                        <label>Deuda Normal</label>
-                                        <asp:TextBox ID="txtNormal" CssClass="form-control" runat="server">
-                                        </asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2 form-group">
-                                        <label>Deuda Total</label>
-                                        <asp:TextBox ID="txtTotal" CssClass="form-control" runat="server"></asp:TextBox>
                                     </div>
                                 </div>
                             </div>

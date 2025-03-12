@@ -59,6 +59,7 @@
     <Compile Include="DALBase.cs" />
     <Compile Include="Detalle_notificaciones_generaes_cidi.cs" />
     <Compile Include="DetNotificacionGeneral.cs" />
+    <Compile Include="MasivoDeuda.cs" />
     <Compile Include="MasivoDeudaGeneral.cs" />
     <Compile Include="MasivoDeudaInm.cs" />
     <Compile Include="NotasPlantillas.cs" />
