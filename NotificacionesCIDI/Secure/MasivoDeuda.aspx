@@ -33,7 +33,7 @@
                             <div id="divFiltros" runat="server">
                                 <div class="row" style="margin-top: 25px;">
                                     <div class="col-md-12">
-                                        <h3 style="color: #367fa9;">Inmueble - Nueva Notificación</h3>
+                                        <h1>Inmueble - Nueva Notificación</h1>
                                     </div>
                                 </div>
                                 <div class="row">

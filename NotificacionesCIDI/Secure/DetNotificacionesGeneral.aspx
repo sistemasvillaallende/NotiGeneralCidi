@@ -6,17 +6,7 @@
         <div>
             <div class="row">
                 <div class="col-12">
-                    <h1
-                        style="font-size: 36px !important; font-weight: 600 !important; margin-bottom: 5px !important; display: flex !important; align-items: start !important;">
-                        <span class="fa fa-car-side"
-                            style="color: #c09e76; border-right: solid 3px; padding-right: 10px;"></span>
-                        <span
-                            style="font-size: 20px !important; padding-left: 8px !important; margin-top: -5px !important;">Automotores</span>
-                    </h1>
-                    <h1
-                        style="font-size: 16px !important; font-weight: 500 !important; color: gray !important; margin-left: 65px !important; margin-top: -24px !important;">
-                        Procuraciones - Cambio de estado masivo</h1>
-                    <hr style="margin-top: 5px; border: 2px solid #c09e76; margin-bottom: 20px; opacity: 1;" />
+                    <h1>Notificación</h1>
                 </div>
             </div>
             <div class="row">

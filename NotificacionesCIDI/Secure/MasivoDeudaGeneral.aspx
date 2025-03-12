@@ -28,7 +28,7 @@
                             <div id="divFiltros" runat="server">
                                 <div class="row" style="margin-top: 25px;">
                                     <div class="col-md-12">
-                                        <h3 style="color: #367fa9;">Filtros</h3>
+                                        <h1>Filtros</h1>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12" style="text-align: left;">
@@ -49,8 +49,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12" style="text-align: right;">
-                                    <button type="button" class="btn btn-outline" id="btnFiltros" runat="server"
-                                        onserverclick="btnFiltros_ServerClick">
+                                    <button type="button" class="btn btn-outline-secondary" id="btnFiltros"
+                                        runat="server" onserverclick="btnFiltros_ServerClick">
                                         <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
                                     </button>
                                 </div>
@@ -71,19 +71,19 @@
                         <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
                             <div class="row">
                                 <div class="12" style="text-align: right">
-                                    <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
+                                    <a class="btn btn-outline-primary" onclick="abrirModalPlantillas();">
                                         <i class="fa fa-file-excel-o"></i> PLANTILLA
                                     </a>
                                     <button type="button" class="btn btn-outline-danger" id="btnClearFiltros"
                                         runat="server" onserverclick="btnClearFiltros_ServerClick">
                                         <span class="fa fa-filter-circle-xmark"></span>&nbsp;Limpiar Filtros
                                     </button>
-                                    <button type="button" id="btnNoti" class="btn btn-outline" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
+                                    <button type="button" id="btnNoti" class="btn btn-outline-info"
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal">
                                         <span class="fa fa-sheet-plastic"></span>&nbsp; Generar notificación CIDI
                                     </button>
                                     <button type="button" runat="server" id="btnExportExcel"
-                                        onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-excel"
+                                        onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                         data-toggle="modal" data-target="#page-change-name">
                                         <span class="fa fa-sheet-plastic"></span>&nbsp; Exportar a Excel
                                     </button>
