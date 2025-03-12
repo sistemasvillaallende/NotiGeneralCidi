@@ -396,14 +396,15 @@
                                                 <span class="fa fa-filter-circle-xmark"></span>&nbsp;Limpiar
                                                 Filtros
                                             </button>
-                                            <button type="button" id="btnNoti" class="btn btn-outline"
+                                            <button type="button" id="btnNoti" class="btn btn-outline-primary"
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                 <span class="fa fa-sheet-plastic"></span>&nbsp; Generar
                                                 notificación CIDI
                                             </button>
                                             <button type="button" runat="server" id="btnExportExcel"
-                                                onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-excel"
-                                                data-toggle="modal" data-target="#page-change-name">
+                                                onserverclick="btnExportExcel_ServerClick"
+                                                class="btn btn-outline-success" data-toggle="modal"
+                                                data-target="#page-change-name">
                                                 <span class="fa fa-sheet-plastic"></span>&nbsp; Exportar
                                                 a Excel
                                             </button>

@@ -10,26 +10,33 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <asp:GridView AutoGenerateColumns="false" CssClass="table" ID="gvMasivosAut" runat="server">
-                            <Columns>
-                                <asp:BoundField DataField="Nro_Emision" HeaderText="Emisión" />
-                                <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha" DataFormatString="{0:d}" />
-                                <asp:BoundField DataField="Fecha_Vencimiento" HeaderText="Fecha Vencimiento"
-                                    DataFormatString="{0:d}" />
-                                <asp:BoundField DataField="Cod_tipo_notificacion" HeaderText="Cod. Notificacion" />
-                                <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" />
-                                <asp:BoundField DataField="Subsistema" HeaderText="Subsistema" />
-                                <asp:BoundField DataField="Cantidad_Reg" HeaderText="Registros" />
-                                <asp:BoundField DataField="Total" HeaderText="Total" />
-                                <asp:BoundField DataField="Porcentaje" HeaderText="Porcentaje" />
-                                <asp:TemplateField>
-                                    <ItemTemplate>
-                                        <a href='DetNotificacionesGeneral.aspx?nro_emision=<%# Eval("Nro_Emision") %>'><span
-                                                class="fa fa-envelope-circle-check" style="color: darkcyan"></span></a>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
+                        <div class="table-responsive">
+                            <asp:GridView AutoGenerateColumns="false" CssClass="table table-striped table-hover"
+                                ID="gvMasivosAut" runat="server">
+                                <Columns>
+                                    <asp:BoundField DataField="Nro_Emision" HeaderText="Emisión" />
+                                    <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha"
+                                        DataFormatString="{0:d}" />
+                                    <asp:BoundField DataField="Fecha_Vencimiento" HeaderText="Fecha Vencimiento"
+                                        DataFormatString="{0:d}" />
+                                    <asp:BoundField DataField="Cod_tipo_notificacion" HeaderText="Cod. Notificacion" />
+                                    <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" />
+                                    <asp:BoundField DataField="Subsistema" HeaderText="Subsistema" />
+                                    <asp:BoundField DataField="Cantidad_Reg" HeaderText="Registros" />
+                                    <asp:BoundField DataField="Total" HeaderText="Total" />
+                                    <asp:BoundField DataField="Porcentaje" HeaderText="Porcentaje" />
+                                    <asp:TemplateField>
+                                        <ItemTemplate>
+                                            <a
+                                                href='DetNotificacionesGeneral.aspx?nro_emision=<%# Eval("Nro_Emision") %>'>
+                                                <span class="fa fa-envelope-circle-check"
+                                                    style="color: darkcyan"></span>
+                                            </a>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

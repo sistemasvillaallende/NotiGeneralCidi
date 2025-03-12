@@ -63,16 +63,17 @@
 
                                     <div class="col-md-3">
                                         <label>Categoria Deuda</label>
-                                        
+
                                         <br />
-                                        <asp:ListBox ID="lstCatDeuda" Height="180" Width="280" CssClass="form-control list-group"
-                                            runat="server" SelectionMode="Multiple"></asp:ListBox>
+                                        <asp:ListBox ID="lstCatDeuda" Height="180" Width="280"
+                                            CssClass="form-control list-group" runat="server" SelectionMode="Multiple">
+                                        </asp:ListBox>
                                     </div>
 
                                     <div class="col-md-2">
                                         <label>Barrio</label>
-                                        <asp:ListBox ID="lstBarrios" Height="180" Width="280" CssClass="form-control" runat="server"
-                                            SelectionMode="Multiple"></asp:ListBox>
+                                        <asp:ListBox ID="lstBarrios" Height="180" Width="280" CssClass="form-control"
+                                            runat="server" SelectionMode="Multiple"></asp:ListBox>
                                     </div>
                                     <!-- <div class="col-md-1">
                                         <label>Zona</label>
@@ -151,12 +152,12 @@
                                             runat="server" onserverclick="btnClearFiltros_ServerClick">
                                             <span class="fa fa-filter-circle-xmark"></span>&nbsp;Limpiar Filtros
                                         </button>
-                                        <button type="button" id="btnNoti" class="btn btn-outline"
+                                        <button type="button" id="btnNoti" class="btn btn-outline-primary"
                                             data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación CIDI
                                         </button>
                                         <button type="button" runat="server" id="btnExportExcel"
-                                            onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-excel"
+                                            onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                             data-toggle="modal" data-target="#page-change-name">
                                             <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel
                                         </button>
@@ -177,11 +178,16 @@
                                                         <asp:Label ID="lblNroCta" runat="server" Text=""></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%" HeaderText="Nombre" />
-                                                <asp:BoundField DataField="apellido" ControlStyle-Width="10%" HeaderText="Apellido" />
-                                                <asp:BoundField DataField="cuit" ControlStyle-Width="10%" HeaderText="CUIT" />
-                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%" HeaderText="Calle" />
-                                                <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%" HeaderText="Barrio" />
+                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
+                                                    HeaderText="Nombre" />
+                                                <asp:BoundField DataField="apellido" ControlStyle-Width="10%"
+                                                    HeaderText="Apellido" />
+                                                <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
+                                                    HeaderText="CUIT" />
+                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
+                                                    HeaderText="Calle" />
+                                                <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%"
+                                                    HeaderText="Barrio" />
                                             </Columns>
                                         </asp:GridView>
                                     </div>

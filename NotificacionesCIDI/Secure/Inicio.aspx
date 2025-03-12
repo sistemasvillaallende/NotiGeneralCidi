@@ -6,13 +6,13 @@
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-        <div class="col-8">
+        <div class="col-12">
             <div class="col-12">
                 <h1>Notificaciones</h1>
             </div>
-            <hr style="margin-top: -10px; border: 2px solid #c09e76; margin-bottom: 20px; opacity: 1; width: 100%;" />
             <div class="">
-                <asp:GridView AutoGenerateColumns="false" CssClass="table" ID="gvMasivosAut" runat="server">
+                <asp:GridView AutoGenerateColumns="false" CssClass="table table-striped table-hover" ID="gvMasivosAut"
+                    runat="server">
                     <Columns>
                         <asp:BoundField DataField="Nro_Emision" HeaderText="Emision" />
                         <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha" DataFormatString="{0:d}" />
