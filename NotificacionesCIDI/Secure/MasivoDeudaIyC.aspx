@@ -126,8 +126,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12" style="text-align: right;">
-                                        <button type="button" class="btn btn-outline" id="btnFiltros" runat="server"
-                                            onserverclick="btnFiltros_ServerClick">
+                                        <button type="button" class="btn btn-outline-primary" id="btnFiltros"
+                                            runat="server" onserverclick="btnFiltros_ServerClick">
                                             <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
                                         </button>
                                     </div>
