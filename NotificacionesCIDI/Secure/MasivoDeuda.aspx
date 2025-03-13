@@ -166,30 +166,33 @@
 
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-12"
-                                        style="height: 320px; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
-                                        <asp:GridView ID="gvDeuda" CssClass="table" runat="server"
-                                            OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False"
-                                            CellPadding="4" ForeColor="#333333" GridLines="None">
-                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                                            </AlternatingRowStyle>
-                                            <Columns>
-                                                <asp:TemplateField HeaderText="Denominación">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblNroCta" runat="server" Text=""></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
-                                                    HeaderText="Nombre" />
-                                                <asp:BoundField DataField="apellido" ControlStyle-Width="10%"
-                                                    HeaderText="Apellido" />
-                                                <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
-                                                    HeaderText="CUIT" />
-                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
-                                                    HeaderText="Calle" />
-                                                <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%"
-                                                    HeaderText="Barrio" />
-                                            </Columns>
-                                        </asp:GridView>
+                                        style="max-height: 75vh; overflow-y: auto; border: solid lightgray; border-radius: 15px;">
+                                        <div class="table-responsive">
+                                            <asp:GridView ID="gvDeuda" CssClass="table table-striped table-hover"
+                                                runat="server" OnRowDataBound="gvDeuda_RowDataBound"
+                                                AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
+                                                GridLines="None" AlternatingRowStyle-BackColor="White"
+                                                AlternatingRowStyle-ForeColor="#284775">
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="Denominación">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblNroCta" runat="server" Text="">
+                                                            </asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
+                                                        HeaderText="Nombre" />
+                                                    <asp:BoundField DataField="apellido" ControlStyle-Width="10%"
+                                                        HeaderText="Apellido" />
+                                                    <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
+                                                        HeaderText="CUIT" />
+                                                    <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
+                                                        HeaderText="Calle" />
+                                                    <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%"
+                                                        HeaderText="Barrio" />
+                                                </Columns>
+                                            </asp:GridView>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
