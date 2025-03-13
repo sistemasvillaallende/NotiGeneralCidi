@@ -91,38 +91,43 @@
                             </div>
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-12"
-                                    style="height: 320px; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
-                                    <asp:GridView ID="gvDeuda" CssClass="table" runat="server"
-                                        OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False"
-                                        CellPadding="4" ForeColor="#333333" GridLines="None">
-                                        <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                                        </AlternatingRowStyle>
-                                        <Columns>
-                                            <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
-                                                HeaderText="nombre"></asp:BoundField>
-                                            <asp:BoundField DataField="cuit" ControlStyle-Width="10%" HeaderText="CUIT">
-                                            </asp:BoundField>
-                                            <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
-                                                HeaderText="Calle"></asp:BoundField>
-                                            <asp:BoundField DataField="nro_dom" ControlStyle-Width="10%"
-                                                HeaderText="Nro"></asp:BoundField>
-                                            <asp:BoundField DataField="barrio" ControlStyle-Width="10%"
-                                                HeaderText="Barrio"></asp:BoundField>
-                                        </Columns>
-                                    </asp:GridView>
-                                    <asp:GridView ID="gvConceptos" CssClass="table" AutoGenerateColumns="false"
-                                        OnRowCommand="gvConceptos_RowCommand" OnRowDeleting="gvConceptos_RowDeleting"
-                                        DataKeyNames="cuit" EmptyDataText="No hay resultados..." runat="server"
-                                        CellPadding="4" ForeColor="#333333" GridLines="None">
-                                        <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                                        </AlternatingRowStyle>
-                                        <Columns>
-                                            <asp:BoundField DataField="Cuit" ControlStyle-Width="10%" HeaderText="CUIT">
-                                                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-                                                <ItemStyle HorizontalAlign="left"></ItemStyle>
-                                            </asp:BoundField>
-                                        </Columns>
-                                    </asp:GridView>
+                                    style="max-height: 75vh; overflow-y: auto; border: solid lightgray; border-radius: 15px;">
+                                    <div class="table-responsive">
+                                        <asp:GridView ID="gvDeuda" CssClass="table table-striped table-hover"
+                                            runat="server" OnRowDataBound="gvDeuda_RowDataBound"
+                                            AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
+                                            GridLines="None">
+                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                                            <Columns>
+                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
+                                                    HeaderText="nombre" />
+                                                <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
+                                                    HeaderText="CUIT" />
+                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
+                                                    HeaderText="Calle" />
+                                                <asp:BoundField DataField="nro_dom" ControlStyle-Width="10%"
+                                                    HeaderText="Nro" />
+                                                <asp:BoundField DataField="barrio" ControlStyle-Width="10%"
+                                                    HeaderText="Barrio" />
+                                            </Columns>
+                                        </asp:GridView>
+                                    </div>
+                                    <div class="table-responsive mt-3">
+                                        <asp:GridView ID="gvConceptos" CssClass="table table-striped table-hover"
+                                            AutoGenerateColumns="false" OnRowCommand="gvConceptos_RowCommand"
+                                            OnRowDeleting="gvConceptos_RowDeleting" DataKeyNames="cuit"
+                                            EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
+                                            ForeColor="#333333" GridLines="None">
+                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                                            <Columns>
+                                                <asp:BoundField DataField="Cuit" ControlStyle-Width="10%"
+                                                    HeaderText="CUIT">
+                                                    <HeaderStyle HorizontalAlign="Center" />
+                                                    <ItemStyle HorizontalAlign="left" />
+                                                </asp:BoundField>
+                                            </Columns>
+                                        </asp:GridView>
+                                    </div>
                                 </div>
                             </div>
                         </div>
