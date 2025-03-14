@@ -52,8 +52,8 @@ namespace DAL
             Nombre = String.Empty;
             Cod_estado_cidi = 0;
             Fecha_Inicio_Estado = DateTime.Now;
-            Fecha_Fin_Estado = DateTime.Now;
-            Vencimiento = DateTime.Now;
+            Fecha_Fin_Estado = DateTime.Now.AddMonths(1);
+            Vencimiento = DateTime.Now.AddMonths(1);
             Nro_cedulon = 0;
             Debe = 0;
             Barcode39 = string.Empty;
@@ -77,7 +77,7 @@ namespace DAL
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = " SELECT * FROM CIDI_DET_NOTIFICACION_GENERAL WHERE Nro_Emision = @nro_emision  ";
-                    cmd.Parameters.AddWithValue("@nro_emision", nro_emision); 
+                    cmd.Parameters.AddWithValue("@nro_emision", nro_emision);
                     cmd.Connection.Open();
 
                     SqlDataReader dr = cmd.ExecuteReader();
@@ -100,7 +100,7 @@ namespace DAL
                             if (!dr.IsDBNull(9)) { obj.Cuit = dr.GetString(9); }
                             if (!dr.IsDBNull(10)) { obj.Nro_Badec = dr.GetInt32(10); }
                             if (!dr.IsDBNull(11)) { obj.Nombre = dr.GetString(11); }
-                            if (!dr.IsDBNull(12)) { obj.Cod_estado_cidi = dr.GetInt32(12); }
+                            if (!dr.IsDBNull(12)) { obj.Cod_estado_cidi = dr.GetInt16(12); }
                             if (!dr.IsDBNull(13)) { obj.Fecha_Inicio_Estado = dr.GetDateTime(13); }
                             if (!dr.IsDBNull(14)) { obj.Fecha_Fin_Estado = dr.GetDateTime(14); }
                             if (!dr.IsDBNull(15)) { obj.Vencimiento = dr.GetDateTime(15); }
@@ -123,5 +123,217 @@ namespace DAL
                 throw ex;
             }
         }
+
+
+        public static void insert(DetNotificacionGeneral obj)
+        {
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO CIDI_DET_NOTIFICACION_GENERAL(");
+                sql.AppendLine("  Nro_Emision");
+                sql.AppendLine(", Nro_Notificacion");
+                sql.AppendLine(", Dominio");
+                sql.AppendLine(", Circunscripcion");
+                sql.AppendLine(", Seccion");
+                sql.AppendLine(", Manzana");
+                sql.AppendLine(", Parcela");
+                sql.AppendLine(", P_h");
+                sql.AppendLine(", Legajo");
+                sql.AppendLine(", Cuit");
+                sql.AppendLine(", Nro_Badec");
+                sql.AppendLine(", Nombre");
+                sql.AppendLine(", Cod_estado_cidi");
+                sql.AppendLine(", Fecha_Inicio_Estado");
+                sql.AppendLine(", Fecha_Fin_Estado");
+                sql.AppendLine(", Vencimiento");
+                sql.AppendLine(", Nro_cedulon");
+                sql.AppendLine(", Debe");
+                sql.AppendLine(", Barcode39");
+                sql.AppendLine(", Barcodeint25");
+                sql.AppendLine(", Monto_original");
+                sql.AppendLine(", Interes");
+                sql.AppendLine(", Descuento");
+                sql.AppendLine(", Importe_pagar");
+                sql.AppendLine(")");
+                sql.AppendLine("VALUES");
+                sql.AppendLine("(");
+                sql.AppendLine("  @Nro_Emision");
+                sql.AppendLine(", @Nro_Notificacion");
+                sql.AppendLine(", @Dominio");
+                sql.AppendLine(", @Circunscripcion");
+                sql.AppendLine(", @Seccion");
+                sql.AppendLine(", @Manzana");
+                sql.AppendLine(", @Parcela");
+                sql.AppendLine(", @P_h");
+                sql.AppendLine(", @Legajo");
+                sql.AppendLine(", @Cuit");
+                sql.AppendLine(", @Nro_Badec");
+                sql.AppendLine(", @Nombre");
+                sql.AppendLine(", @Cod_estado_cidi");
+                sql.AppendLine(", @Fecha_Inicio_Estado");
+                sql.AppendLine(", @Fecha_Fin_Estado");
+                sql.AppendLine(", @Vencimiento");
+                sql.AppendLine(", @Nro_cedulon");
+                sql.AppendLine(", @Debe");
+                sql.AppendLine(", @Barcode39");
+                sql.AppendLine(", @Barcodeint25");
+                sql.AppendLine(", @Monto_original");
+                sql.AppendLine(", @Interes");
+                sql.AppendLine(", @Descuento");
+                sql.AppendLine(", @Importe_pagar");
+                sql.AppendLine(")");
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql.ToString();
+
+                    cmd.Parameters.AddWithValue("@Nro_Emision", obj.Nro_Emision);
+                    cmd.Parameters.AddWithValue("@Nro_Notificacion", obj.Nro_Notificacion);
+                    cmd.Parameters.AddWithValue("@Dominio", obj.Dominio ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Circunscripcion", obj.Circunscripcion);
+                    cmd.Parameters.AddWithValue("@Seccion", obj.Seccion);
+                    cmd.Parameters.AddWithValue("@Manzana", obj.Manzana);
+                    cmd.Parameters.AddWithValue("@Parcela", obj.Parcela);
+                    cmd.Parameters.AddWithValue("@P_h", obj.P_h);
+                    cmd.Parameters.AddWithValue("@Legajo", obj.Legajo);
+                    cmd.Parameters.AddWithValue("@Cuit", obj.Cuit ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Nro_Badec", obj.Nro_Badec);
+                    cmd.Parameters.AddWithValue("@Nombre", obj.Nombre ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Cod_estado_cidi", obj.Cod_estado_cidi);
+                    cmd.Parameters.AddWithValue("@Fecha_Inicio_Estado", obj.Fecha_Inicio_Estado);
+                    cmd.Parameters.AddWithValue("@Fecha_Fin_Estado", obj.Fecha_Fin_Estado);
+                    cmd.Parameters.AddWithValue("@Vencimiento", obj.Vencimiento);
+                    cmd.Parameters.AddWithValue("@Nro_cedulon", obj.Nro_cedulon);
+                    cmd.Parameters.AddWithValue("@Debe", obj.Debe);
+                    cmd.Parameters.AddWithValue("@Barcode39", obj.Barcode39 ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Barcodeint25", obj.Barcodeint25 ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Monto_original", obj.Monto_original);
+                    cmd.Parameters.AddWithValue("@Interes", obj.Interes);
+                    cmd.Parameters.AddWithValue("@Descuento", obj.Descuento);
+                    cmd.Parameters.AddWithValue("@Importe_pagar", obj.Importe_pagar);
+
+                    cmd.Connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        public static void InsertMasivo(List<DetNotificacionGeneral> lista)
+        {
+            try
+            {
+                using (SqlConnection con = getConnection())
+                {
+                    con.Open();
+                    using (SqlTransaction transaction = con.BeginTransaction())
+                    {
+                        foreach (var obj in lista)
+                        {
+                            StringBuilder sql = new StringBuilder();
+                            sql.AppendLine("INSERT INTO CIDI_DET_NOTIFICACION_GENERAL(");
+                            sql.AppendLine("  Nro_Emision");
+                            sql.AppendLine(", Nro_Notificacion");
+                            sql.AppendLine(", Dominio");
+                            sql.AppendLine(", Circunscripcion");
+                            sql.AppendLine(", Seccion");
+                            sql.AppendLine(", Manzana");
+                            sql.AppendLine(", Parcela");
+                            sql.AppendLine(", P_h");
+                            sql.AppendLine(", Legajo");
+                            sql.AppendLine(", Cuit");
+                            sql.AppendLine(", Nro_Badec");
+                            sql.AppendLine(", Nombre");
+                            sql.AppendLine(", Cod_estado_cidi");
+                            sql.AppendLine(", Fecha_Inicio_Estado");
+                            sql.AppendLine(", Fecha_Fin_Estado");
+                            sql.AppendLine(", Vencimiento");
+                            sql.AppendLine(", Nro_cedulon");
+                            sql.AppendLine(", Debe");
+                            sql.AppendLine(", Barcode39");
+                            sql.AppendLine(", Barcodeint25");
+                            sql.AppendLine(", Monto_original");
+                            sql.AppendLine(", Interes");
+                            sql.AppendLine(", Descuento");
+                            sql.AppendLine(", Importe_pagar");
+                            sql.AppendLine(")");
+                            sql.AppendLine("VALUES");
+                            sql.AppendLine("(");
+                            sql.AppendLine("  @Nro_Emision");
+                            sql.AppendLine(", @Nro_Notificacion");
+                            sql.AppendLine(", @Dominio");
+                            sql.AppendLine(", @Circunscripcion");
+                            sql.AppendLine(", @Seccion");
+                            sql.AppendLine(", @Manzana");
+                            sql.AppendLine(", @Parcela");
+                            sql.AppendLine(", @P_h");
+                            sql.AppendLine(", @Legajo");
+                            sql.AppendLine(", @Cuit");
+                            sql.AppendLine(", @Nro_Badec");
+                            sql.AppendLine(", @Nombre");
+                            sql.AppendLine(", @Cod_estado_cidi");
+                            sql.AppendLine(", @Fecha_Inicio_Estado");
+                            sql.AppendLine(", @Fecha_Fin_Estado");
+                            sql.AppendLine(", @Vencimiento");
+                            sql.AppendLine(", @Nro_cedulon");
+                            sql.AppendLine(", @Debe");
+                            sql.AppendLine(", @Barcode39");
+                            sql.AppendLine(", @Barcodeint25");
+                            sql.AppendLine(", @Monto_original");
+                            sql.AppendLine(", @Interes");
+                            sql.AppendLine(", @Descuento");
+                            sql.AppendLine(", @Importe_pagar");
+                            sql.AppendLine(")");
+
+                            using (SqlCommand cmd = new SqlCommand(sql.ToString(), con, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@Nro_Emision", obj.Nro_Emision);
+                                cmd.Parameters.AddWithValue("@Nro_Notificacion", obj.Nro_Notificacion);
+                                cmd.Parameters.AddWithValue("@Dominio", obj.Dominio ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@Circunscripcion", obj.Circunscripcion);
+                                cmd.Parameters.AddWithValue("@Seccion", obj.Seccion);
+                                cmd.Parameters.AddWithValue("@Manzana", obj.Manzana);
+                                cmd.Parameters.AddWithValue("@Parcela", obj.Parcela);
+                                cmd.Parameters.AddWithValue("@P_h", obj.P_h);
+                                cmd.Parameters.AddWithValue("@Legajo", obj.Legajo);
+                                cmd.Parameters.AddWithValue("@Cuit", obj.Cuit ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@Nro_Badec", obj.Nro_Badec);
+                                cmd.Parameters.AddWithValue("@Nombre", obj.Nombre ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@Cod_estado_cidi", obj.Cod_estado_cidi);
+                                cmd.Parameters.AddWithValue("@Fecha_Inicio_Estado", obj.Fecha_Inicio_Estado);
+                                cmd.Parameters.AddWithValue("@Fecha_Fin_Estado", obj.Fecha_Fin_Estado);
+                                cmd.Parameters.AddWithValue("@Vencimiento", obj.Vencimiento);
+                                cmd.Parameters.AddWithValue("@Nro_cedulon", obj.Nro_cedulon);
+                                cmd.Parameters.AddWithValue("@Debe", obj.Debe);
+                                cmd.Parameters.AddWithValue("@Barcode39", obj.Barcode39 ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@Barcodeint25", obj.Barcodeint25 ?? (object)DBNull.Value);
+                                cmd.Parameters.AddWithValue("@Monto_original", obj.Monto_original);
+                                cmd.Parameters.AddWithValue("@Interes", obj.Interes);
+                                cmd.Parameters.AddWithValue("@Descuento", obj.Descuento);
+                                cmd.Parameters.AddWithValue("@Importe_pagar", obj.Importe_pagar);
+
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

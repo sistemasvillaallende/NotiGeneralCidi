@@ -10,21 +10,19 @@ namespace DAL
 {
     public class ZONAS:DALBase
     {
-        public int cod_zona { get; set; }
-        public string nom_zona { get; set; }
-        public decimal tasa_basica_edificado { get; set; }
-        public decimal excedente_edificado { get; set; }
-        public decimal tasa_basica_baldio { get; set; }
-        public decimal excedente_baldio { get; set; }
+        public string categoria{ get; set; }
+        public decimal monto_x_mts_edificado { get; set; }
+        public decimal minimo_edificado{ get; set; }
+        public decimal monto_x_mts_baldio { get; set; }
+        public decimal minimo_baldio{ get; set; }
 
         public ZONAS()
         {
-            cod_zona = 0;
-            nom_zona = string.Empty;
-            tasa_basica_edificado = 0;
-            excedente_edificado = 0;
-            tasa_basica_baldio = 0;
-            excedente_baldio = 0;
+            categoria = string.Empty;
+            monto_x_mts_edificado = 0;
+            minimo_edificado = 0;
+            monto_x_mts_baldio = 0;
+            minimo_baldio = 0;
         }
 
         private static List<ZONAS> mapeo(SqlDataReader dr)
@@ -33,21 +31,20 @@ namespace DAL
             ZONAS obj;
             if (dr.HasRows)
             {
-                int cod_zona = dr.GetOrdinal("cod_zona");
-                int nom_zona = dr.GetOrdinal("nom_zona");
-                int tasa_basica_edificado = dr.GetOrdinal("tasa_basica_edificado");
-                int excedente_edificado = dr.GetOrdinal("excedente_edificado");
-                int tasa_basica_baldio = dr.GetOrdinal("tasa_basica_baldio");
-                int excedente_baldio = dr.GetOrdinal("excedente_baldio");
+                int categoria = dr.GetOrdinal("categoria");
+                int monto_x_mts_edificado = dr.GetOrdinal("monto_x_mts_edificado");
+                int minimo_edificado = dr.GetOrdinal("minimo_edificado");
+                int monto_x_mts_baldio = dr.GetOrdinal("monto_x_mts_baldio");
+                int minimo_baldio = dr.GetOrdinal("minimo_baldio");
+
                 while (dr.Read())
                 {
                     obj = new ZONAS();
-                    if (!dr.IsDBNull(cod_zona)) { obj.cod_zona = dr.GetInt32(cod_zona); }
-                    if (!dr.IsDBNull(nom_zona)) { obj.nom_zona = dr.GetString(nom_zona); }
-                    if (!dr.IsDBNull(tasa_basica_edificado)) { obj.tasa_basica_edificado = dr.GetDecimal(tasa_basica_edificado); }
-                    if (!dr.IsDBNull(excedente_edificado)) { obj.excedente_edificado = dr.GetDecimal(excedente_edificado); }
-                    if (!dr.IsDBNull(tasa_basica_baldio)) { obj.tasa_basica_baldio = dr.GetDecimal(tasa_basica_baldio); }
-                    if (!dr.IsDBNull(excedente_baldio)) { obj.excedente_baldio = dr.GetDecimal(excedente_baldio); }
+                    if (!dr.IsDBNull(categoria)) { obj.categoria = dr.GetString(categoria); }
+                    if (!dr.IsDBNull(monto_x_mts_edificado)) { obj.monto_x_mts_edificado = dr.GetDecimal(monto_x_mts_edificado); }
+                    if (!dr.IsDBNull(minimo_edificado)) { obj.minimo_edificado = dr.GetDecimal(minimo_edificado); }
+                    if (!dr.IsDBNull(monto_x_mts_baldio)) { obj.monto_x_mts_baldio = dr.GetDecimal(monto_x_mts_baldio); }
+                    if (!dr.IsDBNull(minimo_baldio)) { obj.minimo_baldio = dr.GetDecimal(minimo_baldio); }
                     lst.Add(obj);
                 }
             }
@@ -63,7 +60,7 @@ namespace DAL
                 {
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "SELECT *FROM Zonas";
+                    cmd.CommandText = "SELECT *FROM CATEGORIAS_LIQUIDACION_TASA";
                     cmd.Connection.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
                     lst = mapeo(dr);
@@ -76,20 +73,20 @@ namespace DAL
             }
         }
 
-        public static ZONAS getByPk(int cod_zona)
+        public static ZONAS getByPk(string categoria)
         {
             try
             {
                 StringBuilder sql = new StringBuilder();
-                sql.AppendLine("SELECT *FROM Zonas WHERE");
-                sql.AppendLine("cod_zona = @cod_zona");
+                sql.AppendLine("SELECT *FROM CATEGORIAS_LIQUIDACION_TASA WHERE");
+                sql.AppendLine("categoria = @categoria");
                 ZONAS obj = null;
                 using (SqlConnection con = getConnection())
                 {
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql.ToString();
-                    cmd.Parameters.AddWithValue("@cod_zona", cod_zona);
+                    cmd.Parameters.AddWithValue("@categoria", categoria);
                     cmd.Connection.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
                     List<ZONAS> lst = mapeo(dr);
@@ -109,34 +106,31 @@ namespace DAL
             try
             {
                 StringBuilder sql = new StringBuilder();
-                sql.AppendLine("INSERT INTO Zonas(");
-                sql.AppendLine("cod_zona");
-                sql.AppendLine(", nom_zona");
-                sql.AppendLine(", tasa_basica_edificado");
-                sql.AppendLine(", excedente_edificado");
-                sql.AppendLine(", tasa_basica_baldio");
-                sql.AppendLine(", excedente_baldio");
+                sql.AppendLine("INSERT INTO CATEGORIAS_LIQUIDACION_TASA (");
+                sql.AppendLine("categoria");
+                sql.AppendLine(", monto_x_mts_edificado");
+                sql.AppendLine(", minimo_edificado");
+                sql.AppendLine(", monto_x_mts_baldio");
+                sql.AppendLine(", minimo_baldio");
                 sql.AppendLine(")");
                 sql.AppendLine("VALUES");
                 sql.AppendLine("(");
-                sql.AppendLine("@cod_zona");
-                sql.AppendLine(", @nom_zona");
-                sql.AppendLine(", @tasa_basica_edificado");
-                sql.AppendLine(", @excedente_edificado");
-                sql.AppendLine(", @tasa_basica_baldio");
-                sql.AppendLine(", @excedente_baldio");
+                sql.AppendLine("@categoria");
+                sql.AppendLine(", @monto_x_mts_edificado");
+                sql.AppendLine(", @minimo_edificado");
+                sql.AppendLine(", @monto_x_mts_baldio");
+                sql.AppendLine(", @minimo_baldio");
                 sql.AppendLine(")");
                 using (SqlConnection con = getConnection())
                 {
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql.ToString();
-                    cmd.Parameters.AddWithValue("@cod_zona", obj.cod_zona);
-                    cmd.Parameters.AddWithValue("@nom_zona", obj.nom_zona);
-                    cmd.Parameters.AddWithValue("@tasa_basica_edificado", obj.tasa_basica_edificado);
-                    cmd.Parameters.AddWithValue("@excedente_edificado", obj.excedente_edificado);
-                    cmd.Parameters.AddWithValue("@tasa_basica_baldio", obj.tasa_basica_baldio);
-                    cmd.Parameters.AddWithValue("@excedente_baldio", obj.excedente_baldio);
+                    cmd.Parameters.AddWithValue("@categoria", obj.categoria);
+                    cmd.Parameters.AddWithValue("@monto_x_mts_edificado", obj.monto_x_mts_edificado);
+                    cmd.Parameters.AddWithValue("@minimo_edificado", obj.minimo_edificado);
+                    cmd.Parameters.AddWithValue("@monto_x_mts_baldio", obj.monto_x_mts_baldio);
+                    cmd.Parameters.AddWithValue("@minimo_baldio", obj.minimo_baldio);
                     cmd.Connection.Open();
                     return cmd.ExecuteNonQuery();
                 }
@@ -152,25 +146,23 @@ namespace DAL
             try
             {
                 StringBuilder sql = new StringBuilder();
-                sql.AppendLine("UPDATE  Zonas SET");
-                sql.AppendLine("nom_zona=@nom_zona");
-                sql.AppendLine(", tasa_basica_edificado=@tasa_basica_edificado");
-                sql.AppendLine(", excedente_edificado=@excedente_edificado");
-                sql.AppendLine(", tasa_basica_baldio=@tasa_basica_baldio");
-                sql.AppendLine(", excedente_baldio=@excedente_baldio");
+                sql.AppendLine("UPDATE CATEGORIAS_LIQUIDACION_TASA SET");
+                sql.AppendLine(", monto_x_mts_edificado=@monto_x_mts_edificado");
+                sql.AppendLine(", minimo_edificado=@minimo_edificado");
+                sql.AppendLine(", monto_x_mts_baldio=@monto_x_mts_baldio");
+                sql.AppendLine(", minimo_baldio=@minimo_baldio");
                 sql.AppendLine("WHERE");
-                sql.AppendLine("cod_zona=@cod_zona");
+                sql.AppendLine("categoria=@categoria");
                 using (SqlConnection con = getConnection())
                 {
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql.ToString();
-                    cmd.Parameters.AddWithValue("@cod_zona", obj.cod_zona);
-                    cmd.Parameters.AddWithValue("@nom_zona", obj.nom_zona);
-                    cmd.Parameters.AddWithValue("@tasa_basica_edificado", obj.tasa_basica_edificado);
-                    cmd.Parameters.AddWithValue("@excedente_edificado", obj.excedente_edificado);
-                    cmd.Parameters.AddWithValue("@tasa_basica_baldio", obj.tasa_basica_baldio);
-                    cmd.Parameters.AddWithValue("@excedente_baldio", obj.excedente_baldio);
+                    cmd.Parameters.AddWithValue("@categoria", obj.categoria);
+                    cmd.Parameters.AddWithValue("@monto_x_mts_edificado", obj.monto_x_mts_edificado);
+                    cmd.Parameters.AddWithValue("@minimo_edificado", obj.minimo_edificado);
+                    cmd.Parameters.AddWithValue("@monto_x_mts_baldio", obj.monto_x_mts_baldio);
+                    cmd.Parameters.AddWithValue("@minimo_baldio", obj.minimo_baldio);
                     cmd.Connection.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -181,20 +173,20 @@ namespace DAL
             }
         }
 
-        public static void delete(int cod_zona)
+        public static void delete(string categoria)
         {
             try
             {
                 StringBuilder sql = new StringBuilder();
-                sql.AppendLine("DELETE  Zonas ");
+                sql.AppendLine("DELETE  CATEGORIAS_LIQUIDACION_TASA  ");
                 sql.AppendLine("WHERE");
-                sql.AppendLine("cod_zona=@cod_zona");
+                sql.AppendLine("categoria=@categoria");
                 using (SqlConnection con = getConnection())
                 {
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = sql.ToString();
-                    cmd.Parameters.AddWithValue("@cod_zona", cod_zona);
+                    cmd.Parameters.AddWithValue("@categoria", categoria);
                     cmd.Connection.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -204,5 +196,8 @@ namespace DAL
                 throw ex;
             }
         }
+
+
+
     }
 }

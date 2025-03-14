@@ -163,7 +163,7 @@ namespace NotificacionesCIDI.Secure {
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlFecha;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCalles;
         
         /// <summary>
         /// Control txtDesde.
@@ -398,5 +398,37 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnGenerarNoti;
+
+         protected global::System.Web.UI.WebControls.GridView gvPlantilla;
+        
+        protected global::System.Web.UI.WebControls.TextBox hiddenInput2;
+        
+        protected global::System.Web.UI.WebControls.TextBox txtNombreNota;
+        protected global::System.Web.UI.WebControls.Button btnGuardarNota;
+        protected global::System.Web.UI.WebControls.Button  btnNotas;
+
+        /// <summary>
+        /// Control btnGenerate.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGenerate;
+        
+        /// <summary>
+        /// Control litNotasGeneradas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litNotasGeneradas;
+
+         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+
+        protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl;
+        protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl2;
+        protected global::System.Web.UI.WebControls.ListBox lstCalles;
     }
 }

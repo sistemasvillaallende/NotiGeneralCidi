@@ -26,7 +26,7 @@ namespace DAL
         {
             Nro_Emision = 0;
             Fecha_Emision = DateTime.Now;
-            Fecha_Vencimiento = DateTime.Now;
+            Fecha_Vencimiento = DateTime.Now.AddMonths(1);
             Cod_tipo_notificacion = 0;
             Descripcion = string.Empty;
             subsistema = 0;
@@ -91,7 +91,7 @@ namespace DAL
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = "SELECT * FROM CIDI_NOTIFICACION_GENERAL where Subsistema = @subsistema";
-                    cmd.Parameters.AddWithValue("@subsistema", subsistema); 
+                    cmd.Parameters.AddWithValue("@subsistema", subsistema);
                     cmd.Connection.Open();
 
                     SqlDataReader dr = cmd.ExecuteReader();
@@ -122,6 +122,90 @@ namespace DAL
                 throw ex;
             }
         }
+
+
+        public static void insert(NotificacionGeneral obj)
+        {
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO CIDI_NOTIFICACION_GENERAL(");
+                sql.AppendLine("  Nro_Emision");
+                sql.AppendLine(", Fecha_Emision");
+                sql.AppendLine(", Fecha_Vencimiento");
+                sql.AppendLine(", Cod_tipo_notificacion");
+                sql.AppendLine(", Descripcion");
+                sql.AppendLine(", subsistema");
+                sql.AppendLine(", Cantidad_Reg");
+                sql.AppendLine(", Total");
+                sql.AppendLine(", Porcentaje");
+                sql.AppendLine(")");
+                sql.AppendLine("VALUES");
+                sql.AppendLine("(");
+                sql.AppendLine("  @Nro_Emision");
+                sql.AppendLine(", @Fecha_Emision");
+                sql.AppendLine(", @Fecha_Vencimiento");
+                sql.AppendLine(", @Cod_tipo_notificacion");
+                sql.AppendLine(", @Descripcion");
+                sql.AppendLine(", @subsistema");
+                sql.AppendLine(", @Cantidad_Reg");
+                sql.AppendLine(", @Total");
+                sql.AppendLine(", @Porcentaje");
+                sql.AppendLine(")");
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql.ToString();
+                    cmd.Parameters.AddWithValue("@Nro_Emision", obj.Nro_Emision);
+                    cmd.Parameters.AddWithValue("@Fecha_Emision", obj.Fecha_Emision);
+                    cmd.Parameters.AddWithValue("@Fecha_Vencimiento", obj.Fecha_Vencimiento);
+                    cmd.Parameters.AddWithValue("@Cod_tipo_notificacion", obj.Cod_tipo_notificacion);
+                    cmd.Parameters.AddWithValue("@Descripcion", obj.Descripcion);
+                    cmd.Parameters.AddWithValue("@subsistema", obj.subsistema);
+                    cmd.Parameters.AddWithValue("@Cantidad_Reg", obj.Cantidad_Reg);
+                    cmd.Parameters.AddWithValue("@Total", obj.Total);
+                    cmd.Parameters.AddWithValue("@Porcentaje", obj.Porcentaje);
+                    cmd.Connection.Open();
+                    cmd.ExecuteScalar();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static int GetMaxNroEmision()
+        {
+            try
+            {
+                int maxNroEmision = 0; 
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT ISNULL(MAX(Nro_Emision), 0) FROM CIDI_NOTIFICACION_GENERAL";
+
+                    con.Open();
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != DBNull.Value && result != null)
+                    {
+                        maxNroEmision = Convert.ToInt32(result);
+                    }
+                }
+
+                return maxNroEmision;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
 
     }
 }

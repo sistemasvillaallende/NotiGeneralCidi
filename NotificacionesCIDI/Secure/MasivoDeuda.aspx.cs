@@ -1,4 +1,5 @@
-﻿using DAL;
+﻿using BLL;
+using DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeuda> lstFiltrada = null;
         List<DAL.Detalle_notificaciones_generaes_cidi> lstDetalle = null;
-        Notificaciones_generales_cidi objNoti = new Notificaciones_generales_cidi();
+        //Notificaciones_generales_cidi objNoti = new Notificaciones_generales_cidi();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -21,6 +22,10 @@ namespace NotificacionesCIDI.Secure
             {
                 fillBarrios();
                 fillCateDeuda();
+                fillNotas();
+                fillZonas();
+
+
             }
         }
         private void fillBarrios()
@@ -38,6 +43,20 @@ namespace NotificacionesCIDI.Secure
             gvDeuda.UseAccessibleHeader = true;
         }
 
+        private void fillCalles(int cod_barrio)
+        {
+            lstCalles.DataSource = BLL.CallesBLL.read(cod_barrio);
+            lstCalles.DataTextField = "nom_calle";
+            lstCalles.DataValueField = "cod_calle";
+            lstCalles.DataBind();
+        }
+        private void fillZonas()
+        {
+            lstZonas.DataSource = BLL.ZonasBLL.read();
+            lstZonas.DataTextField = "categoria";
+            lstZonas.DataValueField = "categoria";
+            lstZonas.DataBind();
+        }
         // Dropdown de categorias deuda
         private void fillCateDeuda()
         {
@@ -46,6 +65,73 @@ namespace NotificacionesCIDI.Secure
             lstCatDeuda.DataValueField = "cod_categoria";
             lstCatDeuda.DataBind();
         }
+
+        protected void lstBarrios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<string> barriosSeleccionados = new List<string>();
+
+            foreach (ListItem item in lstBarrios.Items)
+            {
+                if (item.Selected)
+                {
+                    // Estabas tratando de convertir a int y luego añadir el int a una lista de strings
+                    // Ahora simplemente añadimos el Value como string
+                    barriosSeleccionados.Add(item.Text);
+                }
+            }
+
+            // Si hay barrios seleccionados, cargar las calles correspondientes
+            if (barriosSeleccionados.Count > 0)
+            {
+                fillCallesPorBarrios(barriosSeleccionados);
+            }
+        }
+
+        private void fillCallesPorBarrios(List<string> barrios)
+        {
+
+
+            lstCalles.DataSource = BLL.CallesBLL.getByCallesByBarrio(barrios);
+            lstCalles.DataTextField = "NOM_CALLE";  // El nombre de la calle
+            lstCalles.DataValueField = "COD_CALLE"; // El código o ID de la calle
+            lstCalles.DataBind();
+        }
+
+        private List<DAL.MasivoDeuda> filtroCalle(List<DAL.MasivoDeuda> lst)
+        {
+            try
+            {
+                List<DAL.MasivoDeuda> lstFiltrada = new List<DAL.MasivoDeuda>();
+
+                if (ddlCalles.SelectedValue == "3")
+                {
+                    return lst;
+                }
+
+                string desde = txtDesde.Text.Trim().ToUpper();
+                string hasta = txtHasta.Text.Trim().ToUpper();
+
+
+                foreach (var item in lst)
+                {
+                    string calle = item.nom_calle.Trim().ToUpper();
+
+                    if (string.Compare(calle, desde) >= 0 && string.Compare(calle, hasta) <= 0)
+                    {
+                        lstFiltrada.Add(item);
+                    }
+                }
+
+                return lstFiltrada;
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error: " + ex.Message;
+                return null;
+            }
+        }
+
+
         protected void gvDeuda_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             // gvDeuda.PageIndex = e.NewPageIndex;
@@ -88,10 +174,40 @@ namespace NotificacionesCIDI.Secure
         {
             List<string> seleccionados = new List<string>();
             List<int> categoriasDeudaSeleccionadas = new List<int>();
+            List<string> callesSeleccionadas = new List<string>();
+            List<string> zonasSeleccionadas = new List<string>();
 
-            List<DAL.MasivoDeuda> lst = new List<DAL.MasivoDeuda>();
-            var lstFiltroBarrios = lst;
-            var lstFiltroCategorias = lst;
+            List<DAL.MasivoDeuda> lst = BLL.MasivoDeudaBLL.getByAll();
+
+
+            int desde = 0;
+            int hasta = 0;
+
+            if (!string.IsNullOrEmpty(txtDesde.Text))
+            {
+                desde = Convert.ToInt32(txtDesde.Text);
+            }
+
+            if (!string.IsNullOrEmpty(txtHasta.Text))
+            {
+                hasta = Convert.ToInt32(txtHasta.Text);
+            }
+
+            foreach (ListItem item in lstCalles.Items)
+            {
+                if (item.Selected)
+                {
+                    callesSeleccionadas.Add(item.Text);
+                }
+            }
+
+            foreach (ListItem item in lstZonas.Items)
+            {
+                if (item.Selected)
+                {
+                    zonasSeleccionadas.Add(item.Text);
+                }
+            }
 
             foreach (ListItem item in lstCatDeuda.Items)
             {
@@ -110,26 +226,34 @@ namespace NotificacionesCIDI.Secure
             }
             if (seleccionados.Count != 0)
             {
-                // lst = filtroBarrios(lst, seleccionados);
-                lstFiltroBarrios = filtroBarrios(lst, seleccionados);
-
+                lst = filtroBarrios(lst, seleccionados);
             }
 
             if (categoriasDeudaSeleccionadas.Count > 0)
             {
-                // lst = filtroCategoriaDeuda(lst, categoriasDeudaSeleccionadas[0]);
-                lstFiltroCategorias = filtroCategoriaDeuda(lst, categoriasDeudaSeleccionadas[0]);
-
+                lst = filtroCategoriaDeuda(lst, categoriasDeudaSeleccionadas[0]);
             }
 
-            lst = lstFiltroBarrios
-                    .Union(lstFiltroCategorias)
-                    .ToList();
+            if (zonasSeleccionadas.Count > 0)
+            {
+                lst = filtroZonas(lst, zonasSeleccionadas);
+            }
+
+            if (callesSeleccionadas.Count > 0)
+            {
+                lst = filtroCalles(lst, callesSeleccionadas, desde, hasta);
+            }
+
+            // lst = lstFiltroBarrios
+            //         .Union(lstFiltroCategorias)
+            //         .Union(lstFiltroCalles)
+            //         .Union(lstFiltroZonas)
+            //         .ToList();
 
             seleccionados.Clear();
             categoriasDeudaSeleccionadas.Clear();
-
-
+            callesSeleccionadas.Clear();
+            zonasSeleccionadas.Clear();
 
             fillGrilla(lst);
             lstFiltrada = lst;
@@ -140,7 +264,7 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
         {
-             lstBarrios.ClearSelection();
+            lstBarrios.ClearSelection();
             List<DAL.MasivoDeuda> lst = new List<DAL.MasivoDeuda>();
             Session["LST"] = lst;
             fillGrilla(lst);
@@ -165,30 +289,7 @@ namespace NotificacionesCIDI.Secure
 
         protected void ConfirmoPeriodos()
         {
-            //VCtasctes Lista;
-            //Listadeuda = new List<VCtasctes>();
-            //Listadeuda.Clear();
-            //for (int i = 0; i < grdList.Rows.Count; i++)
-            //{
-            //    GridViewRow row = grdList.Rows[i];
-            //    bool isChecked = ((CheckBox)row.FindControl("chkSelect")).Checked;
-            //    if (isChecked)
-            //    {
-            //        if (Convert.ToInt32(grdList.DataKeys[i].Values["nro_transaccion"]) != 1000)
-            //        {
-            //            Lista = new VCtasctes();
-            //            Lista.importe = Convert.ToDecimal(grdList.Rows[i].Cells[2].Text);
-            //            Lista.nro_transaccion = Convert.ToInt32(grdList.DataKeys[i].Values["nroTransaccion"]);
-            //            Lista.periodo = Convert.ToString(grdList.Rows[i].Cells[1].Text);
-            //            Lista.fecha_vencimiento = Convert.ToString(grdList.Rows[i].Cells[3].Text);
-            //            //DateTime.Today.ToString("dd/MM/yyyy");
-            //            Lista.categoria_deuda = Convert.ToInt32(grdList.DataKeys[i].Values["categoriaDeuda"]);
-            //            Listadeuda.Add(Lista);
-            //            Lista = null;
-            //        }
 
-            //    }
-            //}
         }
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -215,7 +316,71 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-                lst = BLL.MasivoDeudaBLL.getByBarrios(seleccionados);
+                lst = (from lista in lst
+                       where seleccionados.Contains(lista.nom_barrio)
+                       select lista).ToList();
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private List<DAL.MasivoDeuda> filtroCalles(List<DAL.MasivoDeuda> lst, List<string> seleccionados, int? desde, int? hasta)
+        {
+            try
+            {
+                if (seleccionados == null || seleccionados.Count == 0)
+                {
+                    return lst;
+                }
+
+                bool hayCallesEnLista = lst.Any(x => !string.IsNullOrEmpty(x.nom_calle));
+
+                if ((!desde.HasValue || desde.Value <= 0) && (!hasta.HasValue || hasta.Value <= 0))
+                {
+                    if (hayCallesEnLista)
+                    {
+                         return lst.Where(x => !string.IsNullOrEmpty(x.nom_calle) &&
+                                            seleccionados.Contains(x.nom_calle.Trim())).ToList();
+                    }
+                }
+
+                var inmueblesFiltrados = lst.Select(i => new { i.cir, i.sec, i.man, i.par, i.p_h }).ToList();
+
+                List<DAL.MasivoDeuda> lstCallesAlturas = BLL.MasivoDeudaBLL.getByCalles(seleccionados, desde, hasta);
+
+                return lstCallesAlturas.Where(nuevo =>
+                    inmueblesFiltrados.Any(f =>
+                        f.cir == nuevo.cir &&
+                        f.sec == nuevo.sec &&
+                        f.man == nuevo.man &&
+                        f.par == nuevo.par &&
+                        f.p_h == nuevo.p_h
+                    )
+                ).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private List<DAL.MasivoDeuda> filtroZonas(List<DAL.MasivoDeuda> lst, List<string> seleccionados)
+        {
+            try
+            {
+                List<DAL.MasivoDeuda> listaPorZonas = BLL.MasivoDeudaBLL.getByZonas(seleccionados);
+
+                // Realizar la intersección entre ambas listas basada en la clave del inmueble
+                lst = (from item in lst
+                       join itemZona in listaPorZonas
+                       on new { item.cir, item.sec, item.man, item.par, item.p_h }
+                       equals new { itemZona.cir, itemZona.sec, itemZona.man, itemZona.par, itemZona.p_h }
+                       select item).ToList();
+
                 return lst;
             }
             catch (Exception ex)
@@ -244,36 +409,150 @@ namespace NotificacionesCIDI.Secure
 
         }
 
+        // Falta agregarle transaccional para doble insersion
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
-            //         try
-            //         {
-            //             lstFiltrada = (List<MasivoDeudaInm>)Session["registros_notificar"]; 
+            try
+            {
+                lstFiltrada = (List<DAL.MasivoDeuda>)Session["registros_notificar"];
+                int nroNotificacion = 1;
 
-            //             Notificaciones_generales_cidi obj =
-            // new Notificaciones_generales_cidi();
-            //             List<DAL.Detalle_notificaciones_generaes_cidi> lst = 
-            //                 new List<Detalle_notificaciones_generaes_cidi>();
+                NotificacionGeneral obj = new NotificacionGeneral();
+                List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
 
-            //             foreach (var item in lstFiltrada)
-            //             {
-            //                 if(item.cuil != null && item.cuil.Length == 11)
-            //                 {
-            //                     Detalle_notificaciones_generaes_cidi obj2 = 
-            //                         new Detalle_notificaciones_generaes_cidi();
-            //                     obj2.cuit = item.cuil;
-            //                     obj2.detalle_estado_cidi = string.Empty;
-            //                     obj2.estado = "Sin Enviar";
-            //                     obj2.fecha_primer_envio = null;
-            //                     lst.Add(obj2);
-            //                 }
-            //             }
-            //             BLL.Notificaciones_generales_cidi.insert(obj, lst);
-            //         }
-            //         catch (Exception ex)
-            //         {
-            //             throw ex;
-            //         }
+                obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
+                obj.Cod_tipo_notificacion = 1; // Notificado ? Enviado ?
+                obj.Descripcion = ""; // Aca veo si entra el cuerpo del mail o si entra el titulo descriptivo
+                obj.subsistema = 1; // Despues veo de sacarlo del params ?
+                obj.Cantidad_Reg = lstFiltrada.Count();
+
+                foreach (var item in lstFiltrada)
+                {
+                    if (item.cuit != null && item.cuit.Length == 11)
+                    {
+                        DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
+                        obj2.Nro_Emision = obj.Nro_Emision; // El mismo numero de emision
+                        obj2.Nro_Notificacion = nroNotificacion;
+                        nroNotificacion++;
+                        obj2.Circunscripcion = item.cir;
+                        obj2.Seccion = item.sec;
+                        obj2.Manzana = item.man;
+                        obj2.Parcela = item.par;
+                        obj2.P_h = item.p_h;
+                        obj2.Cuit = item.cuit;
+                        obj2.Nombre = $"{item.nombre} {item.apellido}";
+                        obj2.Cod_estado_cidi = 0; // FALTA VER COMPLETAR ACA
+                        lst.Add(obj2);
+                        //BLL.DetNotificacionGenetalBLL.insert(obj2);
+                    }
+                }
+                BLL.DetNotificacionGenetalBLL.insertMasivo(lst); // Insertar en la tabla 
+                BLL.NotificacionGeneralBLL.insert(obj);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        ////////////////////////////// MODALES 
+        ///
+        protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Obtenemos el contenido y el ID
+                string contenido = DataBinder.Eval(e.Row.DataItem, "contenido").ToString();
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
+
+                // Seteamos atributos data- en el HTML de la fila
+                e.Row.Attributes["data-contenido"] = contenido;
+                e.Row.Attributes["data-id"] = id;
+
+                // Esto hace que el cursor cambie y sea clickeable
+                e.Row.Attributes["style"] = "cursor:pointer;";
+            }
+        }
+
+        // protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
+        // {
+        //     if (e.CommandName == "Select")
+        //     {
+        //         int rowIndex = Convert.ToInt32(e.CommandArgument);
+        //         string contenidoPlantilla = gvPlantilla.DataKeys[rowIndex].Values["contenido"].ToString();
+
+        //         // Usamos JavaScript para cerrar el segundo modal y actualizar el contenido del primero
+        //         ScriptManager.RegisterStartupScript(this, GetType(), "CerrarModalYActualizar",
+        //             "$('#plantillaModalNotas').modal('hide'); " + // Cierra el segundo modal
+        //             "$('#plantillaModal').modal('show'); " + // Abre el primer modal
+        //                                                      // Asigna el contenido al campo oculto y al editor Quill
+        //             "$('#hiddenInput2').val('" + contenidoPlantilla.Replace("'", "\\'") + "'); " +
+        //             "setQuillContent('" + contenidoPlantilla.Replace("'", "\\'") + "');", true);
+        //     }
+        // }
+
+        protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
+
+        protected void btnCargarPlantillas_Click(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
+
+
+        private void savePlantillas(NotasPlantillas notas)
+        {
+            int idMax = NotasPlantillasBLL.getMaxId();
+            notas.id = idMax + 1;
+            NotasPlantillasBLL.insert(notas);
+
+        }
+
+
+        private void fillNotas()
+        {
+            var listaNotas = BLL.NotasPlantillasBLL.read()
+                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
+                   .ToList();
+
+            gvPlantilla.DataSource = listaNotas;
+            gvPlantilla.DataBind();
+
+        }
+
+
+        protected void btnGuardarNota_Click(object sender, EventArgs e)
+        {
+            string contenido = MyHiddenControl2.Value;
+            string nombreNota = MyHiddenControl.Value;
+            string contenido2 = hiddenInput2.Text;
+
+
+            if (string.IsNullOrWhiteSpace(nombreNota))
+            {
+                nombreNota = "Sin nombre"; // Si no ingresan nada, ponemos un nombre por defecto
+            }
+
+            NotasPlantillas notas = new NotasPlantillas();
+            notas.nom_plantilla = nombreNota;
+            notas.contenido = contenido; // Verifica si 'contenidoPlan' está correctamente inicializado
+            notas.id_subsistema = 8;
+
+            savePlantillas(notas);
+            fillNotas(); // Recargar lista
+
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "VolverAModalPrincipal",
+           @"
+        $(document).ready(function() {
+            $('#plantillaModalNombreNotas').modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('#plantillaModal').modal('show');
+        });
+        ", true);
         }
     }
 }
