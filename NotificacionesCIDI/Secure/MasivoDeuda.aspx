@@ -72,14 +72,100 @@
                                                             <label>Hasta</label>
                                                             <asp:TextBox ID="txtHasta" Enabled="false" Type="number"  CssClass="form-control" runat="server"></asp:TextBox>
                                                         </div>
+                                        <h1>Inmueble - Nueva Notificación</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- <div class="col-md-2">
+                                        <label>Fecha</label>
+                                        <asp:DropDownList ID="ddlFecha" CssClass="form-control" runat="server">
+                                            <asp:ListItem Text="Sin filtro" Value="3"></asp:ListItem>
+                                            <asp:ListItem Text="Deuda a partir del" Value="0"></asp:ListItem>
+                                            <asp:ListItem Text="Deuda hasta" Value="1"></asp:ListItem>
+                                            <asp:ListItem Text="Deuda entre" Value="2">Deuda entre</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <asp:TextBox ID="txtDesde" Enabled="false" TextMode="Date"
+                                                    CssClass="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <asp:TextBox ID="txtHasta" Enabled="false" TextMode="Date"
+                                                    CssClass="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="col-md-3">
+                                        <label>Categoria Deuda</label>
+
+                                        <br />
+                                        <asp:ListBox ID="lstCatDeuda" Height="180" Width="280"
+                                            CssClass="form-control list-group" runat="server" SelectionMode="Multiple">
+                                        </asp:ListBox>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label>Barrio</label>
+                                        <asp:ListBox ID="lstBarrios" Height="180" Width="280" CssClass="form-control"
+                                            runat="server" SelectionMode="Multiple"></asp:ListBox>
+                                    </div>
+                                    <!-- <div class="col-md-1">
+                                        <label>Zona</label>
+                                        <asp:ListBox ID="lstZonas" Height="143" CssClass="form-control" runat="server"
+                                            SelectionMode="Multiple"></asp:ListBox>
+                                    </div> -->
+                                    <div class="col-md-4">
+                                        <!-- <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Tipo Deuda</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Monto</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <asp:ListBox ID="lstTipoDeuda" SelectionMode="Multiple" Height="143"
+                                                    CssClass="form-control list-group" runat="server">
+                                                    <asp:ListItem>Deuda Judicial</asp:ListItem>
+                                                    <asp:ListItem>Deuda Pre-Judicial</asp:ListItem>
+                                                    <asp:ListItem>Deuda Administrativa</asp:ListItem>
+                                                    <asp:ListItem>Deuda Normal</asp:ListItem>
+                                                </asp:ListBox>
+                                            </div> 
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="ddlFiltroDeuda" CssClass="form-control"
+                                                    runat="server">
+                                                    <asp:ListItem Text="Sin filtro" Value="3"></asp:ListItem>
+                                                    <asp:ListItem Text="Mayor a" Value="0"></asp:ListItem>
+                                                    <asp:ListItem Text="Menor a" Value="1"></asp:ListItem>
+                                                    <asp:ListItem Text="Entre" Value="2"></asp:ListItem>
+                                                </asp:DropDownList>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <asp:TextBox ID="txtMontoDesde" MIN="0" Enabled="false"
+                                                            TextMode="Number" CssClass="form-control" runat="server">
+                                                        </asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <asp:TextBox ID="txtMontoHasta" MIN="0" Enabled="false"
+                                                            TextMode="Number" CssClass="form-control" runat="server">
+                                                        </asp:TextBox>
                                                     </div>
                                                 </div>
                                             </div>
  
                                 <div class="row">
                                     <div class="col-md-12" style="text-align: right;">
-                                        <button type="button" class="btn btn-outline" id="btnFiltros" runat="server"
-                                            onserverclick="btnFiltros_ServerClick">
+                                        <button type="button" class="btn btn-outline-primary" id="btnFiltros"
+                                            runat="server" onserverclick="btnFiltros_ServerClick">
                                             <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
                                         </button>
                                     </div>
@@ -107,12 +193,12 @@
                                             runat="server" onserverclick="btnClearFiltros_ServerClick">
                                             <span class="fa fa-filter-circle-xmark"></span>&nbsp;Limpiar Filtros
                                         </button>
-                                        <button type="button" id="btnNoti" class="btn btn-outline"
+                                        <button type="button" id="btnNoti" class="btn btn-outline-primary"
                                             data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación CIDI
                                         </button>
                                         <button type="button" runat="server" id="btnExportExcel"
-                                            onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-excel"
+                                            onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                             data-toggle="modal" data-target="#page-change-name">
                                             <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel
                                             
@@ -122,25 +208,33 @@
 
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-12"
-                                        style="height: 320px; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
-                                        <asp:GridView ID="gvDeuda" CssClass="table" runat="server"
-                                            OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False"
-                                            CellPadding="4" ForeColor="#333333" GridLines="None">
-                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                                            </AlternatingRowStyle>
-                                            <Columns>
-                                                <asp:TemplateField HeaderText="Denominación">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblNroCta" runat="server" Text=""></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%" HeaderText="Nombre" />
-                                                <asp:BoundField DataField="apellido" ControlStyle-Width="10%" HeaderText="Apellido" />
-                                                <asp:BoundField DataField="cuit" ControlStyle-Width="10%" HeaderText="CUIT" />
-                                                <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%" HeaderText="Calle" />
-                                                <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%" HeaderText="Barrio" />
-                                            </Columns>
-                                        </asp:GridView>
+                                        style="max-height: 75vh; overflow-y: auto; border: solid lightgray; border-radius: 15px;">
+                                        <div class="table-responsive">
+                                            <asp:GridView ID="gvDeuda" CssClass="table table-striped table-hover"
+                                                runat="server" OnRowDataBound="gvDeuda_RowDataBound"
+                                                AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
+                                                GridLines="None" AlternatingRowStyle-BackColor="White"
+                                                AlternatingRowStyle-ForeColor="#284775">
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="Denominación">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblNroCta" runat="server" Text="">
+                                                            </asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
+                                                        HeaderText="Nombre" />
+                                                    <asp:BoundField DataField="apellido" ControlStyle-Width="10%"
+                                                        HeaderText="Apellido" />
+                                                    <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
+                                                        HeaderText="CUIT" />
+                                                    <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
+                                                        HeaderText="Calle" />
+                                                    <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%"
+                                                        HeaderText="Barrio" />
+                                                </Columns>
+                                            </asp:GridView>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

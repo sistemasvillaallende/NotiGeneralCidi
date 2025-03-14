@@ -31,7 +31,7 @@
                             <div id="divFiltros" runat="server">
                                 <div class="row" style="margin-top: 25px;">
                                     <div class="col-md-12">
-                                        <h3 style="color: #367fa9;">Industria - Nueva Notificación</h3>
+                                        <h1>Industria - Nueva Notificación</h1>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -126,8 +126,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12" style="text-align: right;">
-                                        <button type="button" class="btn btn-outline" id="btnFiltros" runat="server"
-                                            onserverclick="btnFiltros_ServerClick">
+                                        <button type="button" class="btn btn-outline-primary" id="btnFiltros"
+                                            runat="server" onserverclick="btnFiltros_ServerClick">
                                             <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
                                         </button>
                                     </div>

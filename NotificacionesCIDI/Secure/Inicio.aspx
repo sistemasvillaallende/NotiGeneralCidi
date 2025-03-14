@@ -6,22 +6,13 @@
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-        <div class="col-8">
-            <div class="col-12" style="padding: 25px;">
-                <h1
-                    style="font-size: 36px !important; font-weight: 600 !important; margin-bottom: 5px !important; display: flex !important; align-items: start !important;">
-                    <span class="fa fa-car-side"
-                        style="color: #c09e76; border-right: solid 3px; padding-right: 10px;"></span>
-                    <span
-                        style="font-size: 20px !important; padding-left: 8px !important; margin-top: 5px !important;  padding-bottom: 8px !important; ">Notificaciones</span>
-                </h1>
-                <h1
-                    style="font-size: 16px !important; font-weight: 500 !important; color: gray !important; margin-left: 65px !important; margin-top: -24px !important;">
-                </h1>
+        <div class="col-12">
+            <div class="col-12">
+                <h1>Notificaciones</h1>
             </div>
-            <hr style="margin-top: -10px; border: 2px solid #c09e76; margin-bottom: 20px; opacity: 1; width: 100%;" />
             <div class="">
-                <asp:GridView AutoGenerateColumns="false" CssClass="table" ID="gvMasivosAut" runat="server">
+                <asp:GridView AutoGenerateColumns="false" CssClass="table table-striped table-hover" ID="gvMasivosAut"
+                    runat="server">
                     <Columns>
                         <asp:BoundField DataField="Nro_Emision" HeaderText="Emision" />
                         <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha" DataFormatString="{0:d}" />
@@ -42,11 +33,5 @@
                     </Columns>
                 </asp:GridView>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-7"></div>
-        </div>
-        <div class="row">
-            <div class="col-7"></div>
         </div>
     </asp:Content>
