@@ -17,6 +17,11 @@ namespace NotificacionesCIDI
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Request.Cookies["VABack.CIDI"] == null || string.IsNullOrEmpty(Request.Cookies["VABack.CIDI"].Value))
+            {
+                Response.Redirect("Error.aspx");
+                return;
+            }
             if (!IsPostBack)
             {
                 HttpCookie userCookie = Request.Cookies["VABack.CIDI"];
@@ -51,7 +56,7 @@ namespace NotificacionesCIDI
                 Response.Cookies.Add(cookie);
             }
             Session.Abandon();
-            Response.Redirect("~/Login.aspx");
+            Response.Redirect("Error.aspx");
         }
     }
 }
