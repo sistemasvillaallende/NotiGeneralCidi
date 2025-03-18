@@ -34,6 +34,7 @@ namespace DAL
         public decimal Interes { get; set; }
         public decimal Descuento { get; set; }
         public decimal Importe_pagar { get; set; }
+      
 
 
         public DetNotificacionGeneral()
@@ -62,6 +63,7 @@ namespace DAL
             Interes = 0;
             Descuento = 0;
             Importe_pagar = 0;
+           
 
         }
 
@@ -334,6 +336,102 @@ namespace DAL
             }
         }
 
+
+
+        public static List<DetalleNotificadorDTO> getBySubsistemaDTO(int subsistema, int nro_emision)
+        {
+            try
+            {
+                List<DetalleNotificadorDTO> lst = new List<DetalleNotificadorDTO>();
+                DetNotificacionGeneral obj;
+                DetalleNotificadorDTO obj2;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"SELECT 
+                                            c.Nro_Notificacion, 
+                                            c.Cod_estado_cidi,
+                                            c.Circunscripcion,
+                                            c.Seccion,
+                                            c.Manzana,
+                                            c.Parcela,
+                                            c.P_h,
+                                            c.Legajo,
+                                            c.Dominio,                                      
+                                            c.CUIT,  c.NOMBRE
+                                        FROM CIDI_DET_NOTIFICACION_GENERAL c
+                                        WHERE Nro_Emision = @nro_emision   ";
+
+                    cmd.Parameters.AddWithValue("@nro_emision", nro_emision);
+                    cmd.Connection.Open();
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+
+                        while (dr.Read())
+                        {
+                            obj = new DetNotificacionGeneral();
+
+                            if (!dr.IsDBNull(0)) { obj.Nro_Notificacion = dr.GetInt32(0); }
+                            if (!dr.IsDBNull(1)) { obj.Cod_estado_cidi = dr.GetInt16(1); }
+                            if (!dr.IsDBNull(2)) { obj.Circunscripcion = dr.GetInt32(2); }
+                            if (!dr.IsDBNull(3)) { obj.Seccion = dr.GetInt32(3); }
+                            if (!dr.IsDBNull(4)) { obj.Manzana = dr.GetInt32(4); }
+                            if (!dr.IsDBNull(5)) { obj.Parcela = dr.GetInt32(5); }
+                            if (!dr.IsDBNull(6)) { obj.P_h = dr.GetInt32(6); }
+                            if (!dr.IsDBNull(7)) { obj.Legajo = dr.GetInt32(7); }
+                            if (!dr.IsDBNull(8)) { obj.Dominio = dr.GetString(8); }
+                            if (!dr.IsDBNull(9)) { obj.Cuit = dr.GetString(9); }
+                            if (!dr.IsDBNull(10)) { obj.Nombre = dr.GetString(10); }
+
+                            obj2 = new DetalleNotificadorDTO();
+                            obj2.Nro_Notificacion = obj.Nro_Notificacion;
+                            obj2.Cod_estado_cidi = obj.Cod_estado_cidi;
+                            obj2.Denominacion = GenerateDenominacion(subsistema, obj);
+                            obj2.Cuit = obj.Cuit;
+                            obj2.Nombre = obj.Nombre;
+                            lst.Add(obj2);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static string GenerateDenominacion(int subsistema, DetNotificacionGeneral obj)
+        {
+            string denominacion = string.Empty;
+
+            switch (subsistema)
+            {
+                case 1:
+                    denominacion = "CIR: " + obj.Circunscripcion.ToString().PadLeft(2, '0') + " - " +
+                                   "SEC: " + obj.Seccion.ToString().PadLeft(2, '0') + " - " +
+                                   "MAN: " + obj.Manzana.ToString().PadLeft(3, '0') + " - " +
+                                   "PAR: " + obj.Parcela.ToString().PadLeft(3, '0') + " - " +
+                                   "P_H: " + obj.P_h.ToString().PadLeft(3, '0');
+                    break;
+                case 3:
+                    denominacion = obj.Legajo.ToString();
+                    break;
+                case 4:
+                    denominacion = obj.Dominio ?? string.Empty;
+                    break;
+                default:
+                    denominacion = string.Empty;
+                    break;
+            }
+
+            return denominacion;
+        }
 
     }
 }

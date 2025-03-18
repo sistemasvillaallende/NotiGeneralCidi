@@ -14,12 +14,14 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeuda> lstFiltrada = null;
         List<DAL.Detalle_notificaciones_generaes_cidi> lstDetalle = null;
-        //Notificaciones_generales_cidi objNoti = new Notificaciones_generales_cidi();
+        int subsistema;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
+                Session["subsistema"] = subsistema;
                 fillBarrios();
                 fillCateDeuda();
                 fillNotas();
@@ -183,12 +185,12 @@ namespace NotificacionesCIDI.Secure
             int desde = 0;
             int hasta = 0;
 
-            if (!string.IsNullOrEmpty(txtDesde.Text))
+            if (!string.IsNullOrEmpty(txtDesde.Text) && txtDesde.Text != "0")
             {
                 desde = Convert.ToInt32(txtDesde.Text);
             }
 
-            if (!string.IsNullOrEmpty(txtHasta.Text))
+            if (!string.IsNullOrEmpty(txtHasta.Text) && txtHasta.Text != "0")
             {
                 hasta = Convert.ToInt32(txtHasta.Text);
             }
@@ -342,8 +344,8 @@ namespace NotificacionesCIDI.Secure
                 {
                     if (hayCallesEnLista)
                     {
-                         return lst.Where(x => !string.IsNullOrEmpty(x.nom_calle) &&
-                                            seleccionados.Contains(x.nom_calle.Trim())).ToList();
+                        return lst.Where(x => !string.IsNullOrEmpty(x.nom_calle) &&
+                                           seleccionados.Contains(x.nom_calle.Trim())).ToList();
                     }
                 }
 
@@ -420,10 +422,10 @@ namespace NotificacionesCIDI.Secure
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
 
+                int subsistema =  Convert.ToInt32(Session["subsistema"]);
+
                 obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
-                obj.Cod_tipo_notificacion = 1; // Notificado ? Enviado ?
-                obj.Descripcion = ""; // Aca veo si entra el cuerpo del mail o si entra el titulo descriptivo
-                obj.subsistema = 1; // Despues veo de sacarlo del params ?
+                obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
 
                 foreach (var item in lstFiltrada)
@@ -431,7 +433,7 @@ namespace NotificacionesCIDI.Secure
                     if (item.cuit != null && item.cuit.Length == 11)
                     {
                         DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
-                        obj2.Nro_Emision = obj.Nro_Emision; // El mismo numero de emision
+                        obj2.Nro_Emision = obj.Nro_Emision; 
                         obj2.Nro_Notificacion = nroNotificacion;
                         nroNotificacion++;
                         obj2.Circunscripcion = item.cir;
@@ -441,13 +443,15 @@ namespace NotificacionesCIDI.Secure
                         obj2.P_h = item.p_h;
                         obj2.Cuit = item.cuit;
                         obj2.Nombre = $"{item.nombre} {item.apellido}";
-                        obj2.Cod_estado_cidi = 0; // FALTA VER COMPLETAR ACA
+                        obj2.Cod_estado_cidi = 0;
                         lst.Add(obj2);
-                        //BLL.DetNotificacionGenetalBLL.insert(obj2);
                     }
                 }
-                BLL.DetNotificacionGenetalBLL.insertMasivo(lst); // Insertar en la tabla 
+                BLL.DetNotificacionGenetalBLL.insertMasivo(lst);
                 BLL.NotificacionGeneralBLL.insert(obj);
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#modalNotif').modal('show');", true);
+
             }
             catch (Exception ex)
             {

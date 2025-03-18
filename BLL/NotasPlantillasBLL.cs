@@ -25,7 +25,7 @@ namespace BLL
         {
             try
             {
-              NotasPlantillas.insert(obj);
+                NotasPlantillas.insert(obj);
             }
             catch (Exception ex)
             {
@@ -57,11 +57,23 @@ namespace BLL
             }
         }
 
-        public static void getByPk(int id)
+        public static void ActualizarContenido(int id, string contenido)
         {
             try
             {
-                NotasPlantillas.getByPk(id);
+                NotasPlantillas.ActualizarContenido(id, contenido);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+        public static NotasPlantillas getByPk(int id)
+        {
+            try
+            {
+                return NotasPlantillas.getByPk(id);
             }
             catch (Exception ex)
             {
