@@ -43,6 +43,13 @@ namespace NotificacionesCIDI
 
         protected void btnCerraSession_ServerClick(object sender, EventArgs e)
         {
+            // Eliminar la cookie "VABack.CIDI"
+            if (Request.Cookies["VABack.CIDI"] != null)
+            {
+                HttpCookie cookie = new HttpCookie("VABack.CIDI");
+                cookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie);
+            }
             Session.Abandon();
             Response.Redirect("~/Login.aspx");
         }
