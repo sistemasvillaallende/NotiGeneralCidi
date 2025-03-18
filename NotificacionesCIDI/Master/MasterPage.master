@@ -46,14 +46,14 @@
                                     class="img-thumbnail" alt="..." style="height: 55px; border: none;" />
                                 <ul
                                     style="color: gray; list-style: none; text-align: left; padding-left: 0; margin-bottom: 0px;">
-                                    <li id="liNombre" runat="server">Ignacio Martin</li>
-                                    <li id="liApellido" runat="server">Velez Spitale</li>
+                                    <li id="liNombre" runat="server"></li>
+                                    <li id="liApellido" runat="server"></li>
                                 </ul>
                             </button>
                             <ul class="dropdown-menu">
                                 <li style="display: grid; padding: 15px 25px 0px 25px" class="li-usuario">
-                                    <strong id="mnuPcApellido" runat="server">Velez Spitale</strong>
-                                    <span id="mnuPcNombre" runat="server">Ignacio Martin</span>
+                                    <strong id="mnuPcApellido" runat="server"></strong>
+                                    <span id="mnuPcNombre" runat="server"></span>
                                 </li>
                                 <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
                                     <span style="display: ruby;">Oficina: </span>
@@ -63,12 +63,7 @@
                                 <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
                                     <span style="display: ruby;">CUIT: </span>
                                     <span style="display: block; margin-left: 10px;" id="mnuPcCuit"
-                                        runat="server">23-27.173.499-9</span>
-                                </li>
-                                <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
-                                    <span style="display: block;">CIDI: </span>
-                                    <span style="display: block; margin-left: 10px;" id="mnuPcNivelCidi"
-                                        runat="server">Nivel 2</span>
+                                        runat="server"></span>
                                 </li>
                                 <li style="padding: 15px; border-top: solid 1px lightgray; margin-top: 15px;">
                                     <a class="dropdown-item" href="#" runat="server" id="btnCerraSession"
