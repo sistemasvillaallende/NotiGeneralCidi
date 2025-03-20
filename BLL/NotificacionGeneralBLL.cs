@@ -33,6 +33,19 @@ namespace BLL
             }
         }
 
+            public static DAL.NotificacionGeneral readNotificacionByNroEmision(int nro_emision)
+        {
+            try
+            {
+                return DAL.NotificacionGeneral.readByNroEmision(nro_emision);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         public static void insert(NotificacionGeneral obj)
         {
             try

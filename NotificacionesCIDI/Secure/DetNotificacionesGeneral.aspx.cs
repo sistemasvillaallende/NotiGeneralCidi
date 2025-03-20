@@ -24,7 +24,7 @@ namespace NotificacionesCIDI.Secure
                     Session["nro_emision"] = nro_emision;
                     Session["subsistema"] = subsistema;
                     fillGrillas(nro_emision, subsistema);
-                    fillNotas();
+                    fillPlantilla(nro_emision);
                 }
 
             }
@@ -55,16 +55,6 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-         private void fillNotas()
-        {
-            var listaNotas = BLL.NotasPlantillasBLL.read()
-                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
-                   .ToList();
-
-            gvPlantilla.DataSource = listaNotas;
-            gvPlantilla.DataBind();
-
-        }
 
         protected string GetEstadoCidi(object estado)
         {
@@ -98,7 +88,7 @@ namespace NotificacionesCIDI.Secure
             gvMasivosAut.DataBind();
         }
 
-        private List<DetalleNotificadorDTO> FilterData(List<DetalleNotificadorDTO> lst, int estadoCidi)
+        protected List<DetalleNotificadorDTO> FilterData(List<DetalleNotificadorDTO> lst, int estadoCidi)
         {
             {
                 if (estadoCidi != -1)
@@ -114,29 +104,16 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
+        protected void fillPlantilla(int nro_emision){
 
-        protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                // Obtenemos el contenido y el ID
-                string contenido = DataBinder.Eval(e.Row.DataItem, "contenido").ToString();
-                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
+            NotificacionGeneral not = BLL.NotificacionGeneralBLL.readNotificacionByNroEmision(nro_emision);
 
-                // Seteamos atributos data- en el HTML de la fila
-                e.Row.Attributes["data-contenido"] = contenido;
-                e.Row.Attributes["data-id"] = id;
+            NotasPlantillas plantilla = BLL.NotasPlantillasBLL.getByPk(not.id_plantilla);
 
-                // Esto hace que el cursor cambie y sea clickeable
-                e.Row.Attributes["style"] = "cursor:pointer;";
-            }
+            divContenido.InnerHtml = plantilla.contenido;
+            //  divContenido.InnerHtml = "<p>Texto de prueba simple</p>";  
         }
 
-
-        protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-
-        }
     }
 
 }

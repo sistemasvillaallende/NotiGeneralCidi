@@ -136,18 +136,10 @@ namespace NotificacionesCIDI.Secure
 
         protected void gvDeuda_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            // gvDeuda.PageIndex = e.NewPageIndex;
-            // List<DAL.MasivoDeuda> lst = BLL.MasivoDeudaBLL.read(
-            //     Convert.ToDateTime("01/01/1900"), DateTime.Now,
-            //     new List<string>());
-            // Session["LST"] = lst;
-            // fillGrillaDeuda(lst);
         }
 
         public override void VerifyRenderingInServerForm(Control control)
         {
-            //required to avoid the run time error "  
-            //Control 'GridView1' of type 'Grid View' must be placed inside a form tag with runat=server."  
         }
         private void ExportToExcel(string nameReport, GridView wControl)
         {
@@ -245,12 +237,6 @@ namespace NotificacionesCIDI.Secure
             {
                 lst = filtroCalles(lst, callesSeleccionadas, desde, hasta);
             }
-
-            // lst = lstFiltroBarrios
-            //         .Union(lstFiltroCategorias)
-            //         .Union(lstFiltroCalles)
-            //         .Union(lstFiltroZonas)
-            //         .ToList();
 
             seleccionados.Clear();
             categoriasDeudaSeleccionadas.Clear();
@@ -411,29 +397,48 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        // Falta agregarle transaccional para doble insersion
+
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
             try
             {
+
+                if (Session["id_plantilla"] == null)
+                {
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alertaPlantilla", @"
+                            var modalElement = document.getElementById('modalSeleccionarPlantilla');
+                            var myModal = new bootstrap.Modal(modalElement);
+                            myModal.show();
+                         ", true);
+
+                    return;
+                }
+
+
                 lstFiltrada = (List<DAL.MasivoDeuda>)Session["registros_notificar"];
                 int nroNotificacion = 1;
 
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
+                int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
 
-                int subsistema =  Convert.ToInt32(Session["subsistema"]);
+                var plantilla = BLL.NotasPlantillasBLL.getByPk(idPlantilla);
+                string contenidoPlantilla = plantilla.contenido;
+
+                int subsistema = Convert.ToInt32(Session["subsistema"]);
 
                 obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
+                obj.id_plantilla = idPlantilla;
 
                 foreach (var item in lstFiltrada)
                 {
                     if (item.cuit != null && item.cuit.Length == 11)
                     {
                         DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
-                        obj2.Nro_Emision = obj.Nro_Emision; 
+                        obj2.Nro_Emision = obj.Nro_Emision;
                         obj2.Nro_Notificacion = nroNotificacion;
                         nroNotificacion++;
                         obj2.Circunscripcion = item.cir;
@@ -444,13 +449,30 @@ namespace NotificacionesCIDI.Secure
                         obj2.Cuit = item.cuit;
                         obj2.Nombre = $"{item.nombre} {item.apellido}";
                         obj2.Cod_estado_cidi = 0;
+
+                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
+                        EnviarNotificacion(contenidoPersonalizado, item.cuit); // aca ya tengo la plantilla con las variables
                         lst.Add(obj2);
                     }
                 }
                 BLL.DetNotificacionGenetalBLL.insertMasivo(lst);
                 BLL.NotificacionGeneralBLL.insert(obj);
 
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#modalNotif').modal('show');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
+                        var modalElement = document.getElementById('modalNotif');
+                        var myModal = new bootstrap.Modal(modalElement);
+                        
+                        // Asegura que los botones de cierre funcionen
+                        document.querySelector('#modalNotif .btn-close').addEventListener('click', function() {
+                            myModal.hide();
+                        });
+                        
+                        document.querySelector('#modalNotif .btn-secondary').addEventListener('click', function() {
+                            myModal.hide();
+                        });
+                        
+                        myModal.show();
+                    ", true);
 
             }
             catch (Exception ex)
@@ -459,62 +481,24 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-
-        ////////////////////////////// MODALES 
-        ///
         protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                // Obtenemos el contenido y el ID
-                string contenido = DataBinder.Eval(e.Row.DataItem, "contenido").ToString();
-                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
+                CheckBox chk = (CheckBox)e.Row.FindControl("chkSeleccionar");
 
-                // Seteamos atributos data- en el HTML de la fila
-                e.Row.Attributes["data-contenido"] = contenido;
-                e.Row.Attributes["data-id"] = id;
-
-                // Esto hace que el cursor cambie y sea clickeable
+                if (chk != null)
+                {
+                    e.Row.Attributes["onclick"] = $"javascript:SeleccionarFila(this, '{chk.ClientID}');";
+                }
                 e.Row.Attributes["style"] = "cursor:pointer;";
             }
         }
-
-        // protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
-        // {
-        //     if (e.CommandName == "Select")
-        //     {
-        //         int rowIndex = Convert.ToInt32(e.CommandArgument);
-        //         string contenidoPlantilla = gvPlantilla.DataKeys[rowIndex].Values["contenido"].ToString();
-
-        //         // Usamos JavaScript para cerrar el segundo modal y actualizar el contenido del primero
-        //         ScriptManager.RegisterStartupScript(this, GetType(), "CerrarModalYActualizar",
-        //             "$('#plantillaModalNotas').modal('hide'); " + // Cierra el segundo modal
-        //             "$('#plantillaModal').modal('show'); " + // Abre el primer modal
-        //                                                      // Asigna el contenido al campo oculto y al editor Quill
-        //             "$('#hiddenInput2').val('" + contenidoPlantilla.Replace("'", "\\'") + "'); " +
-        //             "setQuillContent('" + contenidoPlantilla.Replace("'", "\\'") + "');", true);
-        //     }
-        // }
 
         protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
         {
 
         }
-
-        protected void btnCargarPlantillas_Click(object sender, GridViewCommandEventArgs e)
-        {
-
-        }
-
-
-        private void savePlantillas(NotasPlantillas notas)
-        {
-            int idMax = NotasPlantillasBLL.getMaxId();
-            notas.id = idMax + 1;
-            NotasPlantillasBLL.insert(notas);
-
-        }
-
 
         private void fillNotas()
         {
@@ -528,35 +512,35 @@ namespace NotificacionesCIDI.Secure
         }
 
 
-        protected void btnGuardarNota_Click(object sender, EventArgs e)
+        private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
         {
-            string contenido = MyHiddenControl2.Value;
-            string nombreNota = MyHiddenControl.Value;
-            string contenido2 = hiddenInput2.Text;
+            string resultado = plantilla;
+            resultado = resultado.Replace("{nombre}", nombre);
+            resultado = resultado.Replace("{apellido}", apellido);
+            resultado = resultado.Replace("{cuit}", cuit);
+            return resultado;
+        }
+
+        private void EnviarNotificacion(string contenidoPersonalizado, string cuit)
+        {
 
 
-            if (string.IsNullOrWhiteSpace(nombreNota))
+        }
+
+        protected void btnObtenerSeleccionados_Click(object sender, EventArgs e)
+        {
+            foreach (GridViewRow row in gvPlantilla.Rows)
             {
-                nombreNota = "Sin nombre"; // Si no ingresan nada, ponemos un nombre por defecto
+                CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSeleccionar");
+                if (chkSeleccionar.Checked)
+                {
+                    int id_plantilla = Convert.ToInt32(gvPlantilla.DataKeys[row.RowIndex]["id"]);
+
+                    Session["id_plantilla"] = id_plantilla;
+
+
+                }
             }
-
-            NotasPlantillas notas = new NotasPlantillas();
-            notas.nom_plantilla = nombreNota;
-            notas.contenido = contenido; // Verifica si 'contenidoPlan' está correctamente inicializado
-            notas.id_subsistema = 8;
-
-            savePlantillas(notas);
-            fillNotas(); // Recargar lista
-
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "VolverAModalPrincipal",
-           @"
-        $(document).ready(function() {
-            $('#plantillaModalNombreNotas').modal('hide');
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
-            $('#plantillaModal').modal('show');
-        });
-        ", true);
         }
     }
 }

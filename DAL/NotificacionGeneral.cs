@@ -20,6 +20,7 @@ namespace DAL
         public int Cantidad_Reg { get; set; }
         public decimal Total { get; set; }
         public decimal Porcentaje { get; set; }
+        public int id_plantilla { get; set; }
 
 
         public NotificacionGeneral()
@@ -33,6 +34,7 @@ namespace DAL
             Cantidad_Reg = 0;
             Total = 0;
             Porcentaje = 0;
+            id_plantilla = 0;
         }
 
         public static List<NotificacionGeneral> read()
@@ -66,6 +68,7 @@ namespace DAL
                             if (!dr.IsDBNull(6)) { obj.Cantidad_Reg = dr.GetInt32(6); }
                             if (!dr.IsDBNull(7)) { obj.Total = dr.GetDecimal(7); }
                             if (!dr.IsDBNull(8)) { obj.Porcentaje = dr.GetDecimal(8); }
+                            if (!dr.IsDBNull(9)) { obj.id_plantilla = dr.GetInt32(9); }
                             lst.Add(obj);
                         }
                     }
@@ -111,6 +114,7 @@ namespace DAL
                             if (!dr.IsDBNull(6)) { obj.Cantidad_Reg = dr.GetInt32(6); }
                             if (!dr.IsDBNull(7)) { obj.Total = dr.GetDecimal(7); }
                             if (!dr.IsDBNull(8)) { obj.Porcentaje = dr.GetDecimal(8); }
+                            if (!dr.IsDBNull(9)) { obj.id_plantilla = dr.GetInt32(9); }
                             lst.Add(obj);
                         }
                     }
@@ -123,6 +127,47 @@ namespace DAL
             }
         }
 
+        public static NotificacionGeneral readByNroEmision(int nro_emision)
+        {
+            try
+            {
+                NotificacionGeneral obj = null;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT * FROM CIDI_NOTIFICACION_GENERAL where Nro_Emision = @nro_emision";
+                    cmd.Parameters.AddWithValue("@Nro_Emision", nro_emision);
+                    cmd.Connection.Open();
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.Read()) 
+                    {
+
+                            obj = new NotificacionGeneral();
+                            obj.Nro_Emision = dr.GetInt32(0);
+                            if (!dr.IsDBNull(1)) { obj.Fecha_Emision = dr.GetDateTime(1); }
+                            if (!dr.IsDBNull(2)) { obj.Fecha_Vencimiento = dr.GetDateTime(2); }
+                            if (!dr.IsDBNull(3)) { obj.Cod_tipo_notificacion = dr.GetInt32(3); }
+                            if (!dr.IsDBNull(4)) { obj.Descripcion = dr.GetString(4); }
+                            if (!dr.IsDBNull(5)) { obj.subsistema = dr.GetInt32(5); }
+                            if (!dr.IsDBNull(6)) { obj.Cantidad_Reg = dr.GetInt32(6); }
+                            if (!dr.IsDBNull(7)) { obj.Total = dr.GetDecimal(7); }
+                            if (!dr.IsDBNull(8)) { obj.Porcentaje = dr.GetDecimal(8); }
+                            if (!dr.IsDBNull(9)) { obj.id_plantilla = dr.GetInt32(9); }
+                            
+                        
+                    }
+                }
+                      return obj;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public static void insert(NotificacionGeneral obj)
         {
@@ -139,6 +184,7 @@ namespace DAL
                 sql.AppendLine(", Cantidad_Reg");
                 sql.AppendLine(", Total");
                 sql.AppendLine(", Porcentaje");
+                sql.AppendLine(", id_plantilla");
                 sql.AppendLine(")");
                 sql.AppendLine("VALUES");
                 sql.AppendLine("(");
@@ -151,6 +197,7 @@ namespace DAL
                 sql.AppendLine(", @Cantidad_Reg");
                 sql.AppendLine(", @Total");
                 sql.AppendLine(", @Porcentaje");
+                sql.AppendLine(", @id_plantilla");
                 sql.AppendLine(")");
                 using (SqlConnection con = getConnection())
                 {
@@ -166,6 +213,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Cantidad_Reg", obj.Cantidad_Reg);
                     cmd.Parameters.AddWithValue("@Total", obj.Total);
                     cmd.Parameters.AddWithValue("@Porcentaje", obj.Porcentaje);
+                    cmd.Parameters.AddWithValue("@id_plantilla", obj.id_plantilla);
                     cmd.Connection.Open();
                     cmd.ExecuteScalar();
                 }
@@ -180,7 +228,7 @@ namespace DAL
         {
             try
             {
-                int maxNroEmision = 0; 
+                int maxNroEmision = 0;
 
                 using (SqlConnection con = getConnection())
                 {
