@@ -2191,6 +2191,7 @@
     <Content Include="App_Themes\Main\js\jquery-ui-1.10.3.min.js" />
     <Content Include="Global.asax" />
     <Content Include="Secure\DetNotificacionesGeneral.aspx" />
+    <Content Include="Secure\Error.aspx" />
     <Content Include="Secure\Inicio.aspx" />
     <Content Include="Secure\MasivoDeuda.aspx" />
     <Content Include="Secure\MasivoDeudaAuto.aspx" />
@@ -2216,6 +2217,13 @@
     </Compile>
     <Compile Include="Secure\DetNotificacionesGeneral.aspx.designer.cs">
       <DependentUpon>DetNotificacionesGeneral.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
     <Compile Include="Secure\Inicio.aspx.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
