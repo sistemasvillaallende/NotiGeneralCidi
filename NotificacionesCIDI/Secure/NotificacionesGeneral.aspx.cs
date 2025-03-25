@@ -15,8 +15,8 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-                 if (!IsPostBack)
-                 {
+                if (!IsPostBack)
+                {
                     subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
                     fillGrillas(subsistema);
                 }
@@ -38,7 +38,12 @@ namespace NotificacionesCIDI.Secure
             {
                 List<NotificacionGeneral> lst = BLL.NotificacionGeneralBLL.readNotificacionBySubsistema(subsistema);
                 gvMasivosAut.DataSource = lst;
-                gvMasivosAut.DataBind();  
+                gvMasivosAut.DataBind();
+                // Forzar que el encabezado se renderice en <thead>
+                if (gvMasivosAut.HeaderRow != null)
+                {
+                    gvMasivosAut.HeaderRow.TableSection = TableRowSection.TableHeader;
+                }
             }
             catch (Exception ex)
             {

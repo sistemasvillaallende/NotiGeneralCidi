@@ -2,12 +2,7 @@
     CodeBehind="Inicio.aspx.cs" Inherits="NotificacionesCIDI.Secure.Inicio" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <!-- Usar DataTables con Bootstrap 5 -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
-    <!-- Cargar primero la librería base de DataTables -->
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <!-- Luego, la integración con Bootstrap 5 (sin atributo onload) -->
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
     <script type="text/javascript">
         jQuery(window).on("load", function(){
             jQuery('#gvMasivosAut').DataTable({
