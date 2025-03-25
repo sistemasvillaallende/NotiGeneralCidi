@@ -40,6 +40,11 @@ namespace NotificacionesCIDI.Secure
                 List<NotificacionGeneral> lst = BLL.NotificacionGeneralBLL.readNotificacionGeneral();
                 gvMasivosAut.DataSource = lst;
                 gvMasivosAut.DataBind();
+                // Add header row as thead for DataTables
+                if (gvMasivosAut.HeaderRow != null)
+                {
+                    gvMasivosAut.HeaderRow.TableSection = System.Web.UI.WebControls.TableRowSection.TableHeader;
+                }
             }
             catch (Exception ex)
             {
