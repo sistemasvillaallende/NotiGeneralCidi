@@ -2,14 +2,20 @@
     CodeBehind="Inicio.aspx.cs" Inherits="NotificacionesCIDI.Secure.Inicio" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
-    
-    <script onload="console.log('DataTables plugin loaded');" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <!-- Usar DataTables con Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+    <!-- Cargar primero la librería base de DataTables -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <!-- Luego, la integración con Bootstrap 5 (sin atributo onload) -->
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script type="text/javascript">
         jQuery(window).on("load", function(){
             jQuery('#gvMasivosAut').DataTable({
                 "paging": true,
-                "searching": true
+                "searching": true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+                }
             });
         });
     </script>
@@ -19,7 +25,7 @@
 
     <div class="col-12">
         <div class="col-12">
-            <h1>Lista de Notificaciones</h1>
+            <h1>Notificaciones</h1>
         </div>
         <div class="">
             <asp:GridView AutoGenerateColumns="false" ClientIDMode="Static" CssClass="table table-striped table-hover" ID="gvMasivosAut"
