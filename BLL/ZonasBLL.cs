@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using DAL;
 namespace BLL
 {
-    public class ZonasBLL:DALBase
+    public class ZonasBLL : DALBase
     {
         public static List<DAL.ZONAS> read()
         {
@@ -21,11 +21,11 @@ namespace BLL
                 throw ex;
             }
         }
-        public static DAL.ZONAS getByPy(int cod_zona)
+        public static DAL.ZONAS getByPk(string categoria)
         {
             try
             {
-                return DAL.ZONAS.getByPk(cod_zona);
+                return DAL.ZONAS.getByPk(categoria);
             }
             catch (Exception ex)
             {
@@ -56,11 +56,11 @@ namespace BLL
             }
         }
 
-        public static void delete(int cod_zona)
+        public static void delete(string categoria)
         {
             try
             {
-                ZONAS.delete(cod_zona);
+                ZONAS.delete(categoria);
             }
             catch (Exception ex)
             {
@@ -68,5 +68,17 @@ namespace BLL
             }
         }
 
+
+        public static List<DAL.ZONAS> readIyc()
+        {
+            try
+            {
+                return DAL.ZONAS.readIyC();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

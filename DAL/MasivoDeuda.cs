@@ -28,7 +28,7 @@ namespace DAL
         public MasivoDeuda()
         {
             cir = 0;
-            sec= 0;
+            sec = 0;
             man = 0;
             par = 0;
             p_h = 0;
@@ -40,6 +40,79 @@ namespace DAL
 
         }
 
+        public static List<MasivoDeuda> getByAll()
+        {
+            try
+            {
+                List<MasivoDeuda> lst = new List<MasivoDeuda>();
+                MasivoDeuda obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+
+                    
+                        cmd.CommandText = @"SELECT DISTINCT 
+                                                i.circunscripcion, i.seccion, i.manzana, i.parcela, i.p_h,
+                                                b.NOM_BARRIO, c.NOM_CALLE ,vd.NOMBRE, vd.APELLIDO, vd.CUIT 
+                                            FROM 
+                                                CTASCTES_INMUEBLES ci
+                                            INNER JOIN 
+                                                INMUEBLES i 
+                                                ON  ci.circunscripcion = i.circunscripcion AND ci.seccion = i.seccion
+                                                AND ci.manzana = i.manzana AND ci.parcela = i.parcela AND ci.p_h = i.p_h
+                                            INNER JOIN 
+                                                VECINO_DIGITAL vd ON i.cuil = vd.CUIT
+                                            INNER JOIN 
+											    CATEGORIAS_LIQUIDACION_TASA clt ON clt.categoria = i.cod_categoria_zona_liq
+                                            LEFT JOIN 
+                                                BARRIOS b ON i.cod_barrio = b.COD_BARRIO
+                                            LEFT JOIN 
+                                                CALLES c  ON i.cod_calle_dom_esp = c.COD_CALLE";                                     
+
+                    cmd.Connection.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int cir = dr.GetOrdinal("circunscripcion");
+                        int sec = dr.GetOrdinal("seccion");
+                        int man = dr.GetOrdinal("manzana");
+                        int par = dr.GetOrdinal("parcela");
+                        int p_h = dr.GetOrdinal("p_h");
+                        int nombre_barrio = dr.GetOrdinal("NOM_BARRIO");
+                        int nombre_calle = dr.GetOrdinal("NOM_CALLE");
+                        int nombre = dr.GetOrdinal("NOMBRE");
+                        int apellido = dr.GetOrdinal("APELLIDO");
+                        int cuit = dr.GetOrdinal("CUIT");
+
+                        while (dr.Read())
+                        {
+
+                            obj = new MasivoDeuda();
+                            if (!dr.IsDBNull(cir)) { obj.cir = dr.GetInt32(cir); }
+                            if (!dr.IsDBNull(sec)) { obj.sec = dr.GetInt32(sec); }
+                            if (!dr.IsDBNull(man)) { obj.man = dr.GetInt32(man); }
+                            if (!dr.IsDBNull(par)) { obj.par = dr.GetInt32(par); }
+                            if (!dr.IsDBNull(p_h)) { obj.p_h = dr.GetInt32(p_h); }
+                            if (!dr.IsDBNull(nombre_barrio)) { obj.nom_barrio = dr.GetString(nombre_barrio); }
+                            if (!dr.IsDBNull(nombre_calle)) { obj.nom_calle = dr.GetString(nombre_calle); }
+                            if (!dr.IsDBNull(nombre)) { obj.nombre = dr.GetString(nombre); }
+                            if (!dr.IsDBNull(apellido)) { obj.apellido = dr.GetString(apellido); }
+                            if (!dr.IsDBNull(cuit)) { obj.cuit = dr.GetString(cuit); }
+
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
 
@@ -58,34 +131,22 @@ namespace DAL
                     if (barrios == null || barrios.Count == 0)
                     {
                         cmd.CommandText = @"SELECT DISTINCT 
-                                                    i.circunscripcion,
-                                                    i.seccion,
-                                                    i.manzana,
-                                                    i.parcela,
-                                                    i.p_h,
-                                                    b.NOM_BARRIO,              
-                                                    c.NOM_CALLE,               
-                                                    vd.NOMBRE,
-                                                    vd.APELLIDO,
-                                                    vd.CUIT                          
-                                                FROM 
-                                                    CTASCTES_INMUEBLES ci
-                                                INNER JOIN 
-                                                    INMUEBLES i 
-                                                    ON  ci.circunscripcion = i.circunscripcion
-                                                    AND ci.seccion = i.seccion
-                                                    AND ci.manzana = i.manzana
-                                                    AND ci.parcela = i.parcela
-                                                    AND ci.p_h = i.p_h
-                                                INNER JOIN 
-                                                    VECINO_DIGITAL vd
-                                                    ON i.CUIT_VECINO_DIGITAL = vd.CUIT
-                                                LEFT JOIN 
-                                                    BARRIOS b
-                                                    ON i.cod_barrio = b.COD_BARRIO
-                                                LEFT JOIN 
-                                                    CALLES c
-                                                    ON i.cod_calle_dom_esp = c.COD_CALLE";
+                                                i.circunscripcion, i.seccion, i.manzana, i.parcela, i.p_h,
+                                                b.NOM_BARRIO, c.NOM_CALLE ,vd.NOMBRE, vd.APELLIDO, vd.CUIT 
+                                            FROM 
+                                                CTASCTES_INMUEBLES ci
+                                            INNER JOIN 
+                                                INMUEBLES i 
+                                                ON  ci.circunscripcion = i.circunscripcion AND ci.seccion = i.seccion
+                                                AND ci.manzana = i.manzana AND ci.parcela = i.parcela AND ci.p_h = i.p_h
+                                            INNER JOIN 
+                                                VECINO_DIGITAL vd ON i.cuil = vd.CUIT
+                                            INNER JOIN 
+											    CATEGORIAS_LIQUIDACION_TASA clt ON clt.categoria = i.cod_categoria_zona_liq
+                                            LEFT JOIN 
+                                                BARRIOS b ON i.cod_barrio = b.COD_BARRIO
+                                            LEFT JOIN 
+                                                CALLES c  ON i.cod_calle_dom_esp = c.COD_CALLE";
                     }
                     else
                     {
@@ -97,34 +158,22 @@ namespace DAL
                         }
 
                         cmd.CommandText = $@"SELECT DISTINCT 
-                                                i.circunscripcion,
-                                                i.seccion,
-                                                i.manzana,
-                                                i.parcela,
-                                                i.p_h,
-                                                b.NOM_BARRIO,              
-                                                c.NOM_CALLE,               
-                                                vd.NOMBRE,
-                                                vd.APELLIDO,
-                                                vd.CUIT 
+                                                i.circunscripcion, i.seccion, i.manzana, i.parcela, i.p_h,
+                                                b.NOM_BARRIO, c.NOM_CALLE ,vd.NOMBRE, vd.APELLIDO, vd.CUIT 
                                             FROM 
                                                 CTASCTES_INMUEBLES ci
                                             INNER JOIN 
                                                 INMUEBLES i 
-                                                ON  ci.circunscripcion = i.circunscripcion
-                                                AND ci.seccion = i.seccion
-                                                AND ci.manzana = i.manzana
-                                                AND ci.parcela = i.parcela
-                                                AND ci.p_h = i.p_h
+                                                ON  ci.circunscripcion = i.circunscripcion AND ci.seccion = i.seccion
+                                                AND ci.manzana = i.manzana AND ci.parcela = i.parcela AND ci.p_h = i.p_h
                                             INNER JOIN 
-                                                VECINO_DIGITAL vd
-                                                ON i.CUIT_VECINO_DIGITAL = vd.CUIT
+                                                VECINO_DIGITAL vd ON i.cuil = vd.CUIT
+                                            INNER JOIN 
+											    CATEGORIAS_LIQUIDACION_TASA clt ON clt.categoria = i.cod_categoria_zona_liq
                                             LEFT JOIN 
-                                                BARRIOS b
-                                                ON i.cod_barrio = b.COD_BARRIO
+                                                BARRIOS b ON i.cod_barrio = b.COD_BARRIO
                                             LEFT JOIN 
-                                                CALLES c
-                                                ON i.cod_calle_dom_esp = c.COD_CALLE
+                                                CALLES c  ON i.cod_calle_dom_esp = c.COD_CALLE
                                             WHERE 
                                                 b.NOM_BARRIO IN ({string.Join(", ", parametros)})";
                     }
@@ -208,7 +257,7 @@ namespace DAL
                                                 AND ci.p_h = i.p_h
                                             INNER JOIN 
                                                 VECINO_DIGITAL vd
-                                                ON i.CUIT_VECINO_DIGITAL = vd.CUIT
+                                                ON i.cuil = vd.CUIT
                                             LEFT JOIN 
                                                 BARRIOS b
                                                 ON i.cod_barrio = b.COD_BARRIO
@@ -309,6 +358,223 @@ namespace DAL
         }
 
 
+
+        public static List<MasivoDeuda> getByCalles(List<string> calles, int? desde, int? hasta)
+        {
+            try
+            {
+                List<MasivoDeuda> lst = new List<MasivoDeuda>();
+                MasivoDeuda obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+
+                    if (calles == null || calles.Count == 0)
+                    {
+                        cmd.CommandText = @"SELECT DISTINCT 
+                                                    i.circunscripcion,
+                                                    i.seccion,
+                                                    i.manzana,
+                                                    i.parcela,
+                                                    i.p_h,
+                                                    b.NOM_BARRIO,              
+                                                    c.NOM_CALLE,               
+                                                    vd.NOMBRE,
+                                                    vd.APELLIDO,
+                                                    vd.CUIT                          
+                                                FROM 
+                                                    CTASCTES_INMUEBLES ci
+                                                INNER JOIN 
+                                                    INMUEBLES i 
+                                                    ON  ci.circunscripcion = i.circunscripcion
+                                                    AND ci.seccion = i.seccion
+                                                    AND ci.manzana = i.manzana
+                                                    AND ci.parcela = i.parcela
+                                                    AND ci.p_h = i.p_h
+                                                INNER JOIN 
+                                                    VECINO_DIGITAL vd
+                                                    ON i.cuil = vd.CUIT
+                                                LEFT JOIN 
+                                                    BARRIOS b
+                                                    ON i.cod_barrio = b.COD_BARRIO
+                                                LEFT JOIN 
+                                                    CALLES c
+                                                    ON i.cod_calle_dom_esp = c.COD_CALLE";
+                    }
+                    else
+                    {
+                        List<string> parametros = new List<string>();
+                        for (int i = 0; i < calles.Count; i++)
+                        {
+                            parametros.Add($"@calle{i}");
+                            cmd.Parameters.AddWithValue($"@calle{i}", calles[i]);
+                        }
+
+                        cmd.CommandText = $@"SELECT DISTINCT 
+                                                i.circunscripcion,
+                                                i.seccion,
+                                                i.manzana,
+                                                i.parcela,
+                                                i.p_h,
+                                                b.NOM_BARRIO,              
+                                                c.NOM_CALLE,               
+                                                vd.NOMBRE,
+                                                vd.APELLIDO,
+                                                vd.CUIT 
+                                            FROM 
+                                                CTASCTES_INMUEBLES ci
+                                            INNER JOIN 
+                                                INMUEBLES i 
+                                                ON  ci.circunscripcion = i.circunscripcion
+                                                AND ci.seccion = i.seccion
+                                                AND ci.manzana = i.manzana
+                                                AND ci.parcela = i.parcela
+                                                AND ci.p_h = i.p_h
+                                            INNER JOIN 
+                                                VECINO_DIGITAL vd
+                                                ON i.cuil  = vd.CUIT
+                                            LEFT JOIN 
+                                                BARRIOS b
+                                                ON i.cod_barrio = b.COD_BARRIO
+                                            LEFT JOIN 
+                                                CALLES c
+                                                ON i.cod_calle_dom_esp = c.COD_CALLE
+                                            WHERE 
+                                                c.NOM_CALLE IN ({string.Join(", ", parametros)})
+                                            AND i.nro_dom_esp BETWEEN @desde AND @hasta
+                                                ";
+                    }
+
+                    cmd.Parameters.AddWithValue("@desde", desde);
+                    cmd.Parameters.AddWithValue("@hasta", hasta);
+                    cmd.Connection.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int cir = dr.GetOrdinal("circunscripcion");
+                        int sec = dr.GetOrdinal("seccion");
+                        int man = dr.GetOrdinal("manzana");
+                        int par = dr.GetOrdinal("parcela");
+                        int p_h = dr.GetOrdinal("p_h");
+                        int nombre_barrio = dr.GetOrdinal("NOM_BARRIO");
+                        int nombre_calle = dr.GetOrdinal("NOM_CALLE");
+                        int nombre = dr.GetOrdinal("NOMBRE");
+                        int apellido = dr.GetOrdinal("APELLIDO");
+                        int cuit = dr.GetOrdinal("CUIT");
+
+                        while (dr.Read())
+                        {
+
+                            obj = new MasivoDeuda();
+                            if (!dr.IsDBNull(cir)) { obj.cir = dr.GetInt32(cir); }
+                            if (!dr.IsDBNull(sec)) { obj.sec = dr.GetInt32(sec); }
+                            if (!dr.IsDBNull(man)) { obj.man = dr.GetInt32(man); }
+                            if (!dr.IsDBNull(par)) { obj.par = dr.GetInt32(par); }
+                            if (!dr.IsDBNull(p_h)) { obj.p_h = dr.GetInt32(p_h); }
+                            if (!dr.IsDBNull(nombre_barrio)) { obj.nom_barrio = dr.GetString(nombre_barrio); }
+                            if (!dr.IsDBNull(nombre_calle)) { obj.nom_calle = dr.GetString(nombre_calle); }
+                            if (!dr.IsDBNull(nombre)) { obj.nombre = dr.GetString(nombre); }
+                            if (!dr.IsDBNull(apellido)) { obj.apellido = dr.GetString(apellido); }
+                            if (!dr.IsDBNull(cuit)) { obj.cuit = dr.GetString(cuit); }
+
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        public static List<MasivoDeuda> getByZonas(List<string> zonas)
+        {
+            try
+            {
+                List<MasivoDeuda> lst = new List<MasivoDeuda>();
+                MasivoDeuda obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+
+
+                    List<string> parametros = new List<string>();
+                    for (int i = 0; i < zonas.Count; i++)
+                    {
+                        parametros.Add($"@zona{i}");
+                        cmd.Parameters.AddWithValue($"@zona{i}", zonas[i]);
+                    }
+
+                    cmd.CommandText = $@"   SELECT DISTINCT 
+                                                i.circunscripcion, i.seccion, i.manzana, i.parcela, i.p_h,
+                                                b.NOM_BARRIO, c.NOM_CALLE ,vd.NOMBRE, vd.APELLIDO, vd.CUIT 
+                                            FROM 
+                                                CTASCTES_INMUEBLES ci
+                                            INNER JOIN 
+                                                INMUEBLES i 
+                                                ON  ci.circunscripcion = i.circunscripcion AND ci.seccion = i.seccion
+                                                AND ci.manzana = i.manzana AND ci.parcela = i.parcela AND ci.p_h = i.p_h
+                                            INNER JOIN 
+                                                VECINO_DIGITAL vd ON i.cuil = vd.CUIT
+                                            INNER JOIN 
+											    CATEGORIAS_LIQUIDACION_TASA clt ON clt.categoria = i.cod_categoria_zona_liq
+                                            LEFT JOIN 
+                                                BARRIOS b ON i.cod_barrio = b.COD_BARRIO
+                                            LEFT JOIN 
+                                                CALLES c  ON i.cod_calle_dom_esp = c.COD_CALLE
+                                        	WHERE i.cod_categoria_zona_liq IN ({string.Join(", ", parametros)}) ";
+
+                    cmd.Connection.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int cir = dr.GetOrdinal("circunscripcion");
+                        int sec = dr.GetOrdinal("seccion");
+                        int man = dr.GetOrdinal("manzana");
+                        int par = dr.GetOrdinal("parcela");
+                        int p_h = dr.GetOrdinal("p_h");
+                        int nombre_barrio = dr.GetOrdinal("NOM_BARRIO");
+                        int nombre_calle = dr.GetOrdinal("NOM_CALLE");
+                        int nombre = dr.GetOrdinal("NOMBRE");
+                        int apellido = dr.GetOrdinal("APELLIDO");
+                        int cuit = dr.GetOrdinal("CUIT");
+
+                        while (dr.Read())
+                        {
+
+                            obj = new MasivoDeuda();
+                            if (!dr.IsDBNull(cir)) { obj.cir = dr.GetInt32(cir); }
+                            if (!dr.IsDBNull(sec)) { obj.sec = dr.GetInt32(sec); }
+                            if (!dr.IsDBNull(man)) { obj.man = dr.GetInt32(man); }
+                            if (!dr.IsDBNull(par)) { obj.par = dr.GetInt32(par); }
+                            if (!dr.IsDBNull(p_h)) { obj.p_h = dr.GetInt32(p_h); }
+                            if (!dr.IsDBNull(nombre_barrio)) { obj.nom_barrio = dr.GetString(nombre_barrio); }
+                            if (!dr.IsDBNull(nombre_calle)) { obj.nom_calle = dr.GetString(nombre_calle); }
+                            if (!dr.IsDBNull(nombre)) { obj.nombre = dr.GetString(nombre); }
+                            if (!dr.IsDBNull(apellido)) { obj.apellido = dr.GetString(apellido); }
+                            if (!dr.IsDBNull(cuit)) { obj.cuit = dr.GetString(cuit); }
+
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
 
     }

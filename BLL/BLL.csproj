@@ -48,12 +48,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarriosBLL.cs" />
+    <Compile Include="CallesBLL.cs" />
     <Compile Include="CATE_DEUDA.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="DetNotificacionGenetalBLL.cs" />
+    <Compile Include="MasivoDeudaAutoBLL.cs" />
     <Compile Include="MasivoDeudaBLL.cs" />
     <Compile Include="MasivoDeudaGeneralBLL.cs" />
     <Compile Include="MasivoDeudaInmBLL.cs" />
+    <Compile Include="MasivoDeudaIyCBLL.cs" />
     <Compile Include="NotasPlantillasBLL.cs" />
     <Compile Include="Notificaciones_generales_cidi.cs" />
     <Compile Include="NotificacionGeneralBLL.cs" />

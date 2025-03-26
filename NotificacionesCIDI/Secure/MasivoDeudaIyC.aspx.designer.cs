@@ -14,7 +14,7 @@ namespace NotificacionesCIDI.Secure
     public partial class MasivoDeudaIyC
     {
 
-        
+
         /// <summary>
         /// Control form1.
         /// </summary>
@@ -203,7 +203,7 @@ namespace NotificacionesCIDI.Secure
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox lstCatDeuda;
-
+        protected global::System.Web.UI.WebControls.ListBox lstCalles;
         /// <summary>
         /// Control lstBarrios.
         /// </summary>
@@ -401,5 +401,16 @@ namespace NotificacionesCIDI.Secure
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnGenerarNoti;
+        /// <summary>
+        /// chkActivo control.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkActivo;
+        protected global::System.Web.UI.WebControls.GridView gvPlantilla;
+        
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
     }
 }

@@ -7,11 +7,13 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace NotificacionesCIDI.Secure {
-    
-    
-    public partial class MasivoDeuda {
-        
+namespace NotificacionesCIDI.Secure
+{
+
+
+    public partial class MasivoDeuda
+    {
+
         /// <summary>
         /// Control form1.
         /// </summary>
@@ -20,7 +22,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// Control ScriptManager1.
         /// </summary>
@@ -29,7 +31,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.ScriptManager ScriptManager1;
-        
+
         /// <summary>
         /// Control imgUsuario.
         /// </summary>
@@ -38,7 +40,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlImage imgUsuario;
-        
+
         /// <summary>
         /// Control liNombre.
         /// </summary>
@@ -47,7 +49,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl liNombre;
-        
+
         /// <summary>
         /// Control liApellido.
         /// </summary>
@@ -56,7 +58,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl liApellido;
-        
+
         /// <summary>
         /// Control mnuPcApellido.
         /// </summary>
@@ -65,7 +67,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl mnuPcApellido;
-        
+
         /// <summary>
         /// Control mnuPcNombre.
         /// </summary>
@@ -74,7 +76,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl mnuPcNombre;
-        
+
         /// <summary>
         /// Control SpanOficina.
         /// </summary>
@@ -83,7 +85,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl SpanOficina;
-        
+
         /// <summary>
         /// Control mnuPcCuit.
         /// </summary>
@@ -92,7 +94,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl mnuPcCuit;
-        
+
         /// <summary>
         /// Control mnuPcNivelCidi.
         /// </summary>
@@ -101,7 +103,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl mnuPcNivelCidi;
-        
+
         /// <summary>
         /// Control btnCerraSession.
         /// </summary>
@@ -110,7 +112,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor btnCerraSession;
-        
+
         /// <summary>
         /// Control table.
         /// </summary>
@@ -119,7 +121,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl table;
-        
+
         /// <summary>
         /// Control Button3.
         /// </summary>
@@ -128,7 +130,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button3;
-        
+
         /// <summary>
         /// Control table2.
         /// </summary>
@@ -137,7 +139,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl table2;
-        
+
         /// <summary>
         /// Control Button4.
         /// </summary>
@@ -146,7 +148,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button4;
-        
+
         /// <summary>
         /// Control divFiltros.
         /// </summary>
@@ -155,7 +157,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divFiltros;
-        
+
         /// <summary>
         /// Control ddlFecha.
         /// </summary>
@@ -163,8 +165,8 @@ namespace NotificacionesCIDI.Secure {
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlFecha;
-        
+        protected global::System.Web.UI.WebControls.DropDownList ddlCalles;
+
         /// <summary>
         /// Control txtDesde.
         /// </summary>
@@ -173,7 +175,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDesde;
-        
+
         /// <summary>
         /// Control txtHasta.
         /// </summary>
@@ -182,7 +184,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtHasta;
-        
+
         /// <summary>
         /// Control DDLCatDeuda.
         /// </summary>
@@ -191,7 +193,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DDLCatDeuda;
-        
+
         /// <summary>
         /// Control lstCatDeuda.
         /// </summary>
@@ -200,7 +202,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox lstCatDeuda;
-        
+
         /// <summary>
         /// Control lstBarrios.
         /// </summary>
@@ -209,7 +211,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox lstBarrios;
-        
+
         /// <summary>
         /// Control lstZonas.
         /// </summary>
@@ -218,7 +220,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox lstZonas;
-        
+
         /// <summary>
         /// Control lstTipoDeuda.
         /// </summary>
@@ -227,7 +229,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox lstTipoDeuda;
-        
+
         /// <summary>
         /// Control ddlFiltroDeuda.
         /// </summary>
@@ -236,7 +238,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlFiltroDeuda;
-        
+
         /// <summary>
         /// Control txtMontoDesde.
         /// </summary>
@@ -245,7 +247,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMontoDesde;
-        
+
         /// <summary>
         /// Control txtMontoHasta.
         /// </summary>
@@ -254,7 +256,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMontoHasta;
-        
+
         /// <summary>
         /// Control btnVolver.
         /// </summary>
@@ -263,7 +265,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnVolver;
-        
+
         /// <summary>
         /// Control btnFiltros.
         /// </summary>
@@ -272,7 +274,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnFiltros;
-        
+
         /// <summary>
         /// Control lblError.
         /// </summary>
@@ -281,7 +283,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblError;
-        
+
         /// <summary>
         /// Control divResultados.
         /// </summary>
@@ -290,7 +292,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divResultados;
-        
+
         /// <summary>
         /// Control btnClearFiltros.
         /// </summary>
@@ -299,7 +301,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnClearFiltros;
-        
+
         /// <summary>
         /// Control btnExportExcel.
         /// </summary>
@@ -308,7 +310,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnExportExcel;
-        
+
         /// <summary>
         /// Control gvDeuda.
         /// </summary>
@@ -317,7 +319,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvDeuda;
-        
+
         /// <summary>
         /// Control txtRegistros.
         /// </summary>
@@ -326,7 +328,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRegistros;
-        
+
         /// <summary>
         /// Control txtTotJudicial.
         /// </summary>
@@ -335,7 +337,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtTotJudicial;
-        
+
         /// <summary>
         /// Control txtPreJudicial.
         /// </summary>
@@ -344,7 +346,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPreJudicial;
-        
+
         /// <summary>
         /// Control txtAdministrativa.
         /// </summary>
@@ -353,7 +355,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtAdministrativa;
-        
+
         /// <summary>
         /// Control txtNormal.
         /// </summary>
@@ -362,7 +364,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNormal;
-        
+
         /// <summary>
         /// Control txtTotal.
         /// </summary>
@@ -371,7 +373,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtTotal;
-        
+
         /// <summary>
         /// Control txtNombreNoti.
         /// </summary>
@@ -380,7 +382,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNombreNoti;
-        
+
         /// <summary>
         /// Control txtescripcion.
         /// </summary>
@@ -389,7 +391,7 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtescripcion;
-        
+
         /// <summary>
         /// Control btnGenerarNoti.
         /// </summary>
@@ -398,5 +400,37 @@ namespace NotificacionesCIDI.Secure {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnGenerarNoti;
+
+        protected global::System.Web.UI.WebControls.GridView gvPlantilla;
+
+        protected global::System.Web.UI.WebControls.TextBox hiddenInput2;
+
+        protected global::System.Web.UI.WebControls.TextBox txtNombreNota;
+        protected global::System.Web.UI.WebControls.Button btnGuardarNota;
+        protected global::System.Web.UI.WebControls.Button btnNotas;
+
+        /// <summary>
+        /// Control btnGenerate.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGenerate;
+
+        /// <summary>
+        /// Control litNotasGeneradas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litNotasGeneradas;
+
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+
+        protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl;
+        protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl2;
+        protected global::System.Web.UI.WebControls.ListBox lstCalles;
     }
 }

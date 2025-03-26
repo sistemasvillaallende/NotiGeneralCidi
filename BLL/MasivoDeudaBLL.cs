@@ -21,8 +21,31 @@ namespace BLL
             }
         }
 
+        public static List<MasivoDeuda> getByCalles(List<string> calles, int? desde, int? hasta)
+        {
+            try
+            {
+                return DAL.MasivoDeuda.getByCalles(calles, desde, hasta);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
 
-        public static List<MasivoDeuda> getByBarrios(List<string> barrios)
+        public static List<MasivoDeuda> getByZonas(List<string> zonas)
+        {
+            try
+            {
+                return DAL.MasivoDeuda.getByZonas(zonas);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+          public static List<MasivoDeuda> getByBarrios(List<string> barrios)
         {
             try
             {
@@ -34,11 +57,24 @@ namespace BLL
             }
         }
 
+          public static List<MasivoDeuda> getByAll()
+        {
+            try
+            {
+                return DAL.MasivoDeuda.getByAll();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+
         public static string armoDenominacion(int cir, int sec, int man, int par, int p_h)
         {
             try
             {
-                return DAL.MasivoDeuda.armoDenominacion(cir,sec,man,par,p_h);
+                return DAL.MasivoDeuda.armoDenominacion(cir, sec, man, par, p_h);
             }
             catch (Exception ex)
             {

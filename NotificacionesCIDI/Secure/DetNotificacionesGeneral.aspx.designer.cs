@@ -16,5 +16,11 @@ namespace NotificacionesCIDI.Secure
 
         protected global::System.Web.UI.HtmlControls.HtmlAnchor btnCerraSession;
          protected global::System.Web.UI.WebControls.GridView gvMasivosAut;
+         protected global:: System.Web.UI.WebControls.CheckBox chkSelect;
+        protected global::System.Web.UI.WebControls.DropDownList DDLEstEnv;
+        protected global::System.Web.UI.WebControls.TextBox txtescripcion;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divContenido;
+
+
     }
 }

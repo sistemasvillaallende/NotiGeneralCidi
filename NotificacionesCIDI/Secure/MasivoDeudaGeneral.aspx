@@ -78,14 +78,14 @@
                                         runat="server" onserverclick="btnClearFiltros_ServerClick">
                                         <span class="fa fa-filter-circle-xmark"></span>&nbsp;Limpiar Filtros
                                     </button>
-                                    <button type="button" id="btnNoti" class="btn btn-outline-info"
-                                        data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <span class="fa fa-sheet-plastic"></span>&nbsp; Generar notificación CIDI
-                                    </button>
-                                    <button type="button" runat="server" id="btnExportExcel"
+                                    <button runat="server" id="btnGenerarNoti"
+                                        onserverclick="btnGenerarNoti_ServerClick"
+                                        type="button" class="btn btn-outline-primary" >
+                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación </button>
+                                        <button type="button" runat="server" id="btnExportExcel"
                                         onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                         data-toggle="modal" data-target="#page-change-name">
-                                        <span class="fa fa-sheet-plastic"></span>&nbsp; Exportar a Excel
+                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel                                           
                                     </button>
                                 </div>
                             </div>
@@ -101,13 +101,13 @@
                                             <Columns>
                                                 <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
                                                     HeaderText="nombre" />
+                                                <asp:BoundField DataField="apellido" ControlStyle-Width="10%"
+                                                    HeaderText="apellido" />
                                                 <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
                                                     HeaderText="CUIT" />
                                                 <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
                                                     HeaderText="Calle" />
-                                                <asp:BoundField DataField="nro_dom" ControlStyle-Width="10%"
-                                                    HeaderText="Nro" />
-                                                <asp:BoundField DataField="barrio" ControlStyle-Width="10%"
+                                                <asp:BoundField DataField="nom_barrio" ControlStyle-Width="10%"
                                                     HeaderText="Barrio" />
                                             </Columns>
                                         </asp:GridView>
@@ -160,284 +160,121 @@
             </div>
         </div>
 
-        <div class="modal fade in" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Generar Notificación</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p style="text-align: center">
-                            Le informamos que la notificación se generara solo con aquellos registros
-                            que cuenten con un CUIT valido
-                        </p>
-                        <div class="form-group">
-                            <label>Nombre</label>
-                            <asp:TextBox ID="txtNombreNoti" CssClass="form-control" runat="server"></asp:TextBox>
-                        </div>
-                        <div class="form-group" style="margin-top: 25px;">
-                            <label>Descripción</label>
-                            <asp:TextBox ID="txtescripcion" TextMode="MultiLine" CssClass="form-control" runat="server">
-                            </asp:TextBox>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button runat="server" id="btnGenerarNoti" onserverclick="btnGenerarNoti_ServerClick"
-                            type="button" class="btn btn-primary">Aceptar</button>
-                    </div>
+        <div class="modal fade" id="modalNotif" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Se ha generado la notificacion.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align: center">
+                        Se ha generado la notificacion.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="plantillaModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog1 modal-dialog">
-                <div class="modal-content1 modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Crear plantilla</h4>
+    </div>
+    <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lista de planillas</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
+                            OnRowDataBound="gvPlantilla_RowDataBound"
+                            OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
+                            CellPadding="4" ForeColor="#333333" GridLines="None" EnableViewState="true"
+                            DataKeyNames="id,contenido">
+                            <AlternatingRowStyle BackColor="White" ForeColor="#284775">
+                            </AlternatingRowStyle>
+                            <Columns>
+                                <asp:TemplateField HeaderText="Seleccionar">
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="chkSeleccionar" runat="server"  onclick="SoloUnCheckbox(this); event.cancelBubble=true;"/>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
+                                    HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
+                            </Columns>
+                        </asp:GridView>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div id="editor-container"
-                                style="height: 200px; border: 1px solid #ccc; margin-left: 20px; margin-right: 20px;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-warning">Cancelar</button>
-                        <div class="d-flex flex-row gap-3 mt-3 pb-3">
-                            <button type="button" class="btn btn-primary" onclick="insertVariable('{nombre}')">Insertar
-                                Nombre</button>
-                            <button type="button" class="btn btn-primary"
-                                onclick="insertVariable('{apellido}')">Insertar Apellido</button>
-                            <button type="button" class="btn btn-primary" onclick="insertVariable('{cuit}')">Insertar
-                                CUIT</button>
-                            <button type="button" class="btn btn-primary" onclick="generarNotas()">GENERAR
-                                NOTAS</button>
-                            <button type="button" class="btn btn-primary" onclick="abrirModalNotas()"
-                                OnClick="btnCargarPlantillas_Click">Notas</button>
-                        </div>
-                        <asp:TextBox ID="hiddenInput2" runat="server" TextMode="MultiLine" Style="display: none;"
-                            ValidateRequestMode="Disabled"></asp:TextBox>
-                        <asp:Literal ID="litNotasGeneradas" runat="server"></asp:Literal>
-                    </div>
+                </div>
+                <div class="modal-footer">  
+                <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" CssClass="btn btn-primary" OnClick="btnObtenerSeleccionados_Click" />
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog1 modal-dialog">
-                <div class="modal-content1 modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Lista de planillas</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
-                                OnRowDataBound="gvPlantilla_RowDataBound" OnRowCommand="gvPlantilla_RowCommand"
-                                AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None"
-                                DataKeyNames="id,contenido">
-                                <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
-                                <Columns>
-                                    <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
-                                        HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
-                                </Columns>
-                            </asp:GridView>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-warning">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="plantillaModalNombreNotas" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog1 modal-dialog">
-                <div class="modal-content1 modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title">Nombre de la nota</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="txtNombreNota">Ingrese el nombre de la nota:</label>
-                            <asp:TextBox ID="txtNombreNota" runat="server" CssClass="form-control"
-                                EnableViewState="true" ViewStateMode="Enabled"></asp:TextBox>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" onclick="volverAlModalPrincipal()"
-                            class="btn btn-warning">Cancelar</button>
-                        <asp:Button ID="btnGuardarNota" runat="server" CssClass="btn btn-primary" Text="Guardar"
-                            OnClick="btnGuardarNota_Click" UseSubmitBehavior="false" ClientIDMode="Static"
-                            OnClientClick=" DoCustomPost();" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script src="../App_Themes/Main/js/jQuery-2.1.4.min.js"></script>
-        <script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
-        <script src="../App_Themes/Main/js/bootstrap.min.js"></script>
-        <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
-        <script src="../App_Themes/fontawesome/js/all.js"></script>
         <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
         <script>
-            $("#btnClearFiltros").click(function () {
-                document.getElementById('lstBarrios').selectedIndex = -1;
-                document.getElementById('lstTipoDeuda').selectedIndex = -1;
-            });
-            $("#ddlBuscar").change(function () {
-                if ($("#ddlBuscar").val() == "Denominacion Catastral") {
-                    $("#divCatastro").show("slow");
-                    $("#divNombre").hide("slow");
-                }
-                else {
-                    $("#divCatastro").hide("slow");
-                    $("#divNombre").show("slow");
-                }
-            });
-
-            function abrirmodalConceptos() {
-                $('#modalConceptos').modal('show');
-            }
-
-            function abrirModalPlantillas() {
-                $('#plantillaModal').modal('show');
-            }
-
-            function abrirModalNotas() {
-                $('#plantillaModalNotas').modal('show');
-            }
-
-            function abrirModalNombrePlantilla() {
-                var modal = $("#plantillaModalNombreNotas");
-
-                modal.appendTo("body");
-                modal.modal("show");
-
-                setTimeout(function () {
-                    var maxZIndex = Math.max(...Array.from(document.querySelectorAll(".modal"))
-                        .map(m => parseFloat(window.getComputedStyle(m).zIndex) || 1050));
-
-                    modal.css({
-                        "display": "block",
-                        "z-index": maxZIndex + 10,
-                        "opacity": "1"
-                    });
-
-                    $(".modal-backdrop").not(".modal-stack").css("z-index", maxZIndex + 9).addClass("modal-stack");
-                }, 100);
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
-                var rows = document.querySelectorAll("#<%= gvPlantilla.ClientID %> tr");
-                rows.forEach(function (row, index) {
-                    if (index > 0) {
-                        row.classList.add("gvRow");
-                        row.addEventListener("click", function () {
-                            __doPostBack('<%= gvPlantilla.UniqueID %>', 'Select$' + (index - 1));
-                        });
+             function abrirModalPlantillas() {
+                        $('#plantillaModalNotas').modal('show');
                     }
-                });
-            });
-        </script>
-        <script>
-            let quill;
-
-            $('#plantillaModal').on('shown.bs.modal', function () {
-                if (!quill) {
-                    quill = new Quill('#editor-container', {
-                        theme: 'snow',
-                        modules: {
-                            toolbar: [['bold', 'italic', 'underline'], ['clean']]
+                  
+                    // Funcion para poder seelccionar el check cuando aprieto cualquier lugar del gridview
+                    function SeleccionarFila(fila, checkBoxId) {
+                        var chk = document.getElementById(checkBoxId);
+                
+                        if (chk !== null) {
+                            chk.checked = !chk.checked;
+                            SoloUnCheckbox(chk);
                         }
-                    });
-                }
-
-                var contenido = $('#hiddenInput2').val();
-                if (contenido) {
-                    setQuillContent(contenido);
-                }
-            });
-
-            $('#plantillaModal').on('hidden.bs.modal', function () {
-                if (quill) {
-                    quill.root.innerHTML = '';
-                }
-
-                $('#hiddenInput2').val('');
-            });
-
-            function setQuillContent(content) {
-                if (quill) {
-                    quill.root.innerHTML = content;
-                }
-            }
-
-            function insertVariable(variable) {
-                const range = quill.getSelection();
-                if (range) {
-                    quill.insertText(range.index, variable, {
-                        'bold': true,
-                        'background': '#f0f0f0'
-                    });
-                    quill.setSelection(range.index + variable.length);
-                }
-            }
-
-            function volverAlModalPrincipal() {
-                $('#plantillaModalNombreNotas').modal('hide');
-                $('.modal-backdrop').remove();
-
-                $('#plantillaModal').modal('show');
-            }
-
-            function DoCustomPost() {
-                var ModalTextBox = document.getElementById("<%= txtNombreNota.ClientID %>");
-                var HiddenTextBox = document.getElementById("<%= MyHiddenControl.ClientID %>");
-
-                if (ModalTextBox) {
-                    HiddenTextBox.value = ModalTextBox.value;
-                }
-                return true;
-            }
-
-            function DoCustomPost2() {
-                {
-                    console.log('Contenido Quill:', quill.root.innerHTML);
-
-                    var contenidoQuill = quill.root.innerHTML;
-
-                    var hiddenInput = document.getElementById("<%= hiddenInput2.ClientID %>");
-                    var myHiddenControl2 = document.getElementById("<%= MyHiddenControl2.ClientID %>");
-                    if (hiddenInput) {
-                        hiddenInput.value = contenidoQuill;
                     }
 
-                    if (myHiddenControl2) {
-                        myHiddenControl2.value = contenidoQuill;
+                    // Funcion para solo seleccionar un checkbox
+                    function SoloUnCheckbox(chk) {
+                        var grid = document.getElementById('<%= gvPlantilla.ClientID %>');
+                        var checkboxes = grid.getElementsByTagName('input');
+
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            var tipo = checkboxes[i].type;
+                            if (tipo === 'checkbox' && checkboxes[i] !== chk) {
+                                checkboxes[i].checked = false;
+                            }
+                        }
                     }
-                }
+
+// para agregar spinner en generar notificaciones
+            if (window.jQuery) {
+                $(document).ready(function() {
+                    $('#<%= btnGenerarNoti.ClientID %>').on('click', function(e) {
+                        var $btn = $(this);
+                        
+                        if ($btn.prop('disabled')) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        
+                        $btn.prop('disabled', true)
+                            .addClass('disabled')
+                            .html('<span class="spinner-border spinner-border-sm mr-1"></span> Procesando...');
+                        
+                        setTimeout(function() {
+                            $btn.prop('disabled', false)
+                                .removeClass('disabled')
+                                .html('<span class="fa fa-sheet-plastic"></span> Generar notificación');
+                        }, 30000);
+                        
+                        return true;
+                    });
+                });
+            } else {
+                console.error('jQuery is not loaded');
             }
 
-            function generarNotas() {
-                DoCustomPost2();
-                abrirModalNombrePlantilla();
-            }
+
         </script>
     </asp:Content>

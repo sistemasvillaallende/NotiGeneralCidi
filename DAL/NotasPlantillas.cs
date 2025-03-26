@@ -86,7 +86,7 @@ namespace DAL
             try
             {
                 StringBuilder sql = new StringBuilder();
-                sql.AppendLine("SELECT *FROM FROM CIDI_PLANTILLAS WHERE");
+                sql.AppendLine("SELECT * FROM  CIDI_PLANTILLAS WHERE");
                 sql.AppendLine("id = @id");
                 NotasPlantillas obj = null;
                 using (SqlConnection con = getConnection())
@@ -168,6 +168,32 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@id_oficina", obj.id_oficina);
                     cmd.Parameters.AddWithValue("@contenido", obj.contenido);
                     cmd.Parameters.AddWithValue("@id", obj.id);
+                    cmd.Connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+         public static void ActualizarContenido(int id, string contenido)
+        {
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("UPDATE CIDI_PLANTILLAS SET");
+                sql.AppendLine("contenido = @contenido");
+                sql.AppendLine("WHERE id = @id");
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sql.ToString();
+                    cmd.Parameters.AddWithValue("@contenido", contenido);
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.Connection.Open();
                     cmd.ExecuteNonQuery();
                 }

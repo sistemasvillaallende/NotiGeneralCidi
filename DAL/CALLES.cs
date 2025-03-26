@@ -11,7 +11,7 @@ namespace DAL
     {
         public int COD_CALLE { get; set; }
         public string NOM_CALLE { get; set; }
-        public int COD_BARRIO { get; set; }
+        public int? COD_BARRIO { get; set; }
 
         public CALLES()
         {
@@ -53,9 +53,10 @@ namespace DAL
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText =
-                        @"SELECT *FROM Calles A
-                          INNER JOIN BARRIOS B ON A.COD_BARRIO:B.COD_BARRIO
-                          WHERE A.COD_BARRIO=@COD_BARRIO";
+                        @"  SELECT A.COD_CALLE, A.NOM_CALLE, B.COD_BARRIO  FROM Calles A
+                          INNER JOIN CALLES_X_BARRIO cxb ON A.COD_CALLE = cxb.cod_calle 
+                          INNER JOIN BARRIOS B ON B.COD_BARRIO = cxb.cod_barrio 
+                          where B.COD_BARRIO = @COD_BARRIO";
 
                     cmd.Parameters.AddWithValue("@COD_BARRIO", COD_BARRIO);
 
@@ -71,6 +72,43 @@ namespace DAL
             }
         }
 
+        public static List<CALLES> readAll()
+        {
+            try
+            {
+                List<CALLES> lst = new List<CALLES>();
+                CALLES obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT * FROM CALLES";
+                    cmd.Connection.Open();
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int COD_CALLE = dr.GetOrdinal("COD_CALLE");
+                         int NOM_CALLE = dr.GetOrdinal("NOM_CALLE");
+
+                        while (dr.Read())
+                        {
+                            obj = new CALLES();
+                            if (!dr.IsDBNull(COD_CALLE)) { obj.COD_CALLE = dr.GetInt32(COD_CALLE); }
+                            if (!dr.IsDBNull(NOM_CALLE)) { obj.NOM_CALLE = dr.GetString(NOM_CALLE); }
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static CALLES getByPk(int COD_CALLE)
         {
             try
@@ -174,6 +212,61 @@ namespace DAL
                     cmd.Connection.Open();
                     cmd.ExecuteNonQuery();
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public static List<CALLES> getByCallesByBarrio(List<string> barrios)
+        {
+            try
+            {
+                List<CALLES> lst = new List<CALLES>();
+                CALLES obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+
+
+                    List<string> parametros = new List<string>();
+                    for (int i = 0; i < barrios.Count; i++)
+                    {
+                        parametros.Add($"@barrio{i}");
+                        cmd.Parameters.AddWithValue($"@barrio{i}", barrios[i]);
+                    }
+
+                    cmd.CommandText = $@"    SELECT A.COD_CALLE, A.NOM_CALLE, B.COD_BARRIO  FROM Calles A
+                          INNER JOIN CALLES_X_BARRIO cxb ON A.COD_CALLE = cxb.cod_calle 
+                          INNER JOIN BARRIOS B ON B.COD_BARRIO = cxb.cod_barrio 
+                          WHERE B.NOM_BARRIO IN ({string.Join(", ", parametros)}) ";
+
+                    cmd.Connection.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int COD_CALLE = dr.GetOrdinal("COD_CALLE");
+                        int NOM_CALLE = dr.GetOrdinal("NOM_CALLE");
+                        int COD_BARRIO = dr.GetOrdinal("COD_BARRIO");
+
+                        while (dr.Read())
+                        {
+
+                            obj = new CALLES();
+                            if (!dr.IsDBNull(COD_CALLE)) { obj.COD_CALLE = dr.GetInt32(COD_CALLE); }
+                            if (!dr.IsDBNull(NOM_CALLE)) { obj.NOM_CALLE = dr.GetString(NOM_CALLE); }
+                            if (!dr.IsDBNull(COD_BARRIO)) { obj.COD_BARRIO = dr.GetInt32(COD_BARRIO); }
+
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
             }
             catch (Exception ex)
             {

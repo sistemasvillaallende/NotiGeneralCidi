@@ -32,24 +32,46 @@ namespace NotificacionesCIDI.Secure
         {
 
         }
+
         public void fillGrillas(int subsistema)
         {
             try
             {
-                List<NotificacionGeneral> lst = BLL.NotificacionGeneralBLL.readNotificacionBySubsistema(subsistema);
-                gvMasivosAut.DataSource = lst;
-                gvMasivosAut.DataBind();
-                // Forzar que el encabezado se renderice en <thead>
-                if (gvMasivosAut.HeaderRow != null)
+
+                var lst = BLL.NotificacionGeneralBLL.readNotificacionBySubsistema(subsistema);
+
+                var dtoList = new List<NotificadorGeneralDTO>();
+
+                foreach (var notif in lst)
                 {
-                    gvMasivosAut.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    var detallesPorEmision = BLL.DetNotificacionGenetalBLL.readDetNotNotificaciones(notif.Nro_Emision);
+
+                    int sinNotificar = detallesPorEmision.Count(d => d.Cod_estado_cidi == 0);
+                    int notificadas = detallesPorEmision.Count(d => d.Cod_estado_cidi == 1);
+                    int rechazadas = detallesPorEmision.Count(d => d.Cod_estado_cidi == 2);
+
+                    dtoList.Add(new NotificadorGeneralDTO
+                    {
+                        Nro_Emision = notif.Nro_Emision,
+                        Fecha_Emision = notif.Fecha_Emision,
+                        Descripcion = notif.Descripcion,
+                        Subsistema = notif.subsistema,
+                        Cantidad_Reg = notif.Cantidad_Reg,
+                        SinNotificar = sinNotificar,
+                        Notificadas = notificadas,
+                        Rechazadas = rechazadas
+                    });
                 }
+
+                gvMasivosAut.DataSource = dtoList;
+                gvMasivosAut.DataBind();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
 
 
     }
