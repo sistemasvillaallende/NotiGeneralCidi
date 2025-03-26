@@ -13,7 +13,6 @@ namespace NotificacionesCIDI.Secure
     public partial class MasivoDeuda : System.Web.UI.Page
     {
         List<DAL.MasivoDeuda> lstFiltrada = null;
-        List<DAL.Detalle_notificaciones_generaes_cidi> lstDetalle = null;
         int subsistema;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -26,7 +25,6 @@ namespace NotificacionesCIDI.Secure
                 fillCateDeuda();
                 fillNotas();
                 fillZonas();
-
 
             }
         }
@@ -59,7 +57,6 @@ namespace NotificacionesCIDI.Secure
             lstZonas.DataValueField = "categoria";
             lstZonas.DataBind();
         }
-        // Dropdown de categorias deuda
         private void fillCateDeuda()
         {
             lstCatDeuda.DataSource = BLL.CATE_DEUDA.readInmueble();
@@ -76,13 +73,9 @@ namespace NotificacionesCIDI.Secure
             {
                 if (item.Selected)
                 {
-                    // Estabas tratando de convertir a int y luego añadir el int a una lista de strings
-                    // Ahora simplemente añadimos el Value como string
                     barriosSeleccionados.Add(item.Text);
                 }
             }
-
-            // Si hay barrios seleccionados, cargar las calles correspondientes
             if (barriosSeleccionados.Count > 0)
             {
                 fillCallesPorBarrios(barriosSeleccionados);
@@ -157,11 +150,6 @@ namespace NotificacionesCIDI.Secure
             Response.Write(stringWrite.ToString());
             Response.End();
 
-        }
-
-        protected void btnExcel_Click(object sender, EventArgs e)
-        {
-            ExportToExcel("Deuda General Inmueble", gvDeuda);
         }
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
@@ -275,10 +263,6 @@ namespace NotificacionesCIDI.Secure
             ExportToExcel("Export", gvDeuda);
         }
 
-        protected void ConfirmoPeriodos()
-        {
-
-        }
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {

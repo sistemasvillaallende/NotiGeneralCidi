@@ -22,6 +22,19 @@ namespace BLL
             }
         }
 
+         public static List<CALLES> readAll()
+        {
+            try
+            {
+                return DAL.CALLES.readAll();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         public static List<CALLES> getByCallesByBarrio(List<string> barrios)
         {
             try

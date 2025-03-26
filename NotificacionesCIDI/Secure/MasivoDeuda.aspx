@@ -1,5 +1,5 @@
-﻿<%@ Page Title="Nueva Notificación" Language="C#" AutoEventWireup="true" EnableEventValidation="false"
-    MasterPageFile="~/Master/MasterPage.master" CodeBehind="MasivoDeuda.aspx.cs"
+﻿<%@ Page Title="Nueva Notificación" Language="C#" AutoEventWireup="true" 
+EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBehind="MasivoDeuda.aspx.cs"
     Inherits="NotificacionesCIDI.Secure.MasivoDeuda"  ValidateRequest="false" %>
 
     <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="server">
@@ -24,7 +24,6 @@
             }
         </script>
         <asp:ScriptManager ID="ScriptManager1" ClientIDMode="AutoId" runat="server"></asp:ScriptManager>
-
         <div class="wrapper">
             <div class="content-wrapper">
                 <section class="content">
@@ -34,6 +33,7 @@
                                 <div class="row" style="margin-top: 25px;">
                                     <div class="col-md-12">
                                         <h3 style="color: #367fa9;">Inmueble - Nueva Notificación</h3>                                           
+                                    
                                         <div class="row">
 
                                             <div class="col-md-3">
@@ -60,8 +60,7 @@
                                                 <label>Calles</label>
                                                 <asp:ListBox ID="lstCalles" Height="180" CssClass="form-control" runat="server" 
                                                 SelectionMode="Multiple"></asp:ListBox>
-                                            </div>
-                                                                     
+                                            </div>                                                                   
                                             <div class="col-md-3">   
                                                 <div class="row"> 
                                                     <div class="col-md-12" >
@@ -100,19 +99,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                    
- 
-                                <div class="row">
-                                    <div class="col-md-12" style="text-align: right;">
-                                        <button type="button" class="btn btn-outline-primary" id="btnFiltros"
-                                            runat="server" onserverclick="btnFiltros_ServerClick">
-                                            <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
-                                        </button>
-                                    </div>
-                                </div>
-                                <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="true" Text="">
-                                </asp:Label>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12" style="text-align: right;">
+                                    <button type="button" class="btn btn-outline-primary" id="btnFiltros"
+                                        runat="server" onserverclick="btnFiltros_ServerClick">
+                                        <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                            <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="true" Text="">
+                            </asp:Label>
 
                             <div class="progress progress-striped active" id="divProgressBar" style="display: none;">
                                 <strong>Procesando consulta...</strong>
@@ -139,8 +136,7 @@
                                         <button type="button" runat="server" id="btnExportExcel"
                                             onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                             data-toggle="modal" data-target="#page-change-name">
-                                            <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel
-                                            
+                                            <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel                                           
                                         </button>
                                     </div>
                                 </div>
@@ -202,39 +198,39 @@
             </div>
         </div>
 
-        <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h4 class="modal-title">Lista de planillas</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
-                            OnRowDataBound="gvPlantilla_RowDataBound"
-                            OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
-                            CellPadding="4" ForeColor="#333333" GridLines="None" EnableViewState="true"
-                            DataKeyNames="id,contenido">
-                            <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                            </AlternatingRowStyle>
-                            <Columns>
-                                <asp:TemplateField HeaderText="Seleccionar">
-                                    <ItemTemplate>
-                                        <asp:CheckBox ID="chkSeleccionar" runat="server"  onclick="SoloUnCheckbox(this); event.cancelBubble=true;"/>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
-                                    HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
-                            </Columns>
-                        </asp:GridView>
+        <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Lista de planillas</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-            <div class="modal-footer">  
-                <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" CssClass="btn btn-primary" OnClick="btnObtenerSeleccionados_Click" />
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
+                                OnRowDataBound="gvPlantilla_RowDataBound"
+                                OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
+                                CellPadding="4" ForeColor="#333333" GridLines="None" EnableViewState="true"
+                                DataKeyNames="id,contenido">
+                                <AlternatingRowStyle BackColor="White" ForeColor="#284775">
+                                </AlternatingRowStyle>
+                                <Columns>
+                                    <asp:TemplateField HeaderText="Seleccionar">
+                                        <ItemTemplate>
+                                            <asp:CheckBox ID="chkSeleccionar" runat="server"  onclick="SoloUnCheckbox(this); event.cancelBubble=true;"/>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
+                                        HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </div>
+                    <div class="modal-footer">  
+                    <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" CssClass="btn btn-primary" OnClick="btnObtenerSeleccionados_Click" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>  
             </div>
         </div>
 

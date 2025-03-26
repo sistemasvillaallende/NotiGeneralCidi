@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class ZONAS:DALBase
+    public class ZONAS : DALBase
     {
-        public string categoria{ get; set; }
+        public string categoria { get; set; }
         public decimal monto_x_mts_edificado { get; set; }
-        public decimal minimo_edificado{ get; set; }
+        public decimal minimo_edificado { get; set; }
         public decimal monto_x_mts_baldio { get; set; }
-        public decimal minimo_baldio{ get; set; }
+        public decimal minimo_baldio { get; set; }
 
         public ZONAS()
         {
@@ -197,7 +197,42 @@ namespace DAL
             }
         }
 
+        public static List<ZONAS> readIyC()
+        {
+            try
+            {
+                List<ZONAS> lst = new List<ZONAS>();
+                ZONAS obj;
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT * FROM ZONAS_IYC";
+                    cmd.Connection.Open();
 
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+
+                        int cod_zona = dr.GetOrdinal("cod_zona");
+
+                        while (dr.Read())
+                        {
+                            obj = new ZONAS();
+                            if (!dr.IsDBNull(cod_zona)) { obj.categoria = dr.GetString(cod_zona); }
+
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                   return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }

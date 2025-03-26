@@ -11,7 +11,7 @@ namespace DAL
     {
         public int COD_CALLE { get; set; }
         public string NOM_CALLE { get; set; }
-        public int COD_BARRIO { get; set; }
+        public int? COD_BARRIO { get; set; }
 
         public CALLES()
         {
@@ -72,6 +72,43 @@ namespace DAL
             }
         }
 
+        public static List<CALLES> readAll()
+        {
+            try
+            {
+                List<CALLES> lst = new List<CALLES>();
+                CALLES obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "SELECT * FROM CALLES";
+                    cmd.Connection.Open();
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int COD_CALLE = dr.GetOrdinal("COD_CALLE");
+                         int NOM_CALLE = dr.GetOrdinal("NOM_CALLE");
+
+                        while (dr.Read())
+                        {
+                            obj = new CALLES();
+                            if (!dr.IsDBNull(COD_CALLE)) { obj.COD_CALLE = dr.GetInt32(COD_CALLE); }
+                            if (!dr.IsDBNull(NOM_CALLE)) { obj.NOM_CALLE = dr.GetString(NOM_CALLE); }
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static CALLES getByPk(int COD_CALLE)
         {
             try

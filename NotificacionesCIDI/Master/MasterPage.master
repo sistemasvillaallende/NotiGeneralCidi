@@ -111,7 +111,7 @@
                                         <nav class="nav flex-column">
                                             <a href="/Secure/NotificacionesGeneral.aspx?subsistema=4"
                                                 class="nav-link ps-4">Notificaciones</a>
-                                            <a href="/Secure/MasivoDeudaAuto.aspx" class="nav-link ps-4">Nueva</a>
+                                            <a href="/Secure/MasivoDeudaAuto.aspx?subsistema=4" class="nav-link ps-4">Nueva</a>
                                         </nav>
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@
                                         <nav class="nav flex-column">
                                             <a href="/Secure/NotificacionesGeneral.aspx?subsistema=3"
                                                 class="nav-link ps-4">Notificaciones</a>
-                                            <a href="/Secure/MasivoDeudaIyC.aspx" class="nav-link ps-4">Nueva</a>
+                                            <a href="/Secure/MasivoDeudaIyC.aspx?subsistema=3" class="nav-link ps-4">Nueva</a>
                                         </nav>
                                     </div>
                                 </div>
@@ -168,7 +168,7 @@
                                         <nav class="nav flex-column">
                                             <a href="/Secure/NotificacionesGeneral.aspx?subsistema=8"
                                                 class="nav-link ps-4">Notificaciones</a>
-                                            <a href="/Secure/MasivoDeudaGeneral.aspx" class="nav-link ps-4">Nueva</a>
+                                            <a href="/Secure/MasivoDeudaGeneral.aspx?subsistema=8" class="nav-link ps-4">Nueva</a>
                                         </nav>
                                     </div>
                                 </div>

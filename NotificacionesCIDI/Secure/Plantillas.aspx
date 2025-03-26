@@ -21,20 +21,23 @@
             </div>
             <asp:HiddenField ID="MyHiddenControl" value="name" runat="server" />
             <asp:HiddenField ID="MyHiddenControl2" value="name" runat="server" ValidateRequestMode="Disabled"/>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <asp:GridView ID="GridPlantillas" runat="server" 
-                                    AutoGenerateColumns="false" 
-                                    CssClass="table table-striped table-hover" 
-                                    GridLines="None" 
-                                    EnableViewState="true" 
-                                    OnRowDataBound="GridPlantillas_RowDataBound" 
+            <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
+            <asp:UpdatePanel ID="UpdatePanelPlantillas" runat="server">
+                <ContentTemplate>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <asp:GridView ID="GridPlantillas" runat="server"
+                                    AutoGenerateColumns="false"
+                                    CssClass="table table-striped table-hover"
+                                    GridLines="None"
+                                    EnableViewState="true"
+                                    OnRowDataBound="GridPlantillas_RowDataBound"
                                     OnRowCommand="GridPlantillas_RowCommand">
-                                <Columns>
-                                    <asp:BoundField DataField="id" HeaderText="Numero Plantilla" />
-                                    <asp:BoundField DataField="nom_plantilla" HeaderText="Nombre de la Plantilla"/>
-                                    <asp:TemplateField HeaderText="Acciones">
+                                    <Columns>
+                                        <asp:BoundField DataField="id" HeaderText="Numero Plantilla" />
+                                        <asp:BoundField DataField="nom_plantilla" HeaderText="Nombre de la Plantilla"/>
+                                        <asp:TemplateField HeaderText="Acciones">
                                             <ItemTemplate>
                                                 <asp:LinkButton
                                                     ID="btnEditar"
@@ -49,25 +52,18 @@
                                                     runat="server"
                                                     CssClass="btn btn-outline-danger"
                                                     CommandName="Eliminar"
-                                                    CommandArgument='<%# Eval("id") %>'>                                                   
+                                                    CommandArgument='<%# Eval("id") %>'>
                                                     <i class="fa-solid fa-trash"></i>
                                                 </asp:LinkButton>
                                             </ItemTemplate>
-                                      
-                                    </asp:TemplateField>
-                                </Columns>
-                        </asp:GridView>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12"></div>
-                </div>
-                <div class="row">
-                    <div class="col-12"></div>
-                </div>
-            </div>
-
+                </ContentTemplate>
+            </asp:UpdatePanel>
             <div class="modal fade" id="exampleModalDelete" data-bs-backdrop="false"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class="modal-content">
@@ -125,7 +121,7 @@
                                 <button type="button" class=" btn btn-primary " onclick="insertVariable('{nombre}')">Insertar Nombre</button>
                                 <button type="button" class=" btn btn-primary " onclick="insertVariable('{apellido}')">Insertar Apellido</button>
                                 <button type="button" class=" btn btn-primary " onclick="insertVariable('{cuit}')">Insertar CUIT</button>
-                                <button type="button" class=" btn btn-primary " onclick="generarNotas()">GENERAR NOTAS</button>
+                                <button type="button" class=" btn btn-primary " onclick="generarNotas()">GENERAR PLANTILLA</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                                 <asp:TextBox ID="hiddenInput2" runat="server" TextMode="MultiLine" Style="display: none;" ValidateRequestMode="Disabled"></asp:TextBox>
@@ -358,6 +354,7 @@
                 function generarNotas() {
                     DoCustomPost2();
                     abrirModalNombrePlantilla();
+                 
                 }
 
                 function prepararContenido() {

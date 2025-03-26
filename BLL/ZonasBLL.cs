@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using DAL;
 namespace BLL
 {
-    public class ZonasBLL:DALBase
+    public class ZonasBLL : DALBase
     {
         public static List<DAL.ZONAS> read()
         {
@@ -68,5 +68,17 @@ namespace BLL
             }
         }
 
+
+        public static List<DAL.ZONAS> readIyc()
+        {
+            try
+            {
+                return DAL.ZONAS.readIyC();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

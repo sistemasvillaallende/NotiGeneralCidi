@@ -123,7 +123,6 @@ namespace NotificacionesCIDI.Secure
             $('#plantillaModalNombreNotas').modal('hide');
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
-            $('#plantillaModal').modal('show');
         });
         ", true);
         }
