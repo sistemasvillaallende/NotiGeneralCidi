@@ -1,31 +1,26 @@
-<%@ Master Language="C#" AutoEventWireup="true"
-CodeBehind="MasterPage.master.cs" Inherits="NotificacionesCIDI.MasterPage" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs"
+  Inherits="NotificacionesCIDI.MasterPage" %>
 
-<!DOCTYPE html>
-<html lang="es">
+  <!DOCTYPE html>
+  <html lang="es">
+
   <head runat="server">
     <meta charset="utf-8" />
-    <title><%: Page.Title %></title>
+    <title>
+      <%: Page.Title %>
+    </title>
     <!-- Include jQuery from CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet" />
     <link href="../Master/styles.css" rel="stylesheet" />
 
     <!-- Usar DataTables con Bootstrap 5 -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
-    />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
+
     <!-- Cargar primero la librería base de DataTables -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <!-- Luego, la integración con Bootstrap 5 (sin atributo onload) -->
@@ -34,165 +29,101 @@ CodeBehind="MasterPage.master.cs" Inherits="NotificacionesCIDI.MasterPage" %>
 
   <body>
     <form id="form1" runat="server">
-      <header
-        class="clearfix no-mobile print"
-        style="
+      <header class="clearfix no-mobile print" style="
           text-align: left;
           background-color: white;
           margin-top: -5px;
           height: 90px;
-        "
-      >
+        ">
         <div class="row" style="padding-top: 20px; padding-bottom: 0px">
           <div class="col-4" style="padding-left: 4%">
             <a href="/Secure/Inicio.aspx">
-              <img
-                src="../App_Themes/Main/img/LogoPablo.png"
-                style="height: 50px"
-              />
+              <img src="../App_Themes/Main/img/LogoPablo.png" style="height: 50px" />
             </a>
           </div>
-          <div
-            class="col-md-4"
-            style="
+          <div class="col-md-4" style="
               align-items: center;
               display: flex;
               text-align: center;
               height: 60px;
-            "
-          >
+            ">
             <a href="#" style="width: 100%; text-decoration: none">
-              <h2
-                class="section-title__title"
-                style="
+              <h2 class="section-title__title" style="
                   color: #6f6f6e;
                   font-size: 24px;
                   line-height: 10px;
                   text-decoration-line: overline;
-                "
-              >
-                <img
-                  src="../App_Themes/Main/img/vecino.png"
-                  style="height: 50px"
-                />
+                ">
+                <img src="../App_Themes/Main/img/vecino.png" style="height: 50px" />
                 SIIMVA WEB
-                <img
-                  src="../App_Themes/Main/img/condor.png"
-                  style="height: 70px; margin-top: -10px"
-                />
+                <img src="../App_Themes/Main/img/condor.png" style="height: 70px; margin-top: -10px" />
               </h2>
             </a>
           </div>
-          <div
-            class="col-md-4"
-            style="
+          <div class="col-md-4" style="
               padding-right: 5%;
               align-items: center;
               display: inline-grid;
               text-align: right;
               height: 60px;
-            "
-          >
+            ">
             <div class="dropdown">
-              <button
-                class="btn-usuario"
-                type="button"
-                style="
+              <button class="btn-usuario" type="button" style="
                   border: none;
                   background-color: transparent;
                   display: inline-flex;
-                "
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  id="imgUsuario"
-                  runat="server"
-                  src="~/App_Themes/Main/img/usuario.png"
-                  class="img-thumbnail"
-                  alt="..."
-                  style="height: 55px; border: none"
-                />
-                <ul
-                  style="
+                " data-bs-toggle="dropdown" aria-expanded="false">
+                <img id="imgUsuario" runat="server" src="~/App_Themes/Main/img/usuario.png" class="img-thumbnail"
+                  alt="..." style="height: 55px; border: none" />
+                <ul style="
                     color: gray;
                     list-style: none;
                     text-align: left;
                     padding-left: 0;
                     margin-bottom: 0px;
-                  "
-                >
+                  ">
                   <li id="liNombre" runat="server"></li>
                   <li id="liApellido" runat="server"></li>
                 </ul>
               </button>
               <ul class="dropdown-menu">
-                <li
-                  style="display: grid; padding: 15px 25px 0px 25px"
-                  class="li-usuario"
-                >
+                <li style="display: grid; padding: 15px 25px 0px 25px" class="li-usuario">
                   <strong id="mnuPcApellido" runat="server"></strong>
                   <span id="mnuPcNombre" runat="server"></span>
                 </li>
-                <li
-                  style="display: flex; padding: 15px 25px 0px 25px"
-                  class="li-usuario"
-                >
+                <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
                   <span style="display: ruby">Oficina: </span>
-                  <span
-                    style="display: block; margin-left: 10px"
-                    id="SpanOficina"
-                    runat="server"
-                  ></span>
+                  <span style="display: block; margin-left: 10px" id="SpanOficina" runat="server"></span>
                 </li>
-                <li
-                  style="display: flex; padding: 15px 25px 0px 25px"
-                  class="li-usuario"
-                >
+                <li style="display: flex; padding: 15px 25px 0px 25px" class="li-usuario">
                   <span style="display: ruby">CUIT: </span>
-                  <span
-                    style="display: block; margin-left: 10px"
-                    id="mnuPcCuit"
-                    runat="server"
-                  ></span>
+                  <span style="display: block; margin-left: 10px" id="mnuPcCuit" runat="server"></span>
                 </li>
-                <li
-                  style="
+                <li style="
                     padding: 15px;
                     border-top: solid 1px lightgray;
                     margin-top: 15px;
-                  "
-                >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    runat="server"
-                    id="btnCerraSession"
-                    onserverclick="btnCerraSession_ServerClick"
-                    style="
+                  ">
+                  <a class="dropdown-item" href="#" runat="server" id="btnCerraSession"
+                    onserverclick="btnCerraSession_ServerClick" style="
                       text-align: center;
                       border: solid 3px lightgray;
                       border-radius: 10px;
                       padding: 8px;
-                    "
-                    >Cerrar Sesion</a
-                  >
+                    ">Cerrar Sesion</a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        <div
-          class="container-fluid"
-          style="
+        <div class="container-fluid" style="
             background: linear-gradient(
               87deg,
               rgb(148 23 23) 0%,
               rgba(255, 35, 0, 1) 41%,
               rgb(255 233 0) 79%
             );
-          "
-        >
+          ">
           <div class="row" style="height: 10px">
             <div class="col-md-12" style="padding-top: 0px"></div>
           </div>
@@ -206,179 +137,91 @@ CodeBehind="MasterPage.master.cs" Inherits="NotificacionesCIDI.MasterPage" %>
               <!-- Nuevo elemento de menú: Inicio -->
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingInicio">
-                  <a
-                    class="accordion-button"
-                    href="/Secure/Inicio.aspx"
-                    style="text-decoration: none"
-                  >
+                  <a class="accordion-button" href="/Secure/Inicio.aspx" style="text-decoration: none">
                     Inicio
                   </a>
                 </h2>
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingAutomotores">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseAutomotores"
-                    aria-expanded="false"
-                    aria-controls="collapseAutomotores"
-                  >
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseAutomotores" aria-expanded="false" aria-controls="collapseAutomotores">
                     <i class="fa fa-car me-2"></i> Automotores
                   </button>
                 </h2>
-                <div
-                  id="collapseAutomotores"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingAutomotores"
-                  data-bs-parent="#sidebarAccordion"
-                >
+                <div id="collapseAutomotores" class="accordion-collapse collapse" aria-labelledby="headingAutomotores"
+                  data-bs-parent="#sidebarAccordion">
                   <div class="accordion-body p-0">
                     <nav class="nav flex-column">
-                      <a
-                        href="/Secure/NotificacionesGeneral.aspx?subsistema=4"
-                        class="nav-link ps-4"
-                        >Notificaciones</a
-                      >
-                      <a
-                        href="/Secure/MasivoDeudaAuto.aspx?subsistema=4"
-                        class="nav-link ps-4"
-                        >Nueva</a
-                      >
+                      <a href="/Secure/NotificacionesGeneral.aspx?subsistema=4" class="nav-link ps-4">Notificaciones</a>
+                      <a href="/Secure/MasivoDeudaAuto.aspx?subsistema=4" class="nav-link ps-4">Nueva</a>
                     </nav>
                   </div>
                 </div>
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingIndyCom">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseIndyCom"
-                    aria-expanded="false"
-                    aria-controls="collapseIndyCom"
-                  >
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseIndyCom" aria-expanded="false" aria-controls="collapseIndyCom">
                     <i class="fa fa-shopping-cart me-2"></i> Ind. y Comercio
                   </button>
                 </h2>
-                <div
-                  id="collapseIndyCom"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingIndyCom"
-                  data-bs-parent="#sidebarAccordion"
-                >
+                <div id="collapseIndyCom" class="accordion-collapse collapse" aria-labelledby="headingIndyCom"
+                  data-bs-parent="#sidebarAccordion">
                   <div class="accordion-body p-0">
                     <nav class="nav flex-column">
-                      <a
-                        href="/Secure/NotificacionesGeneral.aspx?subsistema=3"
-                        class="nav-link ps-4"
-                        >Notificaciones</a
-                      >
-                      <a
-                        href="/Secure/MasivoDeudaIyC.aspx?subsistema=3"
-                        class="nav-link ps-4"
-                        >Nueva</a
-                      >
+                      <a href="/Secure/NotificacionesGeneral.aspx?subsistema=3" class="nav-link ps-4">Notificaciones</a>
+                      <a href="/Secure/MasivoDeudaIyC.aspx?subsistema=3" class="nav-link ps-4">Nueva</a>
                     </nav>
                   </div>
                 </div>
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingInmueble">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseInmueble"
-                    aria-expanded="false"
-                    aria-controls="collapseInmueble"
-                  >
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseInmueble" aria-expanded="false" aria-controls="collapseInmueble">
                     <i class="fa fa-home me-2"></i> Inmueble
                   </button>
                 </h2>
-                <div
-                  id="collapseInmueble"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingInmueble"
-                  data-bs-parent="#sidebarAccordion"
-                >
+                <div id="collapseInmueble" class="accordion-collapse collapse" aria-labelledby="headingInmueble"
+                  data-bs-parent="#sidebarAccordion">
                   <div class="accordion-body p-0">
                     <nav class="nav flex-column">
-                      <a
-                        href="/Secure/NotificacionesGeneral.aspx?subsistema=1"
-                        class="nav-link ps-4"
-                        >Notificaciones</a
-                      >
-                      <a
-                        href="/Secure/MasivoDeuda.aspx?subsistema=1"
-                        class="nav-link ps-4"
-                        >Nueva</a
-                      >
+                      <a href="/Secure/NotificacionesGeneral.aspx?subsistema=1" class="nav-link ps-4">Notificaciones</a>
+                      <a href="/Secure/MasivoDeuda.aspx?subsistema=1" class="nav-link ps-4">Nueva</a>
                     </nav>
                   </div>
                 </div>
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingGeneral">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseGeneral"
-                    aria-expanded="false"
-                    aria-controls="collapseGeneral"
-                  >
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseGeneral" aria-expanded="false" aria-controls="collapseGeneral">
                     <i class="fa fa-home me-2"></i> General
                   </button>
                 </h2>
-                <div
-                  id="collapseGeneral"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingGeneral"
-                  data-bs-parent="#sidebarAccordion"
-                >
+                <div id="collapseGeneral" class="accordion-collapse collapse" aria-labelledby="headingGeneral"
+                  data-bs-parent="#sidebarAccordion">
                   <div class="accordion-body p-0">
                     <nav class="nav flex-column">
-                      <a
-                        href="/Secure/NotificacionesGeneral.aspx?subsistema=8"
-                        class="nav-link ps-4"
-                        >Notificaciones</a
-                      >
-                      <a
-                        href="/Secure/MasivoDeudaGeneral.aspx?subsistema=8"
-                        class="nav-link ps-4"
-                        >Nueva</a
-                      >
+                      <a href="/Secure/NotificacionesGeneral.aspx?subsistema=8" class="nav-link ps-4">Notificaciones</a>
+                      <a href="/Secure/MasivoDeudaGeneral.aspx?subsistema=8" class="nav-link ps-4">Nueva</a>
                     </nav>
                   </div>
                 </div>
               </div>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingPlantilla">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapsePlantilla"
-                    aria-expanded="false"
-                    aria-controls="collapsePlantilla"
-                  >
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapsePlantilla" aria-expanded="false" aria-controls="collapsePlantilla">
                     <i class="fa fa-home me-2"></i> Plantillas
                   </button>
                 </h2>
-                <div
-                  id="collapsePlantilla"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingPlantilla"
-                  data-bs-parent="#sidebarAccordion"
-                >
+                <div id="collapsePlantilla" class="accordion-collapse collapse" aria-labelledby="headingPlantilla"
+                  data-bs-parent="#sidebarAccordion">
                   <div class="accordion-body p-0">
                     <nav class="nav flex-column">
-                      <a href="/Secure/Plantillas.aspx" class="nav-link ps-4"
-                        >Nuevas Plantillas</a
-                      >
+                      <a href="/Secure/Plantillas.aspx" class="nav-link ps-4">Nuevas Plantillas</a>
                     </nav>
                   </div>
                 </div>
@@ -387,10 +230,7 @@ CodeBehind="MasterPage.master.cs" Inherits="NotificacionesCIDI.MasterPage" %>
           </div>
           <div class="col-10 contenido-pagina">
             <!-- Aquí se inyectará el contenido de cada página -->
-            <asp:ContentPlaceHolder
-              ID="MainContent"
-              runat="server"
-            ></asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
           </div>
         </div>
       </div>
@@ -401,11 +241,9 @@ CodeBehind="MasterPage.master.cs" Inherits="NotificacionesCIDI.MasterPage" %>
     <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
     <script src="../App_Themes/fontawesome/js/all.js"></script>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <script>
       $(document).ready(function () {
         var currentPath = window.location.pathname.toLowerCase();
@@ -423,4 +261,5 @@ CodeBehind="MasterPage.master.cs" Inherits="NotificacionesCIDI.MasterPage" %>
       });
     </script>
   </body>
-</html>
+
+  </html>

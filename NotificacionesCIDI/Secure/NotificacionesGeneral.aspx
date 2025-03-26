@@ -35,17 +35,18 @@
                                     <asp:BoundField DataField="Nro_Emision" HeaderText="Emisión" />
                                     <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha"
                                         DataFormatString="{0:d}" />
+                                    <asp:BoundField DataField="Fecha_Vencimiento" HeaderText="Fecha Vencimiento"
+                                        DataFormatString="{0:d}" />
+                                    <asp:BoundField DataField="Cod_tipo_notificacion" HeaderText="Cod. Notificacion" />
                                     <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" />
                                     <asp:BoundField DataField="Subsistema" HeaderText="Subsistema" />
                                     <asp:BoundField DataField="Cantidad_Reg" HeaderText="Registros" />
-                                    <asp:BoundField DataField="SinNotificar" HeaderText="Sin Notificar" />  
-                                    <asp:BoundField DataField="Notificadas" HeaderText="Notificado" />  
-                                    <asp:BoundField DataField="Rechazadas" HeaderText="Rechazo" />  
-                                                                
+                                    <asp:BoundField DataField="Total" HeaderText="Total" />
+                                    <asp:BoundField DataField="Porcentaje" HeaderText="Porcentaje" />
                                     <asp:TemplateField>
                                         <ItemTemplate>
                                             <a
-                                                href='DetNotificacionesGeneral.aspx?nro_emision=<%# Eval("Nro_Emision") %>&subsistema=<%= Request.QueryString["subsistema"] %>'>
+                                                href='DetNotificacionesGeneral.aspx?nro_emision=<%# Eval("Nro_Emision") %>'>
                                                 <span class="fa fa-envelope-circle-check"
                                                     style="color: darkcyan"></span>
                                             </a>
