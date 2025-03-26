@@ -9,6 +9,7 @@
     <title>
       <%: Page.Title %>
     </title>
+
     <!-- Include jQuery from CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
@@ -19,12 +20,11 @@
 
     <!-- Usar DataTables con Bootstrap 5 -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
-
-
     <!-- Cargar primero la librería base de DataTables -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <!-- Luego, la integración con Bootstrap 5 (sin atributo onload) -->
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
   </head>
 
   <body>
@@ -235,10 +235,8 @@
         </div>
       </div>
     </form>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../App_Themes/Main/js/jquery-ui-1.10.3.min.js"></script>
-    <script src="../App_Themes/Main/js/bootstrap.min.js"></script>
-    <script src="../App_Themes/Main/js/bootstrap.bundle.min.js"></script>
+    <!-- Se elimina la referencia duplicada a jQuery -->
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
     <script src="../App_Themes/fontawesome/js/all.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

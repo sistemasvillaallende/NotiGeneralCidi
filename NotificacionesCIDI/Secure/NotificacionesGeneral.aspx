@@ -2,8 +2,9 @@
     Inherits="NotificacionesCIDI.Secure.NotificacionesGeneral" Title="Masivo Deuda"
     MasterPageFile="~/Master/MasterPage.master" %>
     <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <!-- Se eliminan las referencias duplicadas a jQuery y DataTables, pues ya se cargan desde el MasterPage -->
         <script type="text/javascript">
-            jQuery(window).on("load", function () {
+            jQuery(document).ready(function () {
                 var table = jQuery('#<%= gvMasivosAut.ClientID %>');
                 var headerCount = table.find('thead tr th').length;
                 var firstRowTDCount = table.find('tbody tr:first td').length;
