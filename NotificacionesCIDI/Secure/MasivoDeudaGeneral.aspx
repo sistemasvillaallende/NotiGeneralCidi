@@ -39,10 +39,50 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-1">
+                                        <label>Zona</label>
+                                        <asp:ListBox ID="lstZonas" Height="250px" CssClass="form-control" runat="server"
+                                            SelectionMode="Single"></asp:ListBox>
+                                    </div>
                                     <div class="col-md-4">
                                         <label>Barrio</label>
-                                        <asp:ListBox ID="lstBarrios" Height="143" CssClass="form-control" runat="server"
+                                        <div class="input-group mb-2">
+                                            <input type="text" id="txtSearchBarrio" class="form-control" placeholder="Buscar barrio..." />
+                                        </div>
+                                        <asp:ListBox ID="lstBarrios" Height="203" CssClass="form-control" runat="server"
                                             SelectionMode="Multiple"></asp:ListBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Calles</label>
+                                        <div class="input-group mb-2">
+                                            <input type="text" id="txtSearchCalle" class="form-control" placeholder="Buscar calle..." />
+                                        </div>
+                                        <asp:ListBox ID="lstCalles" Height="203px" CssClass="form-control" runat="server" 
+                                            SelectionMode="Multiple"></asp:ListBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>Desde</label>
+                                                <asp:TextBox 
+                                                    ID="txtDesde" 
+                                                    Enabled="false" 
+                                                    Type="Number" 
+                                                    CssClass="form-control" 
+                                                    runat="server">
+                                                </asp:TextBox>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label>Hasta</label>
+                                                <asp:TextBox 
+                                                    ID="txtHasta" 
+                                                    Enabled="false" 
+                                                    Type="Number"  
+                                                    CssClass="form-control" 
+                                                    runat="server"> 
+                                                </asp:TextBox>
+                                            </div>
+                                        </div>
                                     </div>
                                     <br />
                                 </div>
@@ -86,7 +126,7 @@
                                         onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                         data-toggle="modal" data-target="#page-change-name">
                                         <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel                                           
-                                    </button>
+                                    </button>                                                                      
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 20px;">
@@ -275,6 +315,100 @@
                 console.error('jQuery is not loaded');
             }
 
+ //////////////////////////////////////////////// buscador de barrios /////////////////////////7
+        $(document).ready(function() {
+        $("#txtSearchBarrio").on("input", function() {
+            var searchText = $(this).val().toLowerCase();
+            
+            // Show all options first
+            $("#<%= lstBarrios.ClientID %> option").show();
+            
+            // Hide options that don't match the search
+            if (searchText.length > 0) {
+                $("#<%= lstBarrios.ClientID %> option").each(function() {
+                    var text = $(this).text().toLowerCase();
+                    if (text.indexOf(searchText) === -1) {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+    });
 
+    $(document).ready(function() {
+        var $listBox = $("#<%= lstBarrios.ClientID %>");
+        var allOptions = [];
+        
+        $listBox.find("option").each(function() {
+            allOptions.push({
+                value: $(this).val(),
+                text: $(this).text()
+            });
+        });
+        
+        // Add event listener for the search input
+        $("#txtSearchBarrio").on("input", function() {
+            var searchText = $(this).val().toLowerCase();
+            
+            $listBox.empty();
+            
+            $.each(allOptions, function(i, option) {
+                if (searchText === '' || option.text.toLowerCase().indexOf(searchText) > -1) {
+                    $listBox.append(new Option(option.text, option.value));
+                }
+            });
+        });         
+    });
+
+    //////////// fin buscador de barrios /////////////////////////
+    ////////// buscador de calles ////////
+    
+
+    $(document).ready(function() {
+        var $listBox = $("#<%= lstCalles.ClientID %>");
+        var allOptions = [];
+        
+        $listBox.find("option").each(function() {
+            allOptions.push({
+                value: $(this).val(),
+                text: $(this).text()
+            });
+        });
+        
+        // Add event listener for the search input
+        $("#txtSearchCalle").on("input", function() {
+            var searchText = $(this).val().toLowerCase();
+            
+            // Clear the listbox
+            $listBox.empty();
+            
+            // Add back only the matching options
+            $.each(allOptions, function(i, option) {
+                if (searchText === '' || option.text.toLowerCase().indexOf(searchText) > -1) {
+                    $listBox.append(new Option(option.text, option.value));
+                }
+            });
+        });         
+    });
+
+    $(document).ready(function() {
+    var $listBox = $("#<%= lstCalles.ClientID %>");
+    var $txtDesde = $("#<%= txtDesde.ClientID %>");
+    var $txtHasta = $("#<%= txtHasta.ClientID %>");
+
+    $listBox.on("change", function() {
+        var selectedValue = $listBox.val(); 
+        if (selectedValue) { 
+            $txtDesde.prop("disabled", false);
+            $txtHasta.prop("disabled", false);
+        } else { 
+            $txtDesde.prop("disabled", true);
+            $txtHasta.prop("disabled", true);
+        }
+
+        $listBox.val(selectedValue);
+    });
+});
+/////////////////fin buscador de calles ////////////////7
         </script>
     </asp:Content>

@@ -17,7 +17,6 @@
                                     <asp:BoundField DataField="Nro_Emision" HeaderText="Emisión" />
                                     <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha"
                                         DataFormatString="{0:d}" />
-                                    <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" />
                                     <asp:BoundField DataField="Subsistema" HeaderText="Subsistema" />
                                     <asp:BoundField DataField="Cantidad_Reg" HeaderText="Registros" />
                                     <asp:BoundField DataField="SinNotificar" HeaderText="Sin Notificar" />  

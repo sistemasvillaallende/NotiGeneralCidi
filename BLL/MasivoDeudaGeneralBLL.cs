@@ -35,6 +35,17 @@ namespace BLL
         }
 
 
+        public static List<MasivoDeudaGeneral> readWithFilters(int cod_barrio, int cod_calle, string cod_zona, int desde, int hasta)
+        {
+            try
+            {
+                return DAL.MasivoDeudaGeneral.readWithFilters(cod_barrio,cod_calle,cod_zona,desde,hasta);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
 
     }
 }

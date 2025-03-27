@@ -18,7 +18,8 @@ namespace DAL
         public string cuit { get; set; }
         public string nom_calle { get; set; }
         public string nom_barrio { get; set; }
-        
+        public int nro_dom_esp { get; set; }
+
 
         public static List<MasivoDeudaGeneral> read(int cod_barrio)
         {
@@ -232,6 +233,105 @@ namespace DAL
                 throw ex;
             }
         }
+
+        public static List<MasivoDeudaGeneral> readWithFilters(int cod_barrio, int cod_calle, string cod_zona, int desde, int hasta)
+        {
+            try
+            {
+                List<MasivoDeudaGeneral> lst = new List<MasivoDeudaGeneral>();
+                MasivoDeudaGeneral obj;
+
+                using (SqlConnection con = getConnection())
+                {
+                    SqlCommand cmd = con.CreateCommand();
+                    cmd.CommandType = CommandType.Text;
+
+                    string sqlQuery = @"
+                                SELECT DISTINCT 
+                                    vd.NOMBRE,
+                                    vd.APELLIDO,
+                                    vd.CUIT,                            
+                                    c.NOM_CALLE,
+                                    b.NOM_BARRIO,
+                                    i.nro_dom_esp 
+                                FROM 
+                                    VECINO_DIGITAL vd 
+                                LEFT JOIN INMUEBLES i 
+                                    ON vd.CUIT = i.cuil
+                                INNER JOIN BARRIOS b 
+                                    ON i.cod_barrio = b.COD_BARRIO
+                                INNER JOIN CALLES c 
+                                    ON i.cod_calle_dom_esp = c.COD_CALLE
+                                WHERE 1=1";
+
+
+
+                    if (desde >= 0 && hasta > 0)
+                    {
+                        sqlQuery += " AND i.nro_dom_esp BETWEEN @desde AND @hasta";
+                        cmd.Parameters.AddWithValue("@desde", desde);
+                        cmd.Parameters.AddWithValue("@hasta", hasta);
+
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(cod_zona))
+                    {
+                        sqlQuery += " AND i.cod_categoria_zona_liq = @cod_zona";
+                        cmd.Parameters.AddWithValue("@cod_zona", cod_zona);
+                    }
+
+                    if (cod_barrio > 0)
+                    {
+                        sqlQuery += " AND i.cod_barrio = @cod_barrio";
+                        cmd.Parameters.AddWithValue("@cod_barrio", cod_barrio);
+                    }
+
+                    if (cod_calle > 0)
+                    {
+                        sqlQuery += " AND i.cod_calle_dom_esp = @cod_calle";
+                        cmd.Parameters.AddWithValue("@cod_calle", cod_calle);
+                    }
+
+                    sqlQuery += " ORDER BY c.NOM_CALLE, b.NOM_BARRIO";
+
+
+                    cmd.CommandText = sqlQuery;
+         
+                    cmd.Connection.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        int nombre = dr.GetOrdinal("NOMBRE");
+                        int apellido = dr.GetOrdinal("APELLIDO");
+                        int cuit = dr.GetOrdinal("CUIT");
+                        int nombre_calle = dr.GetOrdinal("NOM_CALLE");
+                        int nombre_barrio = dr.GetOrdinal("NOM_BARRIO");
+                        int nro_dom = dr.GetOrdinal("nro_dom_esp");
+
+
+                        while (dr.Read())
+                        {
+                            obj = new MasivoDeudaGeneral();
+                            if (!dr.IsDBNull(nombre)) { obj.nombre = dr.GetString(nombre); }
+                            if (!dr.IsDBNull(apellido)) { obj.apellido = dr.GetString(apellido); }
+                            if (!dr.IsDBNull(cuit)) { obj.cuit = dr.GetString(cuit); }
+                            if (!dr.IsDBNull(nombre_calle)) { obj.nom_calle = dr.GetString(nombre_calle); }
+                            if (!dr.IsDBNull(nombre_barrio)) { obj.nom_barrio = dr.GetString(nombre_barrio); }
+                            if (!dr.IsDBNull(nro_dom)) { obj.nro_dom_esp = dr.GetInt32(nro_dom); }
+                            lst.Add(obj);
+                        }
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
 
 
     }

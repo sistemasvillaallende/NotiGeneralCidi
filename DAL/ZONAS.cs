@@ -60,7 +60,7 @@ namespace DAL
                 {
                     SqlCommand cmd = con.CreateCommand();
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = "SELECT *FROM CATEGORIAS_LIQUIDACION_TASA";
+                    cmd.CommandText = "SELECT * FROM CATEGORIAS_LIQUIDACION_TASA";
                     cmd.Connection.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
                     lst = mapeo(dr);

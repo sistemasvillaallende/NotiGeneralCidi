@@ -458,5 +458,15 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl;
         protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl2;
 
+        
+        /// <summary>
+        /// Control lstCalles.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox lstCalles;
+
     }
 }

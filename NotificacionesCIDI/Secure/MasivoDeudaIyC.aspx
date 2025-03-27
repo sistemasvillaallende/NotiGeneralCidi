@@ -64,8 +64,8 @@
                                                 <label>Desde</label>
                                                 <asp:TextBox 
                                                     ID="txtDesde" 
-                                                    Enabled="true" 
-                                                    Type="Text" 
+                                                    Enabled="false" 
+                                                    Type="Number" 
                                                     CssClass="form-control" 
                                                     runat="server">
                                                 </asp:TextBox>
@@ -74,8 +74,8 @@
                                                 <label>Hasta</label>
                                                 <asp:TextBox 
                                                     ID="txtHasta" 
-                                                    Enabled="true" 
-                                                    Type="Text"  
+                                                    Enabled="false" 
+                                                    Type="Number"  
                                                     CssClass="form-control" 
                                                     runat="server"> 
                                                 </asp:TextBox>
@@ -221,9 +221,7 @@
         function abrirModalPlantillas() {
                         $('#plantillaModalNotas').modal('show');
                     }
-
-
-                    
+                  
                     // Funcion para poder seelccionar el check cuando aprieto cualquier lugar del gridview
                     function SeleccionarFila(fila, checkBoxId) {
                         var chk = document.getElementById(checkBoxId);
@@ -294,62 +292,29 @@
                     $listBox.append(new Option(option.text, option.value));
                 }
             });
-        });
-        
-        // Track if we're setting the "desde" or "hasta" value
-        var isSettingDesde = true;
-        
-        // Add click event listener to the listBox
-        $listBox.on("change", function() {
-            // Get the selected option
-            var selectedText = $(this).find("option:selected").text();
-            
-            // If we're setting the "desde" value
-            if (isSettingDesde) {
-                $("#<%= txtDesde.ClientID %>").val(selectedText);
-                // Toggle to set "hasta" next time
-                isSettingDesde = false;
-                
-                // Highlight the first selection
-                $listBox.find("option").removeClass("first-selected");
-                $listBox.find("option:selected").addClass("first-selected");
-            } 
-            // If we're setting the "hasta" value
-            else {
-                $("#<%= txtHasta.ClientID %>").val(selectedText);
-                // Toggle back to set "desde" next time
-                isSettingDesde = true;
-                
-                // Remove highlight
-                $listBox.find("option").removeClass("first-selected");
-            }
-        });
+        });         
     });
 
+    $(document).ready(function() {
+    var $listBox = $("#<%= lstCalles.ClientID %>");
+    var $txtDesde = $("#<%= txtDesde.ClientID %>");
+    var $txtHasta = $("#<%= txtHasta.ClientID %>");
 
+    $listBox.on("change", function() {
+        var selectedValue = $listBox.val(); 
+        if (selectedValue) { 
+            $txtDesde.prop("disabled", false);
+            $txtHasta.prop("disabled", false);
+        } else { 
+            $txtDesde.prop("disabled", true);
+            $txtHasta.prop("disabled", true);
+        }
 
-    /////////////////////////////////////////////////////////////////////////////7777
-         
-            $(document).ready(function() {
-        // Dynamic filter that updates with each keystroke
-        $("#txtSearchCalle").on("input", function() {
-            var searchText = $(this).val().toLowerCase();
-            
-            // Show all options first (in case they were previously filtered)
-            $("#<%= lstCalles.ClientID %> option").show();
-            
-            // Hide options that don't match the search
-            if (searchText.length > 0) {
-                $("#<%= lstCalles.ClientID %> option").each(function() {
-                    var text = $(this).text().toLowerCase();
-                    if (text.indexOf(searchText) === -1) {
-                        $(this).hide();
-                    }
-                });
-            }
-        });
-
+        $listBox.val(selectedValue);
     });
+});
+        
+
 // para agregar spinner en generar notificaciones
 if (window.jQuery) {
                 $(document).ready(function() {
@@ -374,9 +339,8 @@ if (window.jQuery) {
                         return true;
                     });
                 });
-            } else {
-                console.error('jQuery is not loaded');
-            }
+            } 
+            
 
         </script>
     </asp:Content>
