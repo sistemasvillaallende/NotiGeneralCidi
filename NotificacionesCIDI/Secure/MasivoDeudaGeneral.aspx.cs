@@ -8,6 +8,7 @@ using DAL;
 using System.Data;
 using ClosedXML.Excel;
 using BLL;
+using System.IO;
 
 namespace NotificacionesCIDI.Secure
 {
@@ -23,7 +24,9 @@ namespace NotificacionesCIDI.Secure
                 subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
                 Session["subsistema"] = subsistema;
                 fillBarrios();
+                fillZonas();
                 fillNotas();
+                fillCalles();
             }
         }
         private void fillBarrios()
@@ -34,114 +37,92 @@ namespace NotificacionesCIDI.Secure
             lstBarrios.DataBind();
         }
 
-        protected void gvDeuda_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        private void fillZonas()
         {
-            gvDeuda.PageIndex = e.NewPageIndex;
-            List<DAL.MasivoDeudaGeneral> lst = BLL.MasivoDeudaGeneralBLL.read(10);
-            Session["LST"] = lst;
-            fillGrilla(lst);
+            lstZonas.DataSource = BLL.ZonasBLL.read();
+            lstZonas.DataTextField = "categoria";
+            lstZonas.DataValueField = "categoria";
+            lstZonas.DataBind();
         }
 
-        private void fillGrilla(List<DAL.MasivoDeudaGeneral> lst)
+        private void fillCalles()
         {
-            lstFiltrada = lst;
-            gvDeuda.DataSource = lst;
+            lstCalles.DataSource = BLL.CallesBLL.readAll();
+            lstCalles.DataTextField = "NOM_CALLE";
+            lstCalles.DataValueField = "COD_CALLE";
+            lstCalles.DataBind();
+        }
+
+
+        private void fillGrilla(int cod_barrio, int cod_calle, string cod_zona, int desde, int hasta)
+        {
+            lstFiltrada = BLL.MasivoDeudaGeneralBLL.readWithFilters(cod_barrio, cod_calle, cod_zona, desde, hasta);
+            gvDeuda.DataSource = lstFiltrada;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
+            Session.Add("registros_notificar", lstFiltrada);
         }
 
-        private void ExportToExcel(string nameReport, GridView wControl)
-        {
-
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", "attachment;filename=Deuda_Tasa.xls");
-            Response.Charset = "";
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.ContentType = "application/vnd.xls";
-
-            System.IO.StringWriter stringWrite = new System.IO.StringWriter();
-            System.Web.UI.HtmlTextWriter htmlWrite = new HtmlTextWriter(stringWrite);
-
-            gvDeuda.RenderControl(htmlWrite);
-            Response.Write(stringWrite.ToString());
-            Response.End();
-
-        }
-
-        protected void btnExcel_Click(object sender, EventArgs e)
-        {
-            ExportToExcel("Deuda General Inmueble", gvDeuda);
-        }
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
-            List<string> seleccionados = new List<string>();
             List<DAL.MasivoDeudaGeneral> lst = new List<DAL.MasivoDeudaGeneral>();
 
-            //FILTRO Barrios
-            foreach (ListItem item in lstBarrios.Items)
-            {
-                if (item.Selected)
-                {
-                    seleccionados.Add(item.Text);
-                }
-            }
-            if (seleccionados.Count != 0)
-                lst = filtroBarrios(lst, seleccionados);
-            seleccionados.Clear();
+            int cod_barrio = (lstBarrios.SelectedItem != null && !string.IsNullOrWhiteSpace(lstBarrios.SelectedItem.Value))
+    ? Convert.ToInt32(lstBarrios.SelectedItem.Value)
+    : 0;
 
+            int cod_calle = (lstCalles.SelectedItem != null && !string.IsNullOrWhiteSpace(lstCalles.SelectedItem.Value))
+                ? Convert.ToInt32(lstCalles.SelectedItem.Value)
+                : 0;
 
-            fillGrilla(lst);
-            lstFiltrada = lst;
-            Session.Add("registros_notificar", lstFiltrada);
+            string cod_zona = (lstZonas.SelectedItem != null && !string.IsNullOrWhiteSpace(lstZonas.SelectedItem.Text))
+                ? lstZonas.SelectedItem.Text
+                : null;
+
+            int desde = !string.IsNullOrWhiteSpace(txtDesde.Text)
+                ? Convert.ToInt32(txtDesde.Text)
+                : 0;
+
+            int hasta = !string.IsNullOrWhiteSpace(txtHasta.Text)
+                ? Convert.ToInt32(txtHasta.Text)
+                : 0;
+
+            fillGrilla(cod_barrio, cod_calle, cod_zona, desde, hasta);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
 
         protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
         {
-            lstBarrios.ClearSelection();
-            List<DAL.MasivoDeudaGeneral> lst = BLL.MasivoDeudaGeneralBLL.read(10);
-            Session["LST"] = lst;
-            // Refresca la grilla con la lista completa
-            fillGrilla(lst);
-            Session["registros_notificar"] = lst;
-
-            Session["Detalle"] = null;
-            gvConceptos.DataSource = null;
-            gvConceptos.DataBind();
-            divFiltros.Visible = true;
-            divResultados.Visible = false;
+            try
+            {
+                txtDesde.Text = "";
+                txtHasta.Text = "";
+                lstBarrios.ClearSelection();
+                lstCalles.ClearSelection();
+                lstZonas.ClearSelection();
 
 
+                lstFiltrada = new List<DAL.MasivoDeudaGeneral>();
+                Session.Remove("registros_notificar");
+
+                gvDeuda.DataSource = null;
+                gvDeuda.DataBind();
+                Response.Redirect(Request.RawUrl, false);
+                Context.ApplicationInstance.CompleteRequest();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error al limpiar los filtros: " + ex.Message;
+            }
         }
 
-        protected void btnExport_ServerClick(object sender, EventArgs e)
-        {
-            ExportToExcel("Export", gvDeuda);
-        }
-
-        protected void btnExportExcel_ServerClick(object sender, EventArgs e)
-        {
-            ExportToExcel("Export", gvDeuda);
-        }
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
         }
 
-        private List<DAL.MasivoDeudaGeneral> filtroBarrios(List<DAL.MasivoDeudaGeneral> lst, List<string> seleccionados)
-        {
-            try
-            {
-                lst = BLL.MasivoDeudaGeneralBLL.read(seleccionados);
-                return lst;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         protected void btnCerraSession_ServerClick(object sender, EventArgs e)
         {
@@ -150,7 +131,7 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
-              try
+            try
             {
 
                 lstFiltrada = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
@@ -183,7 +164,7 @@ namespace NotificacionesCIDI.Secure
                         obj2.Cod_estado_cidi = 0;
 
                         string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
-                        EnviarNotificacion(contenidoPersonalizado, item.cuit); // aca ya tengo la plantilla con las variables
+                        EnviarNotificacion(contenidoPersonalizado, item.cuit);
                         lst.Add(obj2);
                     }
                 }
@@ -352,7 +333,6 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-
         protected void gvConceptos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             try
@@ -419,6 +399,60 @@ namespace NotificacionesCIDI.Secure
         }
 
 
+        /////////////////////////////// EXPORT EXCEL /////////////////////////////////////////
+
+
+        protected void btnExportExcel_ServerClick(object sender, EventArgs e)
+        {
+            try
+            {
+                lstFiltrada = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
+
+                if (lstFiltrada == null || lstFiltrada.Count == 0)
+                {
+                    lblError.Text = "No hay datos para exportar.";
+                    return;
+                }
+
+                Response.Clear();
+                Response.Buffer = true;
+                Response.ContentType = "application/vnd.ms-excel";
+                Response.AddHeader("content-disposition", "attachment;filename=DeudaGeneral_Export_" + DateTime.Now.ToString("yyyyMMdd") + ".xls");
+                Response.Charset = "";
+
+                Page.EnableViewState = false;
+
+                using (StringWriter sw = new StringWriter())
+                {
+                    HtmlTextWriter hw = new HtmlTextWriter(sw);
+                    gvDeuda.AllowPaging = false;
+                    gvDeuda.DataSource = lstFiltrada;
+                    gvDeuda.DataBind();
+
+                    gvDeuda.HeaderStyle.ForeColor = System.Drawing.Color.Black;
+                    gvDeuda.HeaderStyle.BackColor = System.Drawing.Color.LightGray;
+                    gvDeuda.RowStyle.BackColor = System.Drawing.Color.White;
+
+                    gvDeuda.RenderControl(hw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+            }
+            catch (System.Threading.ThreadAbortException)
+            {
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Export Error: {ex.Message}\nStack Trace: {ex.StackTrace}";
+                lblError.Text = "Error al exportar: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine(errorMessage);
+            }
+        }
+
+        public override void VerifyRenderingInServerForm(Control control)
+        {
+        }
 
 
     }

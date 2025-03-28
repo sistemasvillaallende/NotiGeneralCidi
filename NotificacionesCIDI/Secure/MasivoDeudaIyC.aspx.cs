@@ -31,7 +31,6 @@ namespace NotificacionesCIDI.Secure
 
         private void fillCalles()
         {
-
             lstCalles.DataSource = BLL.CallesBLL.readAll();
             lstCalles.DataTextField = "NOM_CALLE";
             lstCalles.DataValueField = "COD_CALLE";
@@ -44,9 +43,9 @@ namespace NotificacionesCIDI.Secure
             lstZonas.DataValueField = "categoria";
             lstZonas.DataBind();
         }
-        private void fillGrilla(string desde, string hasta, bool dado_baja, string cod_zona)
+        private void fillGrilla(int desde, int hasta, int cod_calle ,bool dado_baja, string cod_zona)
         {
-            lstFiltrada = BLL.MasivoDeudaIyCBLL.read(desde, hasta, dado_baja, cod_zona);
+            lstFiltrada = BLL.MasivoDeudaIyCBLL.read(desde, hasta, cod_calle ,dado_baja, cod_zona);
             gvDeuda.DataSource = lstFiltrada;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
@@ -64,23 +63,6 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        // private void ExportToExcel(string nameReport, GridView wControl)
-        // {
-
-        //     Response.ClearContent();
-        //     Response.AddHeader("content-disposition", "attachment;filename=Deuda_iyc.xls");
-        //     Response.Charset = "";
-        //     Response.Cache.SetCacheability(HttpCacheability.NoCache);
-        //     Response.ContentType = "application/vnd.xls";
-
-        //     System.IO.StringWriter stringWrite = new System.IO.StringWriter();
-        //     System.Web.UI.HtmlTextWriter htmlWrite = new HtmlTextWriter(stringWrite);
-
-        //     gvDeuda.RenderControl(htmlWrite);
-        //     Response.Write(stringWrite.ToString());
-        //     Response.End();
-
-        // }
 
         protected void btnExportExcel_ServerClick(object sender, EventArgs e)
         {
@@ -155,36 +137,55 @@ namespace NotificacionesCIDI.Secure
         {
             // Do nothing
         }
-        // protected void btnExportExcel_ServerClick(object sender, EventArgs e)
-        // {
 
-        //     ExportToExcel("Export", gvDeuda);
-        // }
-
-        // protected void btnExcel_Click(object sender, EventArgs e)
-        // {
-        //     ExportToExcel("Deuda General Comercio", gvDeuda);
-        // }
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
-            List<DAL.MasivoDeudaIyC> lst = new List<DAL.MasivoDeudaIyC>();
 
-            string desde = txtDesde.Text;
-            string hasta = txtHasta.Text;
+            int desde = !string.IsNullOrWhiteSpace(txtDesde.Text)
+                ? Convert.ToInt32(txtDesde.Text)
+                : 0;
+
+            int hasta = !string.IsNullOrWhiteSpace(txtHasta.Text)
+                ? Convert.ToInt32(txtHasta.Text)
+                : 0;
             bool activo = chkActivo.Checked;
-            string cod_zona = lstZonas.Text;
+            int cod_calle = (lstCalles.SelectedItem != null && !string.IsNullOrWhiteSpace(lstCalles.SelectedItem.Value))
+                ? Convert.ToInt32(lstCalles.SelectedItem.Value)
+                : 0;
 
+            string cod_zona = (lstZonas.SelectedItem != null && !string.IsNullOrWhiteSpace(lstZonas.SelectedItem.Text))
+                ? lstZonas.SelectedItem.Text
+                : null;
 
-            fillGrilla(desde, hasta, activo, cod_zona);
+            fillGrilla(desde, hasta,cod_calle, activo, cod_zona);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
 
-        protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
+         protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
         {
+            try
+            {
+                txtDesde.Text = "";
+                txtHasta.Text = "";
+                chkActivo.Checked = false;
+                lstCalles.ClearSelection();
+               
+                lstFiltrada = new List<DAL.MasivoDeudaIyC>();
+                Session.Remove("registros_notificar");
 
+                gvDeuda.DataSource = null;
+                gvDeuda.DataBind();
+                Response.Redirect(Request.RawUrl, false);
+                Context.ApplicationInstance.CompleteRequest();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error al limpiar los filtros: " + ex.Message;
+            }
         }
+
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
         }

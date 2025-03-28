@@ -1,11 +1,11 @@
 ﻿<%@ Page Title="Nueva Notificación" Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaAuto.aspx.cs"
     Inherits="NotificacionesCIDI.Secure.MasivoDeudaAuto" MasterPageFile="~/Master/MasterPage.master" %>
 
-    <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="server">
         <title>Automotor</title>
     </asp:Content>
 
-    <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
         <script type="text/javascript">
             var pbControl = null;
             var prm = Sys.WebForms.PageRequestManager.getInstance();

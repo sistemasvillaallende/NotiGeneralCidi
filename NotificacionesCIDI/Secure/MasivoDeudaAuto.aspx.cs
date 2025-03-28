@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,8 +12,6 @@ namespace NotificacionesCIDI.Secure
     public partial class MasivoDeudaAuto : System.Web.UI.Page
     {
         List<DAL.MasivoDeudaAuto> lstFiltrada = null;
-        List<DAL.Detalle_notificaciones_generaes_cidi> lstDetalle = null;
-        Notificaciones_generales_cidi objNoti = new Notificaciones_generales_cidi();
         int subsistema;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -27,7 +26,7 @@ namespace NotificacionesCIDI.Secure
 
         private void fillGrilla(int anio, bool exento)
         {
-            lstFiltrada = BLL.MasivoDeudaAutoBLL.read(anio,exento);
+            lstFiltrada = BLL.MasivoDeudaAutoBLL.read(anio, exento);
             gvDeuda.DataSource = lstFiltrada;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
@@ -45,55 +44,35 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        private void ExportToExcel(string nameReport, GridView wControl)
-        {
-
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", "attachment;filename=Deuda_iyc.xls");
-            Response.Charset = "";
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.ContentType = "application/vnd.xls";
-
-            System.IO.StringWriter stringWrite = new System.IO.StringWriter();
-            System.Web.UI.HtmlTextWriter htmlWrite = new HtmlTextWriter(stringWrite);
-
-            gvDeuda.RenderControl(htmlWrite);
-            Response.Write(stringWrite.ToString());
-            Response.End();
-
-        }
-
-        protected void btnExcel_Click(object sender, EventArgs e)
-        {
-            ExportToExcel("Deuda General Comercio", gvDeuda);
-        }
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
-            List<DAL.MasivoDeudaIyC> lst = new List<DAL.MasivoDeudaIyC>();
-            int anio = Convert.ToInt32(txtAnio.Text);            
-            bool exento = chkExento.Checked;       
+            int anio = Convert.ToInt32(txtAnio.Text);
+            bool exento = chkExento.Checked;
 
-            fillGrilla(anio,exento);
+            fillGrilla(anio, exento);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
 
         protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
         {
+            try
+            {
+                txtAnio.Text = "";
+                lstFiltrada = new List<DAL.MasivoDeudaAuto>();
+                Session.Remove("registros_notificar");
 
+                gvDeuda.DataSource = null;
+                gvDeuda.DataBind();
+                Response.Redirect(Request.RawUrl, false);
+                Context.ApplicationInstance.CompleteRequest();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error al limpiar los filtros: " + ex.Message;
+            }
         }
-
-        protected void btnExport_ServerClick(object sender, EventArgs e)
-        {
-            ExportToExcel("Export", gvDeuda);
-        }
-
-        protected void btnExportExcel_ServerClick(object sender, EventArgs e)
-        {
-            ExportToExcel("Export", gvDeuda);
-        }
-
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -220,6 +199,60 @@ namespace NotificacionesCIDI.Secure
                 }
             }
         }
+
+
+        protected void btnExportExcel_ServerClick(object sender, EventArgs e)
+        {
+            try
+            {
+                lstFiltrada = (List<DAL.MasivoDeudaAuto>)Session["registros_notificar"];
+
+                if (lstFiltrada == null || lstFiltrada.Count == 0)
+                {
+                    lblError.Text = "No hay datos para exportar.";
+                    return;
+                }
+
+                Response.Clear();
+                Response.Buffer = true;
+                Response.ContentType = "application/vnd.ms-excel";
+                Response.AddHeader("content-disposition", "attachment;filename=NotificacionAuto_Export_" + DateTime.Now.ToString("yyyyMMdd") + ".xls");
+                Response.Charset = "";
+
+                Page.EnableViewState = false;
+
+                using (StringWriter sw = new StringWriter())
+                {
+                    HtmlTextWriter hw = new HtmlTextWriter(sw);
+                    gvDeuda.AllowPaging = false;
+                    gvDeuda.DataSource = lstFiltrada;
+                    gvDeuda.DataBind();
+
+                    gvDeuda.HeaderStyle.ForeColor = System.Drawing.Color.Black;
+                    gvDeuda.HeaderStyle.BackColor = System.Drawing.Color.LightGray;
+                    gvDeuda.RowStyle.BackColor = System.Drawing.Color.White;
+
+                    gvDeuda.RenderControl(hw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+            }
+            catch (System.Threading.ThreadAbortException)
+            {
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Export Error: {ex.Message}\nStack Trace: {ex.StackTrace}";
+                lblError.Text = "Error al exportar: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine(errorMessage);
+            }
+        }
+
+        public override void VerifyRenderingInServerForm(Control control)
+        {
+        }
+
 
     }
 }

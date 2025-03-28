@@ -43,13 +43,6 @@ namespace NotificacionesCIDI.Secure
             gvDeuda.UseAccessibleHeader = true;
         }
 
-        private void fillCalles(int cod_barrio)
-        {
-            lstCalles.DataSource = BLL.CallesBLL.read(cod_barrio);
-            lstCalles.DataTextField = "nom_calle";
-            lstCalles.DataValueField = "cod_calle";
-            lstCalles.DataBind();
-        }
         private void fillZonas()
         {
             lstZonas.DataSource = BLL.ZonasBLL.read();
@@ -85,11 +78,9 @@ namespace NotificacionesCIDI.Secure
         private void fillCallesPorBarrios(List<string> barrios)
         {
 
-
             lstCalles.DataSource = BLL.CallesBLL.getByCallesByBarrio(barrios);
-            lstCalles.DataTextField = "NOM_CALLE";  // El nombre de la calle
-            lstCalles.DataValueField = "COD_CALLE"; // El código o ID de la calle
-            lstCalles.DataBind();
+            lstCalles.DataTextField = "NOM_CALLE";  
+            lstCalles.DataValueField = "COD_CALLE"; 
         }
 
         private List<DAL.MasivoDeuda> filtroCalle(List<DAL.MasivoDeuda> lst)
