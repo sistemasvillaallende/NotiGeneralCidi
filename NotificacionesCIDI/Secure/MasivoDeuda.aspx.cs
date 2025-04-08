@@ -1,8 +1,11 @@
-﻿using BLL;
-using DAL;
+﻿using DAL;
+using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -14,6 +17,7 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeuda> lstFiltrada = null;
         int subsistema;
+        string urlBase = ConfigurationManager.AppSettings["urlBase"];
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -25,96 +29,142 @@ namespace NotificacionesCIDI.Secure
                 fillCateDeuda();
                 fillNotas();
                 fillZonas();
+                fillCalles();
 
             }
         }
+
+        private void fillNotas()
+        {
+            List<NotasPlantillas> plantillas = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Plantillas/getPlantillas", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                plantillas = JsonConvert.DeserializeObject<List<NotasPlantillas>>(response.Content);
+            }
+
+            var listaNotas = plantillas
+                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
+                   .ToList();
+
+            gvPlantilla.DataSource = listaNotas;
+            gvPlantilla.DataBind();
+
+        }
         private void fillBarrios()
         {
-            lstBarrios.DataSource = BLL.BarriosBLL.read();
+
+            List<BARRIOS> barrios = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Barrio/getBarrios", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                barrios = JsonConvert.DeserializeObject<List<BARRIOS>>(response.Content);
+            }
+
+            lstBarrios.DataSource = barrios;
             lstBarrios.DataTextField = "nom_barrio";
             lstBarrios.DataValueField = "cod_barrio";
             lstBarrios.DataBind();
         }
-        private void fillGrilla(List<DAL.MasivoDeuda> lst)
+
+        private void fillGrilla(int cod_categoria,int cod_barrio, int cod_calle, string cod_zona, int desde, int hasta)
         {
-            lstFiltrada = lst;
-            gvDeuda.DataSource = lst;
+
+            List<DAL.MasivoDeuda> filtroInm = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest($"NotificacionInmueble/getNotificacionInmueble?cod_categoria={cod_categoria}&cod_barrio={cod_barrio}&cod_calle={cod_calle}&cod_zona={cod_zona}&desde={desde}&hasta={hasta}", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                filtroInm = JsonConvert.DeserializeObject<List<DAL.MasivoDeuda>>(response.Content);
+            }
+            gvDeuda.DataSource = filtroInm;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
+            Session.Add("registros_notificar", filtroInm);
         }
 
         private void fillZonas()
         {
-            lstZonas.DataSource = BLL.ZonasBLL.read();
+            List<ZONAS> zonas = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Zona/getZonas", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                zonas = JsonConvert.DeserializeObject<List<ZONAS>>(response.Content);
+            }
+            lstZonas.DataSource = zonas;
             lstZonas.DataTextField = "categoria";
             lstZonas.DataValueField = "categoria";
             lstZonas.DataBind();
         }
         private void fillCateDeuda()
         {
-            lstCatDeuda.DataSource = BLL.CATE_DEUDA.readInmueble();
+
+            List<DAL.CATE_DEUDA> cateDeuda = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("CategoriaDeuda/readIndyCom", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                cateDeuda = JsonConvert.DeserializeObject<List<DAL.CATE_DEUDA>>(response.Content);
+            }
+            lstCatDeuda.DataSource = cateDeuda;
             lstCatDeuda.DataTextField = "des_categoria";
             lstCatDeuda.DataValueField = "cod_categoria";
             lstCatDeuda.DataBind();
         }
 
-        protected void lstBarrios_SelectedIndexChanged(object sender, EventArgs e)
+        private void fillCalles()
         {
-            List<string> barriosSeleccionados = new List<string>();
-
-            foreach (ListItem item in lstBarrios.Items)
+            List<CALLES> calles = null;
+            var options = new RestClientOptions(urlBase)
             {
-                if (item.Selected)
-                {
-                    barriosSeleccionados.Add(item.Text);
-                }
-            }
-            if (barriosSeleccionados.Count > 0)
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Calle/getAllCalles", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
             {
-                fillCallesPorBarrios(barriosSeleccionados);
+                calles = JsonConvert.DeserializeObject<List<CALLES>>(response.Content);
             }
-        }
 
-        private void fillCallesPorBarrios(List<string> barrios)
-        {
-
-            lstCalles.DataSource = BLL.CallesBLL.getByCallesByBarrio(barrios);
-            lstCalles.DataTextField = "NOM_CALLE";  
-            lstCalles.DataValueField = "COD_CALLE"; 
-        }
-
-        private List<DAL.MasivoDeuda> filtroCalle(List<DAL.MasivoDeuda> lst)
-        {
-            try
-            {
-                List<DAL.MasivoDeuda> lstFiltrada = new List<DAL.MasivoDeuda>();
-
-                if (ddlCalles.SelectedValue == "3")
-                {
-                    return lst;
-                }
-
-                string desde = txtDesde.Text.Trim().ToUpper();
-                string hasta = txtHasta.Text.Trim().ToUpper();
-
-
-                foreach (var item in lst)
-                {
-                    string calle = item.nom_calle.Trim().ToUpper();
-
-                    if (string.Compare(calle, desde) >= 0 && string.Compare(calle, hasta) <= 0)
-                    {
-                        lstFiltrada.Add(item);
-                    }
-                }
-
-                return lstFiltrada;
-            }
-            catch (Exception ex)
-            {
-                lblError.Text = "Error: " + ex.Message;
-                return null;
-            }
+            lstCalles.DataSource = calles;
+            lstCalles.DataTextField = "NOM_CALLE";
+            lstCalles.DataValueField = "COD_CALLE";
+            lstCalles.DataBind();
         }
 
 
@@ -145,103 +195,62 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
-            List<string> seleccionados = new List<string>();
-            List<int> categoriasDeudaSeleccionadas = new List<int>();
-            List<string> callesSeleccionadas = new List<string>();
-            List<string> zonasSeleccionadas = new List<string>();
 
-            List<DAL.MasivoDeuda> lst = BLL.MasivoDeudaBLL.getByAll();
+            int cod_categoria = (lstCatDeuda.SelectedItem != null && !string.IsNullOrWhiteSpace(lstCatDeuda.SelectedItem.Value))
+                ? Convert.ToInt32(lstCatDeuda.SelectedItem.Value)
+                : 0;
+
+            int cod_barrio = (lstBarrios.SelectedItem != null && !string.IsNullOrWhiteSpace(lstBarrios.SelectedItem.Value))
+                ? Convert.ToInt32(lstBarrios.SelectedItem.Value)
+                : 0;
+
+            int cod_calle = (lstCalles.SelectedItem != null && !string.IsNullOrWhiteSpace(lstCalles.SelectedItem.Value))
+                ? Convert.ToInt32(lstCalles.SelectedItem.Value)
+                : 0;
+
+            string cod_zona = (lstZonas.SelectedItem != null && !string.IsNullOrWhiteSpace(lstZonas.SelectedItem.Text))
+                ? lstZonas.SelectedItem.Text
+                : null;
+
+            int desde = !string.IsNullOrWhiteSpace(txtDesde.Text)
+                ? Convert.ToInt32(txtDesde.Text)
+                : 0;
+
+            int hasta = !string.IsNullOrWhiteSpace(txtHasta.Text)
+                ? Convert.ToInt32(txtHasta.Text)
+                : 0;
 
 
-            int desde = 0;
-            int hasta = 0;
 
-            if (!string.IsNullOrEmpty(txtDesde.Text) && txtDesde.Text != "0")
-            {
-                desde = Convert.ToInt32(txtDesde.Text);
-            }
-
-            if (!string.IsNullOrEmpty(txtHasta.Text) && txtHasta.Text != "0")
-            {
-                hasta = Convert.ToInt32(txtHasta.Text);
-            }
-
-            foreach (ListItem item in lstCalles.Items)
-            {
-                if (item.Selected)
-                {
-                    callesSeleccionadas.Add(item.Text);
-                }
-            }
-
-            foreach (ListItem item in lstZonas.Items)
-            {
-                if (item.Selected)
-                {
-                    zonasSeleccionadas.Add(item.Text);
-                }
-            }
-
-            foreach (ListItem item in lstCatDeuda.Items)
-            {
-                if (item.Selected)
-                {
-                    categoriasDeudaSeleccionadas.Add(Convert.ToInt32(item.Value));
-                }
-            }
-
-            foreach (ListItem item in lstBarrios.Items)
-            {
-                if (item.Selected)
-                {
-                    seleccionados.Add(item.Text);
-                }
-            }
-            if (seleccionados.Count != 0)
-            {
-                lst = filtroBarrios(lst, seleccionados);
-            }
-
-            if (categoriasDeudaSeleccionadas.Count > 0)
-            {
-                lst = filtroCategoriaDeuda(lst, categoriasDeudaSeleccionadas[0]);
-            }
-
-            if (zonasSeleccionadas.Count > 0)
-            {
-                lst = filtroZonas(lst, zonasSeleccionadas);
-            }
-
-            if (callesSeleccionadas.Count > 0)
-            {
-                lst = filtroCalles(lst, callesSeleccionadas, desde, hasta);
-            }
-
-            seleccionados.Clear();
-            categoriasDeudaSeleccionadas.Clear();
-            callesSeleccionadas.Clear();
-            zonasSeleccionadas.Clear();
-
-            fillGrilla(lst);
-            lstFiltrada = lst;
-            Session.Add("registros_notificar", lstFiltrada);
+            fillGrilla(cod_categoria,cod_barrio, cod_calle, cod_zona, desde, hasta);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
 
         protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
         {
-            lstBarrios.ClearSelection();
-            List<DAL.MasivoDeuda> lst = new List<DAL.MasivoDeuda>();
-            Session["LST"] = lst;
-            fillGrilla(lst);
-            Session["registros_notificar"] = lst;
-            Session["Detalle"] = null;
-            gvDeuda.DataSource = null;
-            gvDeuda.DataBind();
-            divFiltros.Visible = true;
-            divResultados.Visible = false;
+            try
+            {
+                txtDesde.Text = "";
+                txtHasta.Text = "";
+                lstBarrios.ClearSelection();
+                lstCalles.ClearSelection();
+                lstZonas.ClearSelection();
+                lstCatDeuda.ClearSelection();
 
+
+                lstFiltrada = new List<DAL.MasivoDeuda>();
+                Session.Remove("registros_notificar");
+
+                gvDeuda.DataSource = null;
+                gvDeuda.DataBind();
+                Response.Redirect(Request.RawUrl, false);
+                Context.ApplicationInstance.CompleteRequest();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Error al limpiar los filtros: " + ex.Message;
+            }
         }
 
         protected void btnExport_ServerClick(object sender, EventArgs e)
@@ -261,7 +270,7 @@ namespace NotificacionesCIDI.Secure
             {
                 var deuda = (DAL.MasivoDeuda)e.Row.DataItem;
 
-                string denominacion = BLL.MasivoDeudaBLL.armoDenominacion(deuda.cir, deuda.sec, deuda.man, deuda.par, deuda.p_h);
+                string denominacion = ArmoDenominacion(deuda.cir, deuda.sec, deuda.man, deuda.par, deuda.p_h);
 
                 Label lblNroCta = (Label)e.Row.FindControl("lblNroCta");
 
@@ -272,123 +281,56 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        //Filtros
 
-
-        private List<DAL.MasivoDeuda> filtroBarrios(List<DAL.MasivoDeuda> lst, List<string> seleccionados)
+        protected string ArmoDenominacion(int cir, int sec, int man, int par, int p_h)
         {
             try
             {
-                lst = (from lista in lst
-                       where seleccionados.Contains(lista.nom_barrio)
-                       select lista).ToList();
-                return lst;
+                StringBuilder denominacion = new StringBuilder();
+
+                if (cir < 10)
+                    denominacion.AppendFormat("CIR: 0{0} - ", cir);
+                if (cir > 9 && cir < 100)
+                    denominacion.AppendFormat("CIR: {0} - ", cir);
+
+                if (sec < 10)
+                    denominacion.AppendFormat("SEC: 0{0} - ", sec);
+                if (sec > 9 && sec < 100)
+                    denominacion.AppendFormat("SEC: {0} - ", sec);
+
+                if (man < 10)
+                    denominacion.AppendFormat("MAN: 00{0} - ", man);
+                if (man > 9 && man < 100)
+                    denominacion.AppendFormat("MAN: 0{0} - ", man);
+                if (man > 99)
+                    denominacion.AppendFormat("MAN: {0} - ", man);
+
+                if (par < 10)
+                    denominacion.AppendFormat("PAR: 00{0} - ", par);
+                if (par > 9 && par < 100)
+                    denominacion.AppendFormat("PAR: 0{0} - ", par);
+                if (par > 99)
+                    denominacion.AppendFormat("PAR: {0} - ", par);
+
+                if (p_h < 10)
+                    denominacion.AppendFormat("P_H: 00{0}", p_h);
+                if (p_h > 9 && p_h < 100)
+                    denominacion.AppendFormat("P_H: 0{0}", p_h);
+                if (p_h > 99)
+                    denominacion.AppendFormat("P_H: {0}", p_h);
+
+                return denominacion.ToString();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
-        private List<DAL.MasivoDeuda> filtroCalles(List<DAL.MasivoDeuda> lst, List<string> seleccionados, int? desde, int? hasta)
-        {
-            try
-            {
-                if (seleccionados == null || seleccionados.Count == 0)
-                {
-                    return lst;
-                }
-
-                bool hayCallesEnLista = lst.Any(x => !string.IsNullOrEmpty(x.nom_calle));
-
-                if ((!desde.HasValue || desde.Value <= 0) && (!hasta.HasValue || hasta.Value <= 0))
-                {
-                    if (hayCallesEnLista)
-                    {
-                        return lst.Where(x => !string.IsNullOrEmpty(x.nom_calle) &&
-                                           seleccionados.Contains(x.nom_calle.Trim())).ToList();
-                    }
-                }
-
-                var inmueblesFiltrados = lst.Select(i => new { i.cir, i.sec, i.man, i.par, i.p_h }).ToList();
-
-                List<DAL.MasivoDeuda> lstCallesAlturas = BLL.MasivoDeudaBLL.getByCalles(seleccionados, desde, hasta);
-
-                return lstCallesAlturas.Where(nuevo =>
-                    inmueblesFiltrados.Any(f =>
-                        f.cir == nuevo.cir &&
-                        f.sec == nuevo.sec &&
-                        f.man == nuevo.man &&
-                        f.par == nuevo.par &&
-                        f.p_h == nuevo.p_h
-                    )
-                ).ToList();
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private List<DAL.MasivoDeuda> filtroZonas(List<DAL.MasivoDeuda> lst, List<string> seleccionados)
-        {
-            try
-            {
-                List<DAL.MasivoDeuda> listaPorZonas = BLL.MasivoDeudaBLL.getByZonas(seleccionados);
-
-                // Realizar la intersección entre ambas listas basada en la clave del inmueble
-                lst = (from item in lst
-                       join itemZona in listaPorZonas
-                       on new { item.cir, item.sec, item.man, item.par, item.p_h }
-                       equals new { itemZona.cir, itemZona.sec, itemZona.man, itemZona.par, itemZona.p_h }
-                       select item).ToList();
-
-                return lst;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private List<DAL.MasivoDeuda> filtroCategoriaDeuda(List<DAL.MasivoDeuda> lst, int cod_categoria)
-        {
-            try
-            {
-                lst = BLL.MasivoDeudaBLL.getByCategoriaDeuda(cod_categoria);
-                return lst;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
-
-        protected void btnCerraSession_ServerClick(object sender, EventArgs e)
-        {
-
-        }
-
 
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
             try
             {
-
-                if (Session["id_plantilla"] == null)
-                {
-
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alertaPlantilla", @"
-                            var modalElement = document.getElementById('modalSeleccionarPlantilla');
-                            var myModal = new bootstrap.Modal(modalElement);
-                            myModal.show();
-                         ", true);
-
-                    return;
-                }
 
 
                 lstFiltrada = (List<DAL.MasivoDeuda>)Session["registros_notificar"];
@@ -398,12 +340,12 @@ namespace NotificacionesCIDI.Secure
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
 
-                var plantilla = BLL.NotasPlantillasBLL.getByPk(idPlantilla);
+                var plantilla = GetPlantillaByPk(idPlantilla);
                 string contenidoPlantilla = plantilla.contenido;
 
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
 
-                obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
+                obj.Nro_Emision = GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
@@ -430,8 +372,8 @@ namespace NotificacionesCIDI.Secure
                         lst.Add(obj2);
                     }
                 }
-                BLL.DetNotificacionGenetalBLL.insertMasivo(lst);
-                BLL.NotificacionGeneralBLL.insert(obj);
+                InsertDetalleNotificacion(lst);
+                InsertNotificacionGeneral(obj);
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
                         var modalElement = document.getElementById('modalNotif');
@@ -456,6 +398,115 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
+
+        private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
+                requestInsert.AddJsonBody(lst);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private void InsertNotificacionGeneral(NotificacionGeneral obj)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("NotificadorGeneral/insertNuevaNotificacion", Method.Post);
+                requestInsert.AddJsonBody(obj);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private NotasPlantillas GetPlantillaByPk(int idPlantilla)
+        {
+            try
+            {
+                NotasPlantillas plantilla = null;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"Plantillas/getPlantillaByPk?id={idPlantilla}", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
+                }
+                return plantilla;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
+        private int GetMaxNroEmision()
+        {
+            try
+            {
+                int MaxValue = 0;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest("NotificadorGeneral/getMaxNroEmision", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    MaxValue = JsonConvert.DeserializeObject<Int32>(response.Content);
+                }
+                return MaxValue;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
         protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -471,21 +522,7 @@ namespace NotificacionesCIDI.Secure
         }
 
         protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-
-        }
-
-        private void fillNotas()
-        {
-            var listaNotas = BLL.NotasPlantillasBLL.read()
-                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
-                   .ToList();
-
-            gvPlantilla.DataSource = listaNotas;
-            gvPlantilla.DataBind();
-
-        }
-
+        {}
 
         private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
         {

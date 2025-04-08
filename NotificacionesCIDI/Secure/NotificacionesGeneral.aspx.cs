@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DAL;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace NotificacionesCIDI.Secure
 {
     public partial class NotificacionesGeneral : System.Web.UI.Page
     {
         int subsistema;
+        string urlBase = ConfigurationManager.AppSettings["urlBase"];
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -18,7 +22,7 @@ namespace NotificacionesCIDI.Secure
                 if (!IsPostBack)
                 {
                     subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
-                    fillGrillas(subsistema);
+                    CargarNotificacionGeneral(subsistema);
                 }
             }
             catch (Exception ex)
@@ -28,29 +32,60 @@ namespace NotificacionesCIDI.Secure
         }
 
 
-        protected void btnCerraSession_ServerClick(object sender, EventArgs e)
-        {
-
-        }
-        public void fillGrillas(int subsistema)
+        public void fillGrillas(List<DAL.NotificacionGeneral> lst, int subsistema)
         {
             try
             {
-                List<NotificacionGeneral> lst = BLL.NotificacionGeneralBLL.readNotificacionBySubsistema(subsistema);
                 gvMasivosAut.DataSource = lst;
                 gvMasivosAut.DataBind();
-                // Forzar que el encabezado se renderice en <thead>
-                if (gvMasivosAut.HeaderRow != null)
+
+                if (lst.Count > 0)
                 {
+                    gvMasivosAut.UseAccessibleHeader = true;
                     gvMasivosAut.HeaderRow.TableSection = TableRowSection.TableHeader;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine($"Error en fillGrillas: {ex.Message}");
+                throw;
             }
         }
 
+        public void CargarNotificacionGeneral(int subsistema)
+        {
+            try
+            {
 
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+                var client = new RestClient(options);
+                var request = new RestRequest("NotificadorGeneral/greadNotificacionBySubsistema?subsistema=" + subsistema, Method.Get);
+
+                RestResponse response = client.Execute(request);
+
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+
+                    List<DAL.NotificacionGeneral> lst = JsonConvert.DeserializeObject<List<DAL.NotificacionGeneral>>(response.Content);
+                    fillGrillas(lst,subsistema);
+                }
+                else
+                {
+                    Console.WriteLine($"Error en la petición: {response.StatusCode} - {response.ErrorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Excepción: {ex.Message}");
+                throw;
+            }
+        }
     }
+
+
 }

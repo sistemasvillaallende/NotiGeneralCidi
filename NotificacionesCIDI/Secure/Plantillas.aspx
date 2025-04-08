@@ -364,7 +364,7 @@
     // Guardar el contenido en el campo oculto
     document.getElementById('<%= hiddenInput3.ClientID %>').value = contenido;
     
-    return true; // Permite que el postback continúe
+    return true; 
 }
         
 

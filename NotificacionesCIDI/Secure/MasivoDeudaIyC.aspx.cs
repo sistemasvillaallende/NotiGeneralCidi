@@ -7,6 +7,9 @@ using System.Web.UI.WebControls;
 using DAL;
 using System.Web.UI.HtmlControls;
 using System.IO;
+using System.Configuration;
+using Newtonsoft.Json;
+using RestSharp;
 
 
 
@@ -16,6 +19,7 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeudaIyC> lstFiltrada = null;
         int subsistema;
+        string urlBase = ConfigurationManager.AppSettings["urlBase"];
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -31,30 +35,84 @@ namespace NotificacionesCIDI.Secure
 
         private void fillCalles()
         {
-            lstCalles.DataSource = BLL.CallesBLL.readAll();
+            List<CALLES> calles = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Calle/getAllCalles", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                calles = JsonConvert.DeserializeObject<List<CALLES>>(response.Content);
+            }
+
+            lstCalles.DataSource = calles;
             lstCalles.DataTextField = "NOM_CALLE";
             lstCalles.DataValueField = "COD_CALLE";
             lstCalles.DataBind();
         }
         private void fillZonas()
         {
-            lstZonas.DataSource = BLL.ZonasBLL.readIyc();
+            List<ZONAS> zonas = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Zona/getZonasIyC", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                zonas = JsonConvert.DeserializeObject<List<ZONAS>>(response.Content);
+            }
+            lstZonas.DataSource = zonas;
             lstZonas.DataTextField = "categoria";
             lstZonas.DataValueField = "categoria";
             lstZonas.DataBind();
         }
         private void fillGrilla(int desde, int hasta, int cod_calle ,bool dado_baja, string cod_zona)
         {
-            lstFiltrada = BLL.MasivoDeudaIyCBLL.read(desde, hasta, cod_calle ,dado_baja, cod_zona);
-            gvDeuda.DataSource = lstFiltrada;
+            List<DAL.MasivoDeudaIyC> filtroIndyCom = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest($"NotificadorIndyCom/getNotificacionIndycomFiltered?calleDesde={desde}&calleHasta={hasta}&cod_calle={cod_calle}&dado_baja={dado_baja}&cod_zona={cod_zona}", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                filtroIndyCom = JsonConvert.DeserializeObject<List<DAL.MasivoDeudaIyC>>(response.Content);
+            }
+
+            gvDeuda.DataSource = filtroIndyCom;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
-            Session.Add("registros_notificar", lstFiltrada);
+            Session.Add("registros_notificar", filtroIndyCom);
         }
 
         private void fillNotas()
         {
-            var listaNotas = BLL.NotasPlantillasBLL.read()
+            List<NotasPlantillas> plantillas = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Plantillas/getPlantillas", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                plantillas = JsonConvert.DeserializeObject<List<NotasPlantillas>>(response.Content);
+            }
+
+            var listaNotas = plantillas
                    .Select(n => new { n.id, n.nom_plantilla, n.contenido })
                    .ToList();
 
@@ -208,12 +266,12 @@ namespace NotificacionesCIDI.Secure
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
 
-                var plantilla = BLL.NotasPlantillasBLL.getByPk(idPlantilla);
+                var plantilla = GetPlantillaByPk(idPlantilla);
                 string contenidoPlantilla = plantilla.contenido;
 
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
 
-                obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
+                obj.Nro_Emision = GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
@@ -236,8 +294,8 @@ namespace NotificacionesCIDI.Secure
                         lst.Add(obj2);
                     }
                 }
-                BLL.DetNotificacionGenetalBLL.insertMasivo(lst);
-                BLL.NotificacionGeneralBLL.insert(obj);
+                InsertDetalleNotificacion(lst);
+                InsertNotificacionGeneral(obj);
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
                         var modalElement = document.getElementById('modalNotif');
@@ -274,6 +332,111 @@ namespace NotificacionesCIDI.Secure
         private void EnviarNotificacion(string contenidoPersonalizado, string cuit)
         {
 
+
+        }
+        private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
+                requestInsert.AddJsonBody(lst);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private void InsertNotificacionGeneral(NotificacionGeneral obj)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("NotificadorGeneral/insertNuevaNotificacion", Method.Post);
+                requestInsert.AddJsonBody(obj);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+        private NotasPlantillas GetPlantillaByPk(int idPlantilla)
+        {
+            try
+            {
+                NotasPlantillas plantilla = null;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"Plantillas/getPlantillaByPk?id={idPlantilla}", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
+                }
+                return plantilla;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
+        private int GetMaxNroEmision()
+        {
+            try
+            {
+                int MaxValue = 0;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest("NotificadorGeneral/getMaxNroEmision", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    MaxValue = JsonConvert.DeserializeObject<Int32>(response.Content);
+                }
+                return MaxValue;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
         }
 

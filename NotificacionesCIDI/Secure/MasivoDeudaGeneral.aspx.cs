@@ -7,8 +7,10 @@ using System.Web.UI.WebControls;
 using DAL;
 using System.Data;
 using ClosedXML.Excel;
-using BLL;
 using System.IO;
+using System.Configuration;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace NotificacionesCIDI.Secure
 {
@@ -16,6 +18,7 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeudaGeneral> lstFiltrada = null;
         int subsistema;
+        string urlBase = ConfigurationManager.AppSettings["urlBase"];
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,9 +32,49 @@ namespace NotificacionesCIDI.Secure
                 fillCalles();
             }
         }
+
+        private void fillNotas()
+        {
+            List<NotasPlantillas> plantillas = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Plantillas/getPlantillas", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                plantillas = JsonConvert.DeserializeObject<List<NotasPlantillas>>(response.Content);
+            }
+
+            var listaNotas = plantillas
+                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
+                   .ToList();
+
+            gvPlantilla.DataSource = listaNotas;
+            gvPlantilla.DataBind();
+
+        }
         private void fillBarrios()
         {
-            lstBarrios.DataSource = BLL.BarriosBLL.read();
+
+            List<BARRIOS> barrios = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Barrio/getBarrios", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                barrios = JsonConvert.DeserializeObject<List<BARRIOS>>(response.Content);
+            }
+
+            lstBarrios.DataSource = barrios;
             lstBarrios.DataTextField = "nom_barrio";
             lstBarrios.DataValueField = "cod_barrio";
             lstBarrios.DataBind();
@@ -39,7 +82,20 @@ namespace NotificacionesCIDI.Secure
 
         private void fillZonas()
         {
-            lstZonas.DataSource = BLL.ZonasBLL.read();
+            List<ZONAS> zonas = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Zona/getZonas", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                zonas = JsonConvert.DeserializeObject<List<ZONAS>>(response.Content);
+            }
+            lstZonas.DataSource = zonas;
             lstZonas.DataTextField = "categoria";
             lstZonas.DataValueField = "categoria";
             lstZonas.DataBind();
@@ -47,7 +103,21 @@ namespace NotificacionesCIDI.Secure
 
         private void fillCalles()
         {
-            lstCalles.DataSource = BLL.CallesBLL.readAll();
+            List<CALLES> calles = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Calle/getAllCalles", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                calles = JsonConvert.DeserializeObject<List<CALLES>>(response.Content);
+            }
+
+            lstCalles.DataSource = calles;
             lstCalles.DataTextField = "NOM_CALLE";
             lstCalles.DataValueField = "COD_CALLE";
             lstCalles.DataBind();
@@ -56,11 +126,24 @@ namespace NotificacionesCIDI.Secure
 
         private void fillGrilla(int cod_barrio, int cod_calle, string cod_zona, int desde, int hasta)
         {
-            lstFiltrada = BLL.MasivoDeudaGeneralBLL.readWithFilters(cod_barrio, cod_calle, cod_zona, desde, hasta);
-            gvDeuda.DataSource = lstFiltrada;
+
+            List<DAL.MasivoDeudaGeneral> filtroGenerico = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest($"NotificadorGenerico/getNotificacionGnericaFiltered?cod_barrio={cod_barrio}&cod_calle={cod_calle}&cod_zona={cod_zona}&desde={desde}&hasta={hasta}", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                filtroGenerico = JsonConvert.DeserializeObject<List<DAL.MasivoDeudaGeneral>>(response.Content);
+            }
+            gvDeuda.DataSource = filtroGenerico;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
-            Session.Add("registros_notificar", lstFiltrada);
+            Session.Add("registros_notificar", filtroGenerico);
         }
 
 
@@ -124,11 +207,6 @@ namespace NotificacionesCIDI.Secure
         }
 
 
-        protected void btnCerraSession_ServerClick(object sender, EventArgs e)
-        {
-
-        }
-
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
             try
@@ -141,12 +219,12 @@ namespace NotificacionesCIDI.Secure
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
 
-                var plantilla = BLL.NotasPlantillasBLL.getByPk(idPlantilla);
+                var plantilla = GetPlantillaByPk(idPlantilla);
                 string contenidoPlantilla = plantilla.contenido;
 
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
 
-                obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
+                obj.Nro_Emision = GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
@@ -164,12 +242,13 @@ namespace NotificacionesCIDI.Secure
                         obj2.Cod_estado_cidi = 0;
 
                         string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
-                        EnviarNotificacion(contenidoPersonalizado, item.cuit);
+                        InsertDetalleNotificacionIndividual(obj2);         
+                        EnviarNotificacion(contenidoPersonalizado, item.cuit,obj2.Nro_Emision,obj2.Nro_Notificacion);
                         lst.Add(obj2);
                     }
                 }
-                BLL.DetNotificacionGenetalBLL.insertMasivo(lst);
-                BLL.NotificacionGeneralBLL.insert(obj);
+                //InsertDetalleNotificacion(lst);
+                InsertNotificacionGeneral(obj);
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
                         var modalElement = document.getElementById('modalNotif');
@@ -195,6 +274,136 @@ namespace NotificacionesCIDI.Secure
         }
 
 
+        private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
+                requestInsert.AddJsonBody(lst);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private void InsertDetalleNotificacionIndividual(DAL.DetNotificacionGeneral obj)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("DetalleNotificador/insertIndividual", Method.Post);
+                requestInsert.AddJsonBody(obj);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private void InsertNotificacionGeneral(NotificacionGeneral obj)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("NotificadorGeneral/insertNuevaNotificacion", Method.Post);
+                requestInsert.AddJsonBody(obj);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private NotasPlantillas GetPlantillaByPk(int idPlantilla)
+        {
+            try
+            {
+                NotasPlantillas plantilla = null;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"Plantillas/getPlantillaByPk?id={idPlantilla}", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
+                }
+                return plantilla;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
+        private int GetMaxNroEmision()
+        {
+            try
+            {
+                int MaxValue = 0;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest("NotificadorGeneral/getMaxNroEmision", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    MaxValue = JsonConvert.DeserializeObject<Int32>(response.Content);
+                }
+                return MaxValue;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
 
         protected string uploadFile(FileUpload fU, string entidad)
         {
@@ -305,11 +514,8 @@ namespace NotificacionesCIDI.Secure
                 DAL.MasivoDeudaGeneral lst = new DAL.MasivoDeudaGeneral();
                 if (dt.Rows[i]["cuit"] != DBNull.Value)
                 {
-                    //lst.nombre = Convert.ToString(dt.Rows[i]["nombre"]);
                     lst.cuit = Convert.ToString(dt.Rows[i]["cuit"]);
-                    //lst.nom_calle = Convert.ToString(dt.Rows[i]["nom_calle"]);
 
-                    //lst.barrio = Convert.ToString(dt.Rows[i]["barrio"]);
 
                     lstConcepto.Add(lst);
                 }
@@ -327,8 +533,28 @@ namespace NotificacionesCIDI.Secure
             return resultado;
         }
 
-        private void EnviarNotificacion(string contenidoPersonalizado, string cuit)
+        private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion)
         {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}", Method.Post);
+                string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
+                request.AddHeader("Cookie", cookieHeaderValue);
+
+                RestResponse response = client.Execute(request);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
 
         }
@@ -385,17 +611,6 @@ namespace NotificacionesCIDI.Secure
 
                 }
             }
-        }
-
-        private void fillNotas()
-        {
-            var listaNotas = BLL.NotasPlantillasBLL.read()
-                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
-                   .ToList();
-
-            gvPlantilla.DataSource = listaNotas;
-            gvPlantilla.DataBind();
-
         }
 
 

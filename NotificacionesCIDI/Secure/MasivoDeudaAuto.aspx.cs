@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DAL;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace NotificacionesCIDI.Secure
 {
@@ -13,6 +17,7 @@ namespace NotificacionesCIDI.Secure
     {
         List<DAL.MasivoDeudaAuto> lstFiltrada = null;
         int subsistema;
+        string urlBase = ConfigurationManager.AppSettings["urlBase"];
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -26,7 +31,22 @@ namespace NotificacionesCIDI.Secure
 
         private void fillGrilla(int anio, bool exento)
         {
-            lstFiltrada = BLL.MasivoDeudaAutoBLL.read(anio, exento);
+
+            var options = new RestClientOptions(urlBase)
+            {
+                MaxTimeout = -1,
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest($"/NotificacionAuto/getNotificacionAuto?anio={anio}&exento={exento}", Method.Get);
+
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+               lstFiltrada = JsonConvert.DeserializeObject<List<DAL.MasivoDeudaAuto>>(response.Content);
+            }
+
             gvDeuda.DataSource = lstFiltrada;
             gvDeuda.DataBind();
             gvDeuda.UseAccessibleHeader = true;
@@ -35,7 +55,24 @@ namespace NotificacionesCIDI.Secure
 
         private void fillNotas()
         {
-            var listaNotas = BLL.NotasPlantillasBLL.read()
+
+            List<DAL.NotasPlantillas> lst = null;
+            var options = new RestClientOptions(urlBase)
+            {
+                MaxTimeout = -1,
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("Plantillas/getPlantillas", Method.Get);
+
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                 lst = JsonConvert.DeserializeObject<List<DAL.NotasPlantillas>>(response.Content);    
+            }
+
+            var listaNotas = lst
                    .Select(n => new { n.id, n.nom_plantilla, n.contenido })
                    .ToList();
 
@@ -77,14 +114,7 @@ namespace NotificacionesCIDI.Secure
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
         }
-
-
-        protected void btnCerraSession_ServerClick(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+       protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
             try
             {
@@ -95,13 +125,10 @@ namespace NotificacionesCIDI.Secure
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
-
-                var plantilla = BLL.NotasPlantillasBLL.getByPk(idPlantilla);
+                var plantilla = GetPlantillaByPk(idPlantilla);
                 string contenidoPlantilla = plantilla.contenido;
-
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
-
-                obj.Nro_Emision = BLL.NotificacionGeneralBLL.getMaxNroEmision() + 1;
+                obj.Nro_Emision = GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
@@ -124,8 +151,8 @@ namespace NotificacionesCIDI.Secure
                         lst.Add(obj2);
                     }
                 }
-                BLL.DetNotificacionGenetalBLL.insertMasivo(lst);
-                BLL.NotificacionGeneralBLL.insert(obj);
+                InsertDetalleNotificacion(lst);
+                InsertNotificacionGeneral(obj);
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
                         var modalElement = document.getElementById('modalNotif');
@@ -164,6 +191,115 @@ namespace NotificacionesCIDI.Secure
 
 
         }
+    
+        private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
+        {
+            try
+            {
+            var options = new RestClientOptions(urlBase)
+            {
+                MaxTimeout = -1,
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+
+            var client = new RestClient(options);
+            var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
+            requestInsert.AddJsonBody(lst);
+
+            RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private void InsertNotificacionGeneral(NotificacionGeneral obj)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("NotificadorGeneral/insertNuevaNotificacion", Method.Post);
+                requestInsert.AddJsonBody(obj);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private NotasPlantillas GetPlantillaByPk(int idPlantilla)
+        {
+            try
+            {
+                NotasPlantillas plantilla = null;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"Plantillas/getPlantillaByPk?id={idPlantilla}", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                     plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
+                }
+                return plantilla;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
+         private int GetMaxNroEmision()
+        {
+            try
+            {
+                int MaxValue = 0;
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest("NotificadorGeneral/getMaxNroEmision", Method.Get);
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+                    MaxValue = JsonConvert.DeserializeObject<Int32>(response.Content);
+                }
+                return MaxValue;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+
 
         protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -194,8 +330,6 @@ namespace NotificacionesCIDI.Secure
                     int id_plantilla = Convert.ToInt32(gvPlantilla.DataKeys[row.RowIndex]["id"]);
 
                     Session["id_plantilla"] = id_plantilla;
-
-
                 }
             }
         }

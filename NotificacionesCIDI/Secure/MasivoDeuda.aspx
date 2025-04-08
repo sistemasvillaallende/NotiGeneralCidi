@@ -45,9 +45,11 @@ EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBe
                                         
                                             <div class="col-md-3">
                                                 <label>Barrio</label>
-                                                <asp:ListBox ID="lstBarrios" Height="180" Width="280" CssClass="form-control" runat="server"
-                                                    SelectionMode="Multiple" AutoPostBack="true" 
-                                                    OnSelectedIndexChanged="lstBarrios_SelectedIndexChanged"></asp:ListBox>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" id="txtSearchBarrio" class="form-control" placeholder="Buscar barrio..." />
+                                                </div>
+                                                <asp:ListBox ID="lstBarrios" Height="203" CssClass="form-control" runat="server"
+                                            SelectionMode="Multiple"></asp:ListBox>
                                             </div>
                                         
                                             <div class="col-md-1">
@@ -58,8 +60,11 @@ EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBe
                                         
                                             <div class="col-md-2">
                                                 <label>Calles</label>
-                                                <asp:ListBox ID="lstCalles" Height="180" CssClass="form-control" runat="server" 
-                                                SelectionMode="Multiple"></asp:ListBox>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" id="txtSearchCalle" class="form-control" placeholder="Buscar calle..." />
+                                                </div>
+                                                <asp:ListBox ID="lstCalles" Height="203px" CssClass="form-control" runat="server" 
+                                            SelectionMode="Multiple"></asp:ListBox>
                                             </div>                                                                   
                                             <div class="col-md-3">   
                                                 <div class="row"> 
@@ -299,7 +304,101 @@ EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBe
                         }
                     }
 
+            //////////////////////////////////////////////// buscador de barrios /////////////////////////7
+            $(document).ready(function () {
+                $("#txtSearchBarrio").on("input", function () {
+                    var searchText = $(this).val().toLowerCase();
 
+                    // Show all options first
+                    $("#<%= lstBarrios.ClientID %> option").show();
+
+            // Hide options that don't match the search
+            if (searchText.length > 0) {
+                $("#<%= lstBarrios.ClientID %> option").each(function () {
+                    var text = $(this).text().toLowerCase();
+                    if (text.indexOf(searchText) === -1) {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+        });
+
+            $(document).ready(function () {
+                var $listBox = $("#<%= lstBarrios.ClientID %>");
+        var allOptions = [];
+
+        $listBox.find("option").each(function () {
+            allOptions.push({
+                value: $(this).val(),
+                text: $(this).text()
+            });
+        });
+
+        // Add event listener for the search input
+        $("#txtSearchBarrio").on("input", function () {
+            var searchText = $(this).val().toLowerCase();
+
+            $listBox.empty();
+
+            $.each(allOptions, function (i, option) {
+                if (searchText === '' || option.text.toLowerCase().indexOf(searchText) > -1) {
+                    $listBox.append(new Option(option.text, option.value));
+                }
+            });
+        });
+    });
+
+            //////////// fin buscador de barrios /////////////////////////
+            ////////// buscador de calles ////////
+
+
+            $(document).ready(function () {
+                var $listBox = $("#<%= lstCalles.ClientID %>");
+        var allOptions = [];
+        
+        $listBox.find("option").each(function() {
+            allOptions.push({
+                value: $(this).val(),
+                text: $(this).text()
+            });
+        });
+        
+        // Add event listener for the search input
+        $("#txtSearchCalle").on("input", function() {
+            var searchText = $(this).val().toLowerCase();
+            
+            // Clear the listbox
+            $listBox.empty();
+            
+            // Add back only the matching options
+            $.each(allOptions, function(i, option) {
+                if (searchText === '' || option.text.toLowerCase().indexOf(searchText) > -1) {
+                    $listBox.append(new Option(option.text, option.value));
+                }
+            });
+        });         
+    });
+
+    $(document).ready(function() {
+    var $listBox = $("#<%= lstCalles.ClientID %>");
+    var $txtDesde = $("#<%= txtDesde.ClientID %>");
+        var $txtHasta = $("#<%= txtHasta.ClientID %>");
+
+        $listBox.on("change", function () {
+            var selectedValue = $listBox.val();
+            if (selectedValue) {
+                $txtDesde.prop("disabled", false);
+                $txtHasta.prop("disabled", false);
+            } else {
+                $txtDesde.prop("disabled", true);
+                $txtHasta.prop("disabled", true);
+            }
+
+            $listBox.val(selectedValue);
+        });
+    });
+            /////////////////fin buscador de calles ////////////////7
 
           
         </script>

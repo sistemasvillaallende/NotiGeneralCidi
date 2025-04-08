@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DAL;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace NotificacionesCIDI.Secure
 {
@@ -13,6 +16,7 @@ namespace NotificacionesCIDI.Secure
 
         int nro_emision;
         int subsistema;
+        string urlBase = ConfigurationManager.AppSettings["urlBase"];
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -23,8 +27,8 @@ namespace NotificacionesCIDI.Secure
                     subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
                     Session["nro_emision"] = nro_emision;
                     Session["subsistema"] = subsistema;
-                    fillGrillas(nro_emision, subsistema);
-                    fillPlantilla(nro_emision);
+                    FillPlantilla(nro_emision);
+                    CargarDetallesNotificaciones(nro_emision, subsistema);
                 }
 
             }
@@ -33,29 +37,23 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
-    
-
-
-        protected void btnCerraSession_ServerClick(object sender, EventArgs e)
-        {
-
-        }
-        public void fillGrillas(int nro_emision, int subsistema)
+        public void fillGrillas(List<DAL.DetalleNotificadorDTO> lst)
         {
             try
             {
-                List<DetalleNotificadorDTO> lst = BLL.DetNotificacionGenetalBLL.getBySubsistemaDTO(nro_emision, subsistema);
                 gvMasivosAut.DataSource = lst;
                 gvMasivosAut.DataBind();
-
+                if (lst.Count > 0)
+                {
+                    gvMasivosAut.UseAccessibleHeader = true;
+                    gvMasivosAut.HeaderRow.TableSection = TableRowSection.TableHeader;
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
-
         protected string GetEstadoCidi(object estado)
         {
             int estadoCidi = Convert.ToInt32(estado);
@@ -71,19 +69,29 @@ namespace NotificacionesCIDI.Secure
                     return "Desconocido";
             }
         }
-
-
         protected void DDLEstEnv_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedValue = Convert.ToInt32(DDLEstEnv.SelectedValue);
             int nro_emision = Convert.ToInt32(Session["nro_emision"]);
             int subsistema = Convert.ToInt32(Session["subsistema"]);
+            List<DAL.DetalleNotificadorDTO> lst = null;
 
-            List<DetalleNotificadorDTO> lst = BLL.DetNotificacionGenetalBLL.getBySubsistemaDTO(nro_emision, subsistema);
+            var options = new RestClientOptions(urlBase)
+            {
+                MaxTimeout = -1,
+                RemoteCertificateValidationCallback = (senderr, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest($"DetalleNotificador/getBySubsistema?nro_emision={nro_emision}&subsistema={subsistema}", Method.Get);
+
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+                lst = JsonConvert.DeserializeObject<List<DAL.DetalleNotificadorDTO>>(response.Content);
+            }
 
             List<DetalleNotificadorDTO> filteredList = FilterData(lst, selectedValue);
-
-
             gvMasivosAut.DataSource = filteredList;
             gvMasivosAut.DataBind();
         }
@@ -104,16 +112,71 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        protected void fillPlantilla(int nro_emision){
+        public void CargarDetallesNotificaciones(int nro_emision, int subsistema)
+        {
+            try
+            {
 
-            NotificacionGeneral not = BLL.NotificacionGeneralBLL.readNotificacionByNroEmision(nro_emision);
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+                var client = new RestClient(options);
+                var request = new RestRequest($"DetalleNotificador/getBySubsistema?nro_emision={nro_emision}&subsistema={subsistema}", Method.Get);
 
-            NotasPlantillas plantilla = BLL.NotasPlantillasBLL.getByPk(not.id_plantilla);
+                RestResponse response = client.Execute(request);
 
-            divContenido.InnerHtml = plantilla.contenido;
-            //  divContenido.InnerHtml = "<p>Texto de prueba simple</p>";  
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+
+                    List<DAL.DetalleNotificadorDTO> lst = JsonConvert.DeserializeObject<List<DAL.DetalleNotificadorDTO>>(response.Content);
+                    fillGrillas(lst);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Excepción: {ex.Message}");
+                throw;
+            }
         }
 
-    }
 
+        public void FillPlantilla(int nro_emision)
+        {
+            NotificacionGeneral notificacion = null;
+            NotasPlantillas plantilla = null;
+
+            var options = new RestClientOptions(urlBase)
+            {
+                MaxTimeout = -1,
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest($"NotificadorGeneral/readNotificacionByNroEmision?nro_emision={nro_emision}", Method.Get);
+
+            RestResponse response = client.Execute(request);
+
+            if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+            {
+
+               notificacion = JsonConvert.DeserializeObject<DAL.NotificacionGeneral>(response.Content);
+            }
+            var requestPlantilla = new RestRequest($"Plantillas/getPlantillaByPk?id={notificacion.id_plantilla}", Method.Get);
+            RestResponse responsePlantilla = client.Execute(requestPlantilla);
+
+            if (responsePlantilla.IsSuccessful && !string.IsNullOrEmpty(responsePlantilla.Content))
+            {
+
+                 plantilla = JsonConvert.DeserializeObject<DAL.NotasPlantillas>(responsePlantilla.Content);
+
+            }
+
+            divContenido.InnerHtml = plantilla.contenido;
+
+        }
+    }
 }
+

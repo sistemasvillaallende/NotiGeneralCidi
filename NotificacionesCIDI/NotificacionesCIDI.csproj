@@ -2197,7 +2197,6 @@
     <Content Include="Secure\MasivoDeudaAuto.aspx" />
     <Content Include="Secure\MasivoDeudaGeneral.aspx" />
     <Content Include="Secure\MasivoDeudaIyC.aspx" />
-    <Content Include="Secure\NotificacionesCIDI.aspx" />
     <Content Include="Secure\NotificacionesGeneral.aspx" />
     <Content Include="Secure\Plantillas.aspx" />
     <Content Include="Web.config" />
@@ -2259,13 +2258,6 @@
     </Compile>
     <Compile Include="Secure\MasivoDeudaIyC.aspx.designer.cs">
       <DependentUpon>MasivoDeudaIyC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Secure\NotificacionesCIDI.aspx.cs">
-      <DependentUpon>NotificacionesCIDI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Secure\NotificacionesCIDI.aspx.designer.cs">
-      <DependentUpon>NotificacionesCIDI.aspx</DependentUpon>
     </Compile>
     <Compile Include="Secure\NotificacionesGeneral.aspx.cs">
       <DependentUpon>NotificacionesGeneral.aspx</DependentUpon>
@@ -2388,6 +2380,15 @@
       <Version>0.69.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="RestSharp">
+      <Version>112.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
+      <Version>6.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

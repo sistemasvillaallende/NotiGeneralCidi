@@ -55,7 +55,6 @@
     <Compile Include="BARRIOS.cs" />
     <Compile Include="CALLES.cs" />
     <Compile Include="CATE_DEUDA.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="DALBase.cs" />
     <Compile Include="DetalleNotificadorDTO.cs" />
     <Compile Include="Detalle_notificaciones_generaes_cidi.cs" />
