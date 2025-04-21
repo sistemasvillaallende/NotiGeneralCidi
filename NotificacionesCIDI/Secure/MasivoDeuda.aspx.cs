@@ -368,7 +368,8 @@ namespace NotificacionesCIDI.Secure
                         obj2.Cod_estado_cidi = 0;
 
                         string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
-                        EnviarNotificacion(contenidoPersonalizado, item.cuit); // aca ya tengo la plantilla con las variables
+                        InsertDetalleNotificacionIndividual(obj2);
+                        EnviarNotificacion(contenidoPersonalizado, item.cuit, obj2.Nro_Emision, obj2.Nro_Notificacion);
                         lst.Add(obj2);
                     }
                 }
@@ -412,6 +413,30 @@ namespace NotificacionesCIDI.Secure
                 var client = new RestClient(options);
                 var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
                 requestInsert.AddJsonBody(lst);
+
+                RestResponse responseInsert = client.Execute(requestInsert);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        private void InsertDetalleNotificacionIndividual(DAL.DetNotificacionGeneral obj)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("DetalleNotificador/insertIndividual", Method.Post);
+                requestInsert.AddJsonBody(obj);
 
                 RestResponse responseInsert = client.Execute(requestInsert);
 
@@ -533,8 +558,28 @@ namespace NotificacionesCIDI.Secure
             return resultado;
         }
 
-        private void EnviarNotificacion(string contenidoPersonalizado, string cuit)
+        private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion)
         {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}", Method.Post);
+                string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
+                request.AddHeader("Cookie", cookieHeaderValue);
+
+                RestResponse response = client.Execute(request);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
 
         }
