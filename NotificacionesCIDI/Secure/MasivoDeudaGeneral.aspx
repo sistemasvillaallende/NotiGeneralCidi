@@ -138,6 +138,7 @@
                                             <a class="btn btn-primary" onclick="abrirmodalConceptos();">
                                                 <i class="fa fa-upload" aria-hidden="true"></i> Cargar Excel
                                             </a>
+                                            <span class="text-muted ml-3">Nota: El archivo Excel debe contener únicamente una columna de CUIT en la primera columna.</span>
                                         </div>
                                         <div style="width:200px">
                                         <asp:Label ID="lblUploadStatus" runat="server" CssClass="alert alert-success d-block mt-3"  Visible="false"></asp:Label>
