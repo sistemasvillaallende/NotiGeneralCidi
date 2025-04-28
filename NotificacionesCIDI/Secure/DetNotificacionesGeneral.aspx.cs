@@ -186,6 +186,7 @@ namespace NotificacionesCIDI.Secure
                 string contenidoPlantilla = Convert.ToString(Session["plantilla"]);
                 int nroEmision = Convert.ToInt32(Session["nro_emision"]);
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
+                string subsistemaNombre = GetSubsistema(subsistema);
                 List<DAL.DetNotificacionGeneral> lstCompleted = CargarDetallesNotificacionesCompleta(nroEmision);
                 List<DAL.DetNotificacionGeneral> lstSeleccionados = new List<DAL.DetNotificacionGeneral>();
 
@@ -211,7 +212,7 @@ namespace NotificacionesCIDI.Secure
                         string nombreCompleto = item.Nombre;
                         SepararNombreApellido(nombreCompleto, out nombre, out apellido);
                         string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit);
-                        EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion);
+                        EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion,subsistemaNombre);
                     }
                 }
             }
@@ -220,6 +221,62 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
+
+      
+        //private DAL.Subsistema GetSubsistemaByTipo(int tipoSubsistema)
+        //{
+        //    try
+        //    {
+        //        DAL.Subsistema nombreSubsistema = null;
+        //        var options = new RestClientOptions(urlBase)
+        //        {
+        //            MaxTimeout = -1,
+        //            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+        //        };
+
+        //        var client = new RestClient(options);
+        //        var request = new RestRequest($"/Subsistema/getSubsistemaByTipo?tipo_subsitema={tipoSubsistema}", Method.Get);
+        //        RestResponse response = client.Execute(request);
+
+        //        if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+        //        {
+        //            nombreSubsistema = JsonConvert.DeserializeObject<DAL.Subsistema>(response.Content);
+        //        }
+        //        return nombreSubsistema;
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+
+        //}
+
+        // Tuve que colocar este switch ya que el endpoint arriba no me trae PERSONAL y GENERAL
+        private string GetSubsistema(object subsistema)
+        {
+            int sub = Convert.ToInt32(subsistema);
+            switch (sub)
+            {
+
+                case 1:
+                    return "Inmueble";
+                case 2:
+                    return "Facturacion";
+                case 3:
+                    return "Industria y Comercio";
+                case 4:
+                    return "Automotor";
+                case 8:
+                    return "General";
+                case 20:
+                    return "Recursos humanos";
+                default:
+                    return "Desconocido";
+            }
+        }
+
+
         private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
         {
             string resultado = plantilla;
@@ -229,7 +286,7 @@ namespace NotificacionesCIDI.Secure
             return resultado;
         }
 
-        private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion)
+        private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion, string subsistemaNombre)
         {
             try
             {
@@ -240,7 +297,7 @@ namespace NotificacionesCIDI.Secure
                 };
 
                 var client = new RestClient(options);
-                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}", Method.Post);
+                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}&subsistemaNombre={subsistemaNombre}", Method.Post);
                 string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
                 request.AddHeader("Cookie", cookieHeaderValue);
 

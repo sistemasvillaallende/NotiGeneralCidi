@@ -95,25 +95,6 @@ namespace NotificacionesCIDI.Secure
             divResultados.Visible = true;
         }
 
-        //protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        txtAnio.Text = "";
-        //        lstFiltrada = new List<DAL.MasivoDeudaAuto>();
-        //        Session.Remove("registros_notificar");
-
-        //        gvDeuda.DataSource = null;
-        //        gvDeuda.DataBind();
-        //        Response.Redirect(Request.RawUrl, false);
-        //        Context.ApplicationInstance.CompleteRequest();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        lblError.Text = "Error al limpiar los filtros: " + ex.Message;
-        //    }
-        //}
-
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
         }
@@ -328,7 +309,7 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-
+        
         protected void btnExportExcel_ServerClick(object sender, EventArgs e)
         {
             try
