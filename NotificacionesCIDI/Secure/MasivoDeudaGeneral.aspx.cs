@@ -26,6 +26,8 @@ namespace NotificacionesCIDI.Secure
             {
                 subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
                 Session["subsistema"] = subsistema;
+                Session["id_plantilla"] = null;
+                Session.Remove("id_plantilla");
                 fillNotas();
 
             }
@@ -73,72 +75,6 @@ namespace NotificacionesCIDI.Secure
         {
         }
 
-
-        //protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-
-        //        lstFiltrada = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
-        //        int nroNotificacion = 1;
-
-        //        NotificacionGeneral obj = new NotificacionGeneral();
-        //        List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
-        //        int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
-
-        //        var plantilla = GetPlantillaByPk(idPlantilla);
-        //        string contenidoPlantilla = plantilla.contenido;
-
-        //        int subsistema = Convert.ToInt32(Session["subsistema"]);
-
-        //        obj.Nro_Emision = GetMaxNroEmision() + 1;
-        //        obj.subsistema = subsistema;
-        //        obj.Cantidad_Reg = lstFiltrada.Count();
-        //        obj.id_plantilla = idPlantilla;
-
-        //        foreach (var item in lstFiltrada)
-        //        {
-        //            if (item.cuit != null && item.cuit.Length == 11)
-        //            {
-        //                DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
-        //                obj2.Nro_Emision = obj.Nro_Emision;
-        //                obj2.Nro_Notificacion = nroNotificacion;
-        //                nroNotificacion++;
-        //                obj2.Cuit = item.cuit;
-        //                obj2.Nombre = $"{item.nombre} {item.apellido}";
-        //                obj2.Cod_estado_cidi = 0;
-
-        //                string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
-        //                //InsertDetalleNotificacionIndividual(obj2);         
-        //                EnviarNotificacion(contenidoPersonalizado, item.cuit,obj2.Nro_Emision,obj2.Nro_Notificacion);
-        //                lst.Add(obj2);
-        //            }
-        //        }
-        //        //InsertDetalleNotificacion(lst);
-        //        InsertNotificacionGeneral(obj);
-
-        //        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
-        //                var modalElement = document.getElementById('modalNotif');
-        //                var myModal = new bootstrap.Modal(modalElement);
-
-        //                // Asegura que los botones de cierre funcionen
-        //                document.querySelector('#modalNotif .btn-close').addEventListener('click', function() {
-        //                    myModal.hide();
-        //                });
-
-        //                document.querySelector('#modalNotif .btn-secondary').addEventListener('click', function() {
-        //                    myModal.hide();
-        //                });
-
-        //                myModal.show();
-        //            ", true);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
 
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {

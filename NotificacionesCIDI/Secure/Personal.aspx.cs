@@ -26,6 +26,8 @@ namespace NotificacionesCIDI.Secure
             {
                 subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
                 Session["subsistema"] = subsistema;
+                Session["id_plantilla"] = null;
+                Session.Remove("id_plantilla");
                 fillClasificacionPersonal();
                 fillNotas();
 
