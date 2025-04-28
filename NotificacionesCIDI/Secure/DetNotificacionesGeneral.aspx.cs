@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -54,6 +55,7 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
+
         protected string GetEstadoCidi(object estado)
         {
             int estadoCidi = Convert.ToInt32(estado);
@@ -116,7 +118,6 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-
                 var options = new RestClientOptions(urlBase)
                 {
                     MaxTimeout = -1,
@@ -126,7 +127,6 @@ namespace NotificacionesCIDI.Secure
                 var request = new RestRequest($"DetalleNotificador/getBySubsistema?nro_emision={nro_emision}&subsistema={subsistema}", Method.Get);
 
                 RestResponse response = client.Execute(request);
-
 
                 if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
                 {
@@ -175,7 +175,153 @@ namespace NotificacionesCIDI.Secure
             }
 
             divContenido.InnerHtml = plantilla.contenido;
+            Session.Add("plantilla", plantilla.contenido);
+        }
 
+
+        protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+        {
+            try
+            {
+                string contenidoPlantilla = Convert.ToString(Session["plantilla"]);
+                int nroEmision = Convert.ToInt32(Session["nro_emision"]);
+                int subsistema = Convert.ToInt32(Session["subsistema"]);
+                List<DAL.DetNotificacionGeneral> lstCompleted = CargarDetallesNotificacionesCompleta(nroEmision);
+                List<DAL.DetNotificacionGeneral> lstSeleccionados = new List<DAL.DetNotificacionGeneral>();
+
+                foreach (GridViewRow row in gvMasivosAut.Rows)
+                {
+                    CheckBox cb = (CheckBox)row.FindControl("chkSelect");
+                    if (cb != null && cb.Checked)
+                    {
+                        int nroNotificacion = Convert.ToInt32(row.Cells[1].Text);
+                        var registroEncontrado = lstCompleted.FirstOrDefault(item => item.Nro_Notificacion == nroNotificacion);
+                        if (registroEncontrado != null)
+                        {
+                            lstSeleccionados.Add(registroEncontrado);
+                        }
+                    }
+                }
+
+                string nombre, apellido;
+                foreach (var item in lstSeleccionados)
+                {
+                    if (item.Cuit != null && item.Cuit.Length == 11)
+                    {
+                        string nombreCompleto = item.Nombre;
+                        SepararNombreApellido(nombreCompleto, out nombre, out apellido);
+                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit);
+                        EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
+        {
+            string resultado = plantilla;
+            resultado = resultado.Replace("{nombre}", nombre);
+            resultado = resultado.Replace("{apellido}", apellido);
+            resultado = resultado.Replace("{cuit}", cuit);
+            return resultado;
+        }
+
+        private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion)
+        {
+            try
+            {
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+
+                var client = new RestClient(options);
+                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}", Method.Post);
+                string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
+                request.AddHeader("Cookie", cookieHeaderValue);
+
+                RestResponse response = client.Execute(request);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
+
+        public List<DAL.DetNotificacionGeneral> CargarDetallesNotificacionesCompleta(int nro_emision)
+        {
+            try
+            {
+                List<DAL.DetNotificacionGeneral> lst = null;
+
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
+                var client = new RestClient(options);
+                var request = new RestRequest($"DetalleNotificador/readDetNotNotificaciones?nro_emision={nro_emision}", Method.Get);
+
+                RestResponse response = client.Execute(request);
+
+                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                {
+
+                     lst = JsonConvert.DeserializeObject<List<DAL.DetNotificacionGeneral>>(response.Content);
+
+                }
+
+                return lst;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Excepción: {ex.Message}");
+                throw;
+            }
+        }
+
+        public void SepararNombreApellido(string nombreCompleto, out string nombre, out string apellido)
+        {
+            string[] palabras = nombreCompleto.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (palabras.Length == 0)
+            {
+                nombre = string.Empty;
+                apellido = string.Empty;
+                return;
+            }
+
+            if (palabras.Length == 1)
+            {
+                nombre = palabras[0];
+                apellido = string.Empty;
+                return;
+            }
+
+            if (palabras.Length == 2)
+            {
+                nombre = palabras[0];
+                apellido = palabras[1];
+                return;
+            }
+
+            if (palabras.Length == 4)
+            {
+                nombre = string.Join(" ", palabras, 0, 2);
+                apellido = string.Join(" ", palabras, 2, 2);
+                return;
+            }
+
+            nombre = string.Join(" ", palabras, 0, palabras.Length - 1);
+            apellido = palabras[palabras.Length - 1];
         }
     }
 }

@@ -29,6 +29,25 @@ namespace NotificacionesCIDI.Secure
         }
 
 
+        // HACER UN ENDPOINT PARA SUBSISTEMAS DESPUES
+        protected string GetSubsistema(object subsistema)
+        {
+            int sub = Convert.ToInt32(subsistema);
+            switch (sub)
+            {
+
+                case 1:
+                    return "INMUEBLES";
+                case 2:
+                    return "FACTURACION";
+                case 3:
+                    return "INDYCOM";
+                case 4:
+                    return "AUTOMOTORES";
+                default:
+                    return "Desconocido";
+            }
+        }
         protected void btnCerraSession_ServerClick(object sender, EventArgs e)
         {
 

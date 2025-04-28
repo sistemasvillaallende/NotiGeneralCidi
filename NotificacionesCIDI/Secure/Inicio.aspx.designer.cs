@@ -15,33 +15,6 @@ namespace NotificacionesCIDI.Secure
     {
 
         /// <summary>
-        /// Control btnMasivoDeuda.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnMasivoDeuda;
-
-        /// <summary>
-        /// Control btnNotificacionesCIDI.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnNotificacionesCIDI;
-
-        /// <summary>
-        /// Control btnPlantillas.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPlantillas;
-
-        /// <summary>
         /// Control gvMasivosAut.
         /// </summary>
         /// <remarks>

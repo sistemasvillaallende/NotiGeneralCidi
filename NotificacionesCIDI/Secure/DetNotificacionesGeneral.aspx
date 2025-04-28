@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-7" style="padding: 20px; padding-bottom: 0px;">
-                            <h1 style="display: inline-block; margin-right: 20px;">Notificación</h1>
+                            <h1 style="display: inline-block; margin-right: 20px;">Notificación </h1>
                         </div>
                         <div class="col-3" style="padding: 20px; padding-bottom: 0px;">
                             <div class="form-group">
@@ -39,7 +39,7 @@
                 <div class="col-12">
                     <div class="table-responsive">
                         <asp:GridView AutoGenerateColumns="false" CssClass="table table-striped table-hover"
-                            ID="gvMasivosAut" runat="server">
+                            ID="gvMasivosAut" runat="server" DataKeyNames="Nro_Notificacion">
                             <Columns>
                                 <asp:TemplateField HeaderText="Seleccionar">
                                     <HeaderTemplate>
@@ -59,7 +59,11 @@
                                         </div>
                                     </ItemTemplate>                                    
                                 </asp:TemplateField>
-                                <asp:BoundField DataField="Denominacion" HeaderText="Denominacion" />
+                                <asp:TemplateField HeaderText="Denominacion">
+                                        <ItemTemplate>
+                                            <%# Eval("Denominacion") %>
+                                        </ItemTemplate>
+                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Estado Cidi">
                                     <ItemTemplate>
                                         <%# GetEstadoCidi(Eval("Cod_estado_cidi")) %>
@@ -96,10 +100,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button runat="server" id="btnGenerarNoti" type="button" class="btn btn-primary">Aceptar</button>
+                        <button runat="server" id="Button1" onserverclick="btnGenerarNoti_ServerClick"
+                            type="button" class="btn btn-outline-primary" >
+                            <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación </button>
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -118,6 +124,31 @@
                                 elm[i].click();
                         }
                 }
-                       
+            if (window.jQuery) {
+                $(document).ready(function () {
+                    $('#<%= Button1.ClientID %>').on('click', function (e) {
+                        var $btn = $(this);
+
+                        if ($btn.prop('disabled')) {
+                            e.preventDefault();
+                            return false;
+                        }
+
+                        $btn.prop('disabled', true)
+                            .addClass('disabled')
+                            .html('<span class="spinner-border spinner-border-sm mr-1"></span> Procesando...');
+
+                        setTimeout(function () {
+                            $btn.prop('disabled', false)
+                                .removeClass('disabled')
+                                .html('<span class="fa fa-sheet-plastic"></span> Generar notificación');
+                        }, 30000);
+
+                        return true;
+                    });
+                });
+                } else {
+                    console.error('jQuery is not loaded');
+                }      
         </script>
     </asp:Content>

@@ -1,6 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MasivoDeudaGeneral.aspx.cs"
-    Inherits="NotificacionesCIDI.Secure.MasivoDeudaGeneral" MasterPageFile="~/Master/MasterPage.master"
-    title="Notificador General" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Personal.aspx.cs" Inherits="NotificacionesCIDI.Secure.Personal"
+    MasterPageFile="~/Master/MasterPage.master"  title="Personal" %>
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
      <style>
@@ -14,19 +13,13 @@
     .modal-plantillas {
         display: flex;
         align-items: center;
-        min-height: calc(100% - 0.5rem);
+        min-height: calc(100% - 1rem);
             }
-
-    .modal-upload{
-         display: flex;
-         align-items: center;
-         min-height: calc(100% - 0.5rem);
-    }
 
     .modal-title {
 		text-align: center !important ;
 		font-size: 26px !important;
-		margin: 10px 15px 10px 0px !important;
+		margin: 15px  !important;
         
 	}
 
@@ -133,17 +126,15 @@
                                     <div class="col-md-12">
                                         <h1>Filtros</h1>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12" style="text-align: left;">
-                                            <a class="btn btn-primary" onclick="abrirmodalConceptos();">
-                                                <i class="fa fa-upload" aria-hidden="true"></i> Cargar Excel
-                                            </a>
-                                        </div>
-                                        <div style="width:200px">
-                                        <asp:Label ID="lblUploadStatus" runat="server" CssClass="alert alert-success d-block mt-3"  Visible="false"></asp:Label>
-                                        </div>
-                                    </div>
-                                </div>                                
+                                </div>
+                                <div class="row">                                   
+                                    <div class="col-md-4">
+                                        <label>Clasificacion Personal</label>
+                                        <asp:ListBox ID="lstClasificacionPersonal" Height="203" CssClass="form-control" runat="server"
+                                            SelectionMode="Multiple"></asp:ListBox>
+                                    </div>             
+                                    <br />
+                                </div>
                             <div class="row">
                                 <div class="col-md-12" style="text-align: right;">
                                     <button type="button" class="btn btn-outline-primary" id="btnFiltros" runat="server"
@@ -151,11 +142,11 @@
                                         <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
                                     </button>
                                 </div>
-                            </div>
                             <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="true" Text="">
                             </asp:Label>
+                            </div> 
                             </div>
-                        </div>
+                          </div>   
                         <asp:HiddenField ID="MyHiddenControl" value="name" runat="server" />
                         <asp:HiddenField ID="MyHiddenControl2" value="name" runat="server"
                             ValidateRequestMode="Disabled" />
@@ -170,8 +161,8 @@
                             <div class="row">
                                 <div class="12" style="text-align: right">
                                     <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
-                                        <i class="fa fa-list" aria-hidden="true"></i> Plantilla
-                                    </a>
+                                        <i class="fa fa-list" aria-hidden="true"></i> Plantillas
+                                    </a>                
                                     <button runat="server" id="btnGenerarNoti"
                                         onserverclick="btnGenerarNoti_ServerClick"
                                         type="button" class="btn btn-outline-primary" >
@@ -186,12 +177,11 @@
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-12"
                                     style="max-height: 75vh; overflow-y: auto; border: solid lightgray; border-radius: 15px;">
-                                    <div class="table-responsive mt-3">
-                                        <asp:GridView ID="gvConceptos" CssClass="table table-striped table-hover"
-                                            AutoGenerateColumns="false" OnRowCommand="gvConceptos_RowCommand"
-                                            OnRowDeleting="gvConceptos_RowDeleting" DataKeyNames="cuit"
-                                            EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
-                                            ForeColor="#333333" GridLines="None">
+                                    <div class="table-responsive">
+                                        <asp:GridView ID="gvDeuda" CssClass="table table-striped table-hover"
+                                            runat="server" OnRowDataBound="gvDeuda_RowDataBound"
+                                            AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
+                                            GridLines="None">
                                             <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
                                             <Columns>
                                                 <asp:TemplateField HeaderText="Seleccionar">
@@ -203,12 +193,28 @@
                                                         <asp:CheckBox ID="chkSelect" runat="server" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:BoundField DataField="Cuit" ControlStyle-Width="10%"
-                                                     HeaderText="CUIT" />
-                                                 <asp:BoundField DataField="Nombre" ControlStyle-Width="10%"
-                                                     HeaderText="Nombre" />
-                                                 <asp:BoundField DataField="Apellido" ControlStyle-Width="10%"
-                                                     HeaderText="Apellido" />
+                                                <asp:BoundField DataField="cuil" ControlStyle-Width="10%"
+                                                    HeaderText="Cuil" />
+                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
+                                                    HeaderText="Nombre completo" />                                               
+                                                <asp:BoundField DataField="des_clasif_per" ControlStyle-Width="10%"
+                                                    HeaderText="Clasificacion" />
+                                            </Columns>
+                                        </asp:GridView>
+                                    </div>
+                                    <div class="table-responsive mt-3">
+                                        <asp:GridView ID="gvConceptos" CssClass="table table-striped table-hover"
+                                            AutoGenerateColumns="false" OnRowCommand="gvConceptos_RowCommand"
+                                            DataKeyNames="cuit"
+                                            EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
+                                            ForeColor="#333333" GridLines="None">
+                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                                            <Columns>
+                                                <asp:BoundField DataField="Cuit" ControlStyle-Width="10%"
+                                                    HeaderText="CUIT">
+                                                    <HeaderStyle HorizontalAlign="Center" />
+                                                    <ItemStyle HorizontalAlign="left" />
+                                                </asp:BoundField>
                                             </Columns>
                                         </asp:GridView>
                                     </div>
@@ -219,52 +225,28 @@
                 </section>
             </div>
         </div>
-          <div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="ModalErrorLabel" aria-hidden="true">
-              <div class="modal-dialog modal-confirm">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <div class="icon-box">
-	                   <i class="fa fa-exclamation-circle fa-4x" aria-hidden="true"></i>
-                          </div>
-                           <div style="width: 100%; text-align: center;">
-                              <h4 class="modal-title">Error</h4>
-                          </div>
-                      </div>
-                      <div class="modal-body">
-                          <p style="text-align: center">
-                               <span id="modalErrorTexto"></span>
-                          </p>
-                      </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cerrar</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        <div class="modal fade" id="modalConceptos">
-            <div class="modal-dialog modal-upload">
-                <div class="modal-content">
-                    <div class="modal-header">                       
-                        <h4 class="modal-title">Subir lista de Cuit</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label  class="pt-2 pb-3">Subir archivo</label>
-                            <asp:FileUpload ID="fUploadConceptos" CssClass="form-control" runat="server" onchange="hideErrorMessage()" />
-                            <asp:Label ID="lblFileError" runat="server" CssClass="text-danger" 
-                                Text="*Archivo no ha sido seleccionado" Visible="false"></asp:Label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>
-                        <asp:Button ID="btnConceptos_x_legajos" CssClass="btn btn-primary"
-                            OnClientClick="this.disabled=true;this.value = 'Procesando...'" UseSubmitBehavior="false"
-                            OnClick="btnConceptos_x_legajos_Click" runat="server" Text="Aceptar" />
-                    </div>
-                </div>
-            </div>
-        </div>
+         <div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="ModalErrorLabel" aria-hidden="true">
+             <div class="modal-dialog modal-confirm">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <div class="icon-box">
+			                   <i class="fa fa-exclamation-circle fa-4x" aria-hidden="true"></i>
+                         </div>
+                          <div style="width: 100%; text-align: center;">
+                             <h4 class="modal-title">Error</h4>
+                         </div>
+                     </div>
+                     <div class="modal-body">
+                         <p style="text-align: center">
+                              <span id="modalErrorTexto"></span>
+                         </p>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cerrar</button>
+                     </div>
+                 </div>
+             </div>
+         </div>
     <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-plantillas">
             <div class="modal-content">
@@ -277,7 +259,9 @@
                         <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
                             OnRowDataBound="gvPlantilla_RowDataBound"
                             OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
-                            CellPadding="4" ForeColor="#333333" GridLines="None" EnableViewState="true"
+                            ForeColor="#333333" GridLines="None" EnableViewState="true"
+                            ShowHeader="false" ShowFooter="false"
+                            CellPadding="0" CellSpacing="0"
                             DataKeyNames="id,contenido">
                             <AlternatingRowStyle BackColor="White" ForeColor="#284775">
                             </AlternatingRowStyle>
@@ -309,11 +293,7 @@
         <script>
              function abrirModalPlantillas() {
                         $('#plantillaModalNotas').modal('show');
-            }
-
-            function abrirmodalConceptos() {
-                $('#modalConceptos').modal('show');
-            }
+                    }
                   
                     // Funcion para poder seelccionar el check cuando aprieto cualquier lugar del gridview
                     function SeleccionarFila(fila, checkBoxId) {
@@ -338,7 +318,7 @@
                         }
                     }
 
-// para agregar spinner en generar notificaciones
+            // para agregar spinner en generar notificaciones
             if (window.jQuery) {
                 $(document).ready(function() {
                     $('#<%= btnGenerarNoti.ClientID %>').on('click', function(e) {
@@ -366,12 +346,6 @@
                 console.error('jQuery is not loaded');
             }
 
-
-            function hideErrorMessage() {
-                // Hide the error message when a file is selected
-                document.getElementById('<%= lblFileError.ClientID %>').style.display = 'none';
-            }
-
             // para seleccionar todos los checkboxs
             function SelectAllCheckboxes(spanChk) {
                 var oItem = spanChk.children;
@@ -385,5 +359,7 @@
                             elm[i].click();
                     }
             }
+
+ 
         </script>
     </asp:Content>

@@ -132,15 +132,6 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divResultados;
 
         /// <summary>
-        /// Control btnClearFiltros.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnClearFiltros;
-
-        /// <summary>
         /// Control btnGenerarNoti.
         /// </summary>
         /// <remarks>

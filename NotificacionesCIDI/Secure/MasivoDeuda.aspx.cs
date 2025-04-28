@@ -227,32 +227,6 @@ namespace NotificacionesCIDI.Secure
             divResultados.Visible = true;
         }
 
-        protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
-        {
-            try
-            {
-                txtDesde.Text = "";
-                txtHasta.Text = "";
-                lstBarrios.ClearSelection();
-                lstCalles.ClearSelection();
-                lstZonas.ClearSelection();
-                lstCatDeuda.ClearSelection();
-
-
-                lstFiltrada = new List<DAL.MasivoDeuda>();
-                Session.Remove("registros_notificar");
-
-                gvDeuda.DataSource = null;
-                gvDeuda.DataBind();
-                Response.Redirect(Request.RawUrl, false);
-                Context.ApplicationInstance.CompleteRequest();
-            }
-            catch (Exception ex)
-            {
-                lblError.Text = "Error al limpiar los filtros: " + ex.Message;
-            }
-        }
-
         protected void btnExport_ServerClick(object sender, EventArgs e)
         {
             ExportToExcel("Export", gvDeuda);
@@ -331,25 +305,47 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
+                List<DAL.MasivoDeuda> todosLosRegistros = (List<DAL.MasivoDeuda>)Session["registros_notificar"];
 
+                List<DAL.MasivoDeuda> lstFiltrada = new List<DAL.MasivoDeuda>();
 
-                lstFiltrada = (List<DAL.MasivoDeuda>)Session["registros_notificar"];
+                foreach (GridViewRow row in gvDeuda.Rows)
+                {
+                    CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSelect");
+
+                    if (chkSeleccionar != null && chkSeleccionar.Checked)
+                    {
+                        int index = row.RowIndex;
+                        lstFiltrada.Add(todosLosRegistros[index]);
+                    }
+                }
+
+                if (lstFiltrada.Count == 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
+                    "$('#modalErrorTexto').text('Debe seleccionar algun registro.');" +
+                    "$('#modalError').modal('show');", true);
+                    return;
+                }
+
                 int nroNotificacion = 1;
-
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
-
+                if (Session["id_plantilla"] == null)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
+                    "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
+                    "$('#modalError').modal('show');", true);
+                    return;
+                }
                 var plantilla = GetPlantillaByPk(idPlantilla);
                 string contenidoPlantilla = plantilla.contenido;
-
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
-
                 obj.Nro_Emision = GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
-
                 foreach (var item in lstFiltrada)
                 {
                     if (item.cuit != null && item.cuit.Length == 11)
@@ -366,39 +362,18 @@ namespace NotificacionesCIDI.Secure
                         obj2.Cuit = item.cuit;
                         obj2.Nombre = $"{item.nombre} {item.apellido}";
                         obj2.Cod_estado_cidi = 0;
-
-                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
-                        InsertDetalleNotificacionIndividual(obj2);
-                        EnviarNotificacion(contenidoPersonalizado, item.cuit, obj2.Nro_Emision, obj2.Nro_Notificacion);
                         lst.Add(obj2);
                     }
                 }
                 InsertDetalleNotificacion(lst);
                 InsertNotificacionGeneral(obj);
-
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
-                        var modalElement = document.getElementById('modalNotif');
-                        var myModal = new bootstrap.Modal(modalElement);
-                        
-                        // Asegura que los botones de cierre funcionen
-                        document.querySelector('#modalNotif .btn-close').addEventListener('click', function() {
-                            myModal.hide();
-                        });
-                        
-                        document.querySelector('#modalNotif .btn-secondary').addEventListener('click', function() {
-                            myModal.hide();
-                        });
-                        
-                        myModal.show();
-                    ", true);
-
+                Response.Redirect($"/Secure/DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
 
         private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
         {
@@ -424,29 +399,6 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        private void InsertDetalleNotificacionIndividual(DAL.DetNotificacionGeneral obj)
-        {
-            try
-            {
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-
-                var client = new RestClient(options);
-                var requestInsert = new RestRequest("DetalleNotificador/insertIndividual", Method.Post);
-                requestInsert.AddJsonBody(obj);
-
-                RestResponse responseInsert = client.Execute(requestInsert);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
 
         private void InsertNotificacionGeneral(NotificacionGeneral obj)
         {
@@ -501,7 +453,6 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-
         private int GetMaxNroEmision()
         {
             try
@@ -530,7 +481,6 @@ namespace NotificacionesCIDI.Secure
             }
 
         }
-
 
         protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
         {

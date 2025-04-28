@@ -29,7 +29,7 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        private void fillGrilla(int anio, bool exento)
+        private void fillGrilla(int anioDesde,int anioHasta, bool exento)
         {
 
             var options = new RestClientOptions(urlBase)
@@ -38,7 +38,7 @@ namespace NotificacionesCIDI.Secure
                 RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
             };
             var client = new RestClient(options);
-            var request = new RestRequest($"/NotificacionAuto/getNotificacionAuto?anio={anio}&exento={exento}", Method.Get);
+            var request = new RestRequest($"/NotificacionAuto/getNotificacionAuto?desde={anioDesde}&hasta={anioHasta}&exento={exento}", Method.Get);
 
             RestResponse response = client.Execute(request);
 
@@ -84,47 +84,77 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
-            int anio = Convert.ToInt32(txtAnio.Text);
+            int anioDesde = Convert.ToInt32(txtAnio.Text);
+            int anioHasta = Convert.ToInt32(TextBox1.Text);
             bool exento = chkExento.Checked;
 
-            fillGrilla(anio, exento);
+            fillGrilla(anioDesde,anioHasta, exento);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
 
-        protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
-        {
-            try
-            {
-                txtAnio.Text = "";
-                lstFiltrada = new List<DAL.MasivoDeudaAuto>();
-                Session.Remove("registros_notificar");
+        //protected void btnClearFiltros_ServerClick(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        txtAnio.Text = "";
+        //        lstFiltrada = new List<DAL.MasivoDeudaAuto>();
+        //        Session.Remove("registros_notificar");
 
-                gvDeuda.DataSource = null;
-                gvDeuda.DataBind();
-                Response.Redirect(Request.RawUrl, false);
-                Context.ApplicationInstance.CompleteRequest();
-            }
-            catch (Exception ex)
-            {
-                lblError.Text = "Error al limpiar los filtros: " + ex.Message;
-            }
-        }
+        //        gvDeuda.DataSource = null;
+        //        gvDeuda.DataBind();
+        //        Response.Redirect(Request.RawUrl, false);
+        //        Context.ApplicationInstance.CompleteRequest();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        lblError.Text = "Error al limpiar los filtros: " + ex.Message;
+        //    }
+        //}
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
         }
-       protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+
+
+        protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
             try
             {
+                List<DAL.MasivoDeudaAuto> todosLosRegistros = (List<DAL.MasivoDeudaAuto>)Session["registros_notificar"];
 
-                lstFiltrada = (List<DAL.MasivoDeudaAuto>)Session["registros_notificar"];
+                List<DAL.MasivoDeudaAuto> lstFiltrada = new List<DAL.MasivoDeudaAuto>();
+
+                foreach (GridViewRow row in gvDeuda.Rows)
+                {
+                    CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSelect");
+
+                    if (chkSeleccionar != null && chkSeleccionar.Checked)
+                    {
+                        int index = row.RowIndex;
+                        lstFiltrada.Add(todosLosRegistros[index]);
+                    }
+                }
+
+                if (lstFiltrada.Count == 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
+                    "$('#modalErrorTexto').text('Debe seleccionar algun registro.');" +
+                    "$('#modalError').modal('show');", true);
+                    return;
+                }
+
                 int nroNotificacion = 1;
-
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
+                if (Session["id_plantilla"] == null )
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
+                    "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
+                    "$('#modalError').modal('show');", true);
+                    return;
+                }
                 var plantilla = GetPlantillaByPk(idPlantilla);
                 string contenidoPlantilla = plantilla.contenido;
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
@@ -132,7 +162,6 @@ namespace NotificacionesCIDI.Secure
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
-
                 foreach (var item in lstFiltrada)
                 {
                     if (item.cuit != null && item.cuit.Length == 11)
@@ -145,32 +174,12 @@ namespace NotificacionesCIDI.Secure
                         obj2.Cuit = item.cuit;
                         obj2.Nombre = $"{item.nombre} {item.apellido}";
                         obj2.Cod_estado_cidi = 0;
-
-                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, item.nombre, item.apellido, item.cuit);
-                        InsertDetalleNotificacionIndividual(obj2);
-                        EnviarNotificacion(contenidoPersonalizado, item.cuit, obj2.Nro_Emision, obj2.Nro_Notificacion);
                         lst.Add(obj2);
                     }
                 }
                 InsertDetalleNotificacion(lst);
                 InsertNotificacionGeneral(obj);
-
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", @"
-                        var modalElement = document.getElementById('modalNotif');
-                        var myModal = new bootstrap.Modal(modalElement);
-                        
-                        // Asegura que los botones de cierre funcionen
-                        document.querySelector('#modalNotif .btn-close').addEventListener('click', function() {
-                            myModal.hide();
-                        });
-                        
-                        document.querySelector('#modalNotif .btn-secondary').addEventListener('click', function() {
-                            myModal.hide();
-                        });
-                        
-                        myModal.show();
-                    ", true);
-
+                Response.Redirect($"/Secure/DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
             }
             catch (Exception ex)
             {
@@ -178,64 +187,6 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
-        {
-            string resultado = plantilla;
-            resultado = resultado.Replace("{nombre}", nombre);
-            resultado = resultado.Replace("{apellido}", apellido);
-            resultado = resultado.Replace("{cuit}", cuit);
-            return resultado;
-        }
-
-        private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion)
-        {
-            try
-            {
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-
-                var client = new RestClient(options);
-                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}", Method.Post);
-                string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
-                request.AddHeader("Cookie", cookieHeaderValue);
-
-                RestResponse response = client.Execute(request);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-
-        }
-
-        private void InsertDetalleNotificacionIndividual(DAL.DetNotificacionGeneral obj)
-        {
-            try
-            {
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-
-                var client = new RestClient(options);
-                var requestInsert = new RestRequest("DetalleNotificador/insertIndividual", Method.Post);
-                requestInsert.AddJsonBody(obj);
-
-                RestResponse responseInsert = client.Execute(requestInsert);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
         private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
         {
             try
@@ -313,7 +264,6 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-
          private int GetMaxNroEmision()
         {
             try
@@ -342,8 +292,6 @@ namespace NotificacionesCIDI.Secure
             }
 
         }
-
-
 
         protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -405,12 +353,13 @@ namespace NotificacionesCIDI.Secure
                     gvDeuda.AllowPaging = false;
                     gvDeuda.DataSource = lstFiltrada;
                     gvDeuda.DataBind();
-
+                    gvDeuda.Columns[0].Visible = false;
                     gvDeuda.HeaderStyle.ForeColor = System.Drawing.Color.Black;
                     gvDeuda.HeaderStyle.BackColor = System.Drawing.Color.LightGray;
                     gvDeuda.RowStyle.BackColor = System.Drawing.Color.White;
 
                     gvDeuda.RenderControl(hw);
+                    gvDeuda.Columns[0].Visible = true;
                     Response.Write(sw.ToString());
                     Response.End();
                 }

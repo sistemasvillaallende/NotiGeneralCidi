@@ -52,6 +52,29 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
+        protected string GetSubsistema(object subsistema)
+        {
+            int sub = Convert.ToInt32(subsistema);
+            switch (sub)
+            {
+                
+                case 1:
+                    return "INMUEBLES";
+                case 2:
+                    return "FACTURACION";
+                case 3:
+                    return "INDYCOM";
+                case 4:
+                    return "AUTOMOTORES";
+                case 8:
+                    return "GENERAL";
+                case 20:
+                    return "PERSONAL";
+                default:
+                    return "Desconocido";
+            }
+        }
+
         public void CargarNotificacionGeneral(int subsistema)
         {
             try

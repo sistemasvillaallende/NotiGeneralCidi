@@ -28,16 +28,14 @@
                 <asp:GridView AutoGenerateColumns="false" ClientIDMode="Static"
                     CssClass="table table-striped table-hover" ID="gvMasivosAut" runat="server">
                     <Columns>
-                        <asp:BoundField DataField="Nro_Emision" HeaderText="Emision" />
-                        <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha" DataFormatString="{0:d}" />
-                        <asp:BoundField DataField="Fecha_Vencimiento" HeaderText="Fecha Vencimiento"
-                            DataFormatString="{0:d}" />
-                        <asp:BoundField DataField="Cod_tipo_notificacion" HeaderText="Cod. Notificacion" />
-                        <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" />
-                        <asp:BoundField DataField="Subsistema" HeaderText="Subsistema" />
+                        <asp:BoundField DataField="Nro_Emision" HeaderText="Emision Nro." />
+                        <asp:BoundField DataField="Fecha_Emision" HeaderText="Fecha de Emision" DataFormatString="{0:d}" />
+                        <asp:TemplateField HeaderText="Subsistema">
+                            <ItemTemplate>
+                                <%# GetSubsistema(Eval("Subsistema")) %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
                         <asp:BoundField DataField="Cantidad_Reg" HeaderText="Registros" />
-                        <asp:BoundField DataField="Total" HeaderText="Total" />
-                        <asp:BoundField DataField="Porcentaje" HeaderText="Porcentaje" />
                         <asp:TemplateField>
                             <ItemTemplate>
                                 <a href='DetNotificacionesGeneral.aspx?nro_emision=<%# Eval("Nro_Emision") %>'><span

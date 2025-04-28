@@ -2198,6 +2198,7 @@
     <Content Include="Secure\MasivoDeudaGeneral.aspx" />
     <Content Include="Secure\MasivoDeudaIyC.aspx" />
     <Content Include="Secure\NotificacionesGeneral.aspx" />
+    <Content Include="Secure\Personal.aspx" />
     <Content Include="Secure\Plantillas.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2265,6 +2266,13 @@
     </Compile>
     <Compile Include="Secure\NotificacionesGeneral.aspx.designer.cs">
       <DependentUpon>NotificacionesGeneral.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Secure\Personal.aspx.cs">
+      <DependentUpon>Personal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Secure\Personal.aspx.designer.cs">
+      <DependentUpon>Personal.aspx</DependentUpon>
     </Compile>
     <Compile Include="Secure\Plantillas.aspx.cs">
       <DependentUpon>Plantillas.aspx</DependentUpon>
