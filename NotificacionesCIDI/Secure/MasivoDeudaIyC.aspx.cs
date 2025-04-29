@@ -209,7 +209,19 @@ namespace NotificacionesCIDI.Secure
             int hasta = !string.IsNullOrWhiteSpace(txtHasta.Text)
                 ? Convert.ToInt32(txtHasta.Text)
                 : 0;
-            bool activo = chkActivo.Checked;
+            bool activo = false;//chkExento.Checked;
+
+            switch (DDLExento.SelectedItem.Value)
+            {
+                case "0":
+                    activo = false;
+                    break;
+                case "1":
+                    activo = true;
+                    break;
+                default:
+                    break;
+            }
             int cod_calle = (lstCalles.SelectedItem != null && !string.IsNullOrWhiteSpace(lstCalles.SelectedItem.Value))
                 ? Convert.ToInt32(lstCalles.SelectedItem.Value)
                 : 0;

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DAL;
+using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using Newtonsoft.Json;
 using RestSharp;
@@ -31,7 +32,7 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        private void fillGrilla(int anioDesde,int anioHasta, bool exento)
+        private void fillGrilla(int anioDesde, int anioHasta, bool exento)
         {
 
             var options = new RestClientOptions(urlBase)
@@ -46,7 +47,7 @@ namespace NotificacionesCIDI.Secure
 
             if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
             {
-               lstFiltrada = JsonConvert.DeserializeObject<List<DAL.MasivoDeudaAuto>>(response.Content);
+                lstFiltrada = JsonConvert.DeserializeObject<List<DAL.MasivoDeudaAuto>>(response.Content);
             }
 
             gvDeuda.DataSource = lstFiltrada;
@@ -71,7 +72,7 @@ namespace NotificacionesCIDI.Secure
 
             if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
             {
-                 lst = JsonConvert.DeserializeObject<List<DAL.NotasPlantillas>>(response.Content);    
+                lst = JsonConvert.DeserializeObject<List<DAL.NotasPlantillas>>(response.Content);
             }
 
             var listaNotas = lst
@@ -88,9 +89,22 @@ namespace NotificacionesCIDI.Secure
         {
             int anioDesde = Convert.ToInt32(txtAnio.Text);
             int anioHasta = Convert.ToInt32(TextBox1.Text);
-            bool exento = chkExento.Checked;
 
-            fillGrilla(anioDesde,anioHasta, exento);
+            bool exento = false;//chkExento.Checked;
+
+            switch (DDLExento.SelectedItem.Value)
+            {
+                case "0":
+                    exento = false;
+                    break;
+                case "1":
+                    exento = true;
+                    break;
+                default:
+                    break;
+            }
+
+            fillGrilla(anioDesde, anioHasta, exento);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
@@ -131,7 +145,7 @@ namespace NotificacionesCIDI.Secure
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
                 int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
-                if (Session["id_plantilla"] == null )
+                if (Session["id_plantilla"] == null)
                 {
                     ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
                     "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
@@ -174,17 +188,17 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-            var options = new RestClientOptions(urlBase)
-            {
-                MaxTimeout = -1,
-                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-            };
+                var options = new RestClientOptions(urlBase)
+                {
+                    MaxTimeout = -1,
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
 
-            var client = new RestClient(options);
-            var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
-            requestInsert.AddJsonBody(lst);
+                var client = new RestClient(options);
+                var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
+                requestInsert.AddJsonBody(lst);
 
-            RestResponse responseInsert = client.Execute(requestInsert);
+                RestResponse responseInsert = client.Execute(requestInsert);
 
             }
             catch (Exception)
@@ -235,7 +249,7 @@ namespace NotificacionesCIDI.Secure
 
                 if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
                 {
-                     plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
+                    plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
                 }
                 return plantilla;
 
@@ -247,7 +261,7 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-         private int GetMaxNroEmision()
+        private int GetMaxNroEmision()
         {
             try
             {
@@ -309,7 +323,7 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        
+
         protected void btnExportExcel_ServerClick(object sender, EventArgs e)
         {
             try

@@ -15,7 +15,7 @@ namespace DAL
             try
             {
                 return new SqlConnection(System.Configuration.
-                    ConfigurationManager.ConnectionStrings["DBMain"].ConnectionString);
+                    ConfigurationManager.ConnectionStrings["DBMain2"].ConnectionString);
             }
             catch (Exception ex)
             {
