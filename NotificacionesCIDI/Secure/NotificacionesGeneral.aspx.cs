@@ -22,6 +22,30 @@ namespace NotificacionesCIDI.Secure
                 if (!IsPostBack)
                 {
                     subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
+                    hIdSubsistema.Value = subsistema.ToString();
+                    switch (subsistema)
+                    {
+                        case 1:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-home");
+                            spanSubsistema.InnerHtml = "Inmuebles";
+                            break;
+                        case 2:
+
+                            break;
+                        case 3:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-industry");
+                            spanSubsistema.InnerHtml = "Industria y Comercio";
+                            break;
+                        case 4:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-car-side");
+                            spanSubsistema.InnerHtml = "Automotores";
+                            break;
+                        default:
+                            break;
+                    }
                     CargarNotificacionGeneral(subsistema);
                 }
             }
@@ -57,7 +81,7 @@ namespace NotificacionesCIDI.Secure
             int sub = Convert.ToInt32(subsistema);
             switch (sub)
             {
-                
+
                 case 1:
                     return "INMUEBLES";
                 case 2:
@@ -95,7 +119,7 @@ namespace NotificacionesCIDI.Secure
                 {
 
                     List<DAL.NotificacionGeneral> lst = JsonConvert.DeserializeObject<List<DAL.NotificacionGeneral>>(response.Content);
-                    fillGrillas(lst,subsistema);
+                    fillGrillas(lst, subsistema);
                 }
                 else
                 {

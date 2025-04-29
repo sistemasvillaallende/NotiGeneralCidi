@@ -23,13 +23,16 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:HiddenField ID="hIdSubsistema" runat="server" />
     <div class="container-fluid" style="padding-right: 4%; padding-left: 2%;">
         <div class="row">
             <div class="col-12" style="padding: 0px;">
                 <h1 style="font-size: 36px !important; font-weight: 600 !important; margin-bottom: 5px !important; display: flex !important; align-items: start !important;">
-                    <span class="fa fa-car-side" style="color: #367fa9; border-right: solid 3px; padding-right: 10px;"></span>
-                    <span style="font-size: 20px !important; padding-left: 8px !important; margin-top: -5px !important;">Industria y Comercio</span> </h1>
-                <h1 style="font-size: 16px !important; font-weight: 500 !important; color: gray !important; margin-left: 65px !important; margin-top: -24px !important;">Notificaciones - Listado</h1>
+                    <span id="spanIcono" runat="server" class="fa fa-car-side" style="color: #367fa9; border-right: solid 3px; padding-right: 10px;"></span>
+                    <span id="spanSubsistema" runat="server" 
+                        style="font-size: 20px !important;
+                        padding-left: 8px !important; margin-top: -5px !important;"></span> </h1>
+                <h1 style="font-size: 16px !important; font-weight: 500 !important; color: gray !important; margin-left: 65px !important; margin-top: -24px !important;">Listado de Notificaciones</h1>
                 <hr style="margin-top: 5px; border: 2px solid #c09e76; margin-bottom: 20px; opacity: 1;">
             </div>
         </div>

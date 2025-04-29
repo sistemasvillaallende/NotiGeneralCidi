@@ -137,7 +137,7 @@
               <!-- Nuevo elemento de menú: Inicio -->
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingInicio">
-                  <a class="accordion-button" href="/Secure/Inicio.aspx" style="text-decoration: none">
+                  <a class="accordion-button" href="../Secure/Inicio.aspx" style="text-decoration: none">
                     Inicio
                   </a>
                 </h2>
@@ -153,8 +153,8 @@
                   data-bs-parent="#sidebarAccordion">
                   <div class="accordion-body p-0">
                     <nav class="nav flex-column">
-                      <a href="/Secure/NotificacionesGeneral.aspx?subsistema=4" class="nav-link ps-4">Notificaciones</a>
-                      <a href="/Secure/MasivoDeudaAuto.aspx?subsistema=4" class="nav-link ps-4">Nueva</a>
+                      <a href="../Secure/NotificacionesGeneral.aspx?subsistema=4" class="nav-link ps-4">Notificaciones</a>
+                      <a href="../Secure/MasivoDeudaAuto.aspx?subsistema=4" class="nav-link ps-4">Nueva</a>
                     </nav>
                   </div>
                 </div>
