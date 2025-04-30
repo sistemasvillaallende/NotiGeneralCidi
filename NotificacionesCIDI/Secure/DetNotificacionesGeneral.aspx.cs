@@ -16,7 +16,7 @@ namespace NotificacionesCIDI.Secure
     {
 
         int nro_emision;
-        int subsistema;
+        public int subsistema;
         string urlBase = ConfigurationManager.AppSettings["urlBase"];
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,6 +28,38 @@ namespace NotificacionesCIDI.Secure
                     subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
                     Session["nro_emision"] = nro_emision;
                     Session["subsistema"] = subsistema;
+                    switch (subsistema)
+                    {
+                        case 1:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-home");
+                            spanSubsistema.InnerHtml = "Inmuebles";
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-industry");
+                            spanSubsistema.InnerHtml = "Industria y Comercio";
+                            break;
+                        case 4:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-car-side");
+                            spanSubsistema.InnerHtml = "Automotores";
+                            break;
+                        case 8:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-globe");
+                            spanSubsistema.InnerHtml = "General";
+                            break;
+                        case 20:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-user");
+                            spanSubsistema.InnerHtml = "Personal";
+                            break;
+                        default:
+                            break;
+                    }
                     FillPlantilla(nro_emision);
                     CargarDetallesNotificaciones(nro_emision, subsistema);
                 }
