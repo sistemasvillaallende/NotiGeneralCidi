@@ -29,7 +29,7 @@
             min-height: calc(100% - 1rem);
         }
 
-        .modal-confirm ..modal-content {
+        .modal-confirm .modal-content {
             padding: 25px !important;
             border-radius: 5px;
             border: none;
@@ -190,13 +190,20 @@
                             </div>
                         </div>
                         <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
+                             <div class="row">
+                                <div class="col-md-12 mb-4 d-flex justify-content-end">
+                                    <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
+                                        <i class="fa-solid fa-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <h2>Generar Dataset Notificación</h2>
                                 </div>
                                 <div class="col-md-8" style="text-align: right">
                                     <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
-                                        <i class="fa fa-list" aria-hidden="true"></i>Plantillas
+                                        <i class="fa fa-list" aria-hidden="true"></i> Plantillas
                                     </a>
                                     <button runat="server" id="btnGenerarNoti" onserverclick="btnGenerarNoti_ServerClick"
                                         type="button" class="btn btn-outline-primary">
@@ -213,7 +220,7 @@
                                 <div class="col-md-12"
                                     style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
                                     <asp:GridView ID="gvDeuda" CssClass="table" runat="server"
-                                        OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False"
+                                        OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False" 
                                         CellPadding="4" ForeColor="#333333" GridLines="None">
                                         <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
                                         <Columns>

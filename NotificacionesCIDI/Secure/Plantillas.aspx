@@ -3,22 +3,26 @@
     Debug="true" ValidateRequest="false" Title="Plantillas" %>
 
     <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-        <div>
-            <div class="row" style="padding: 20px; ">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10" style="padding: 20px; padding-bottom: 0px;">
-                            <h1 style="display: inline-block; margin-right: 20px;">Plantillas</h1>
-                        </div>                                           
-                        <div class="col-2" style="padding: 20px; text-align: right; padding-bottom: 0px;">
-                            <button type="button" id="btnNoti" class="btn btn-outline-primary"
-                            data-bs-toggle="modal" data-bs-target="#plantillaModal">
-                            <span class="fa fa-sheet-plastic"></span>&nbsp;Nueva Plantilla
-                        </button>
-                        </div>
-                    </div>
+         <div class="container-fluid" style="padding-right: 4%; padding-left: 2%;">
+             <div class="row">
+                <div class="col-12" style="padding: 0px;">
+                    <h1 style="font-size: 36px !important; font-weight: 600 !important; margin-bottom: 5px !important; display: flex !important; align-items: start !important;">
+                        <span  class="fa fa-list" style="color: #367fa9; border-right: solid 3px; padding-right: 10px;"></span>
+                        <span 
+                            style="font-size: 20px !important;
+                            padding-left: 8px !important; margin-top: -5px !important;">Plantillas</span> </h1>
+                    <h1 style="font-size: 16px !important; font-weight: 500 !important; color: gray !important; margin-left: 65px !important; margin-top: -24px !important;">Listado de Plantillas</h1>
+                    <hr style="margin-top: 5px; border: 2px solid #c09e76; margin-bottom: 20px; opacity: 1;">
                 </div>
-            </div>
+            </div>   
+             <div class="row mb-3">
+                  <div class="col-12" style="padding: 20px; text-align: right; padding-bottom: 0px;">
+                    <button type="button" id="btnNoti" class="btn btn-outline-primary"
+                    data-bs-toggle="modal" data-bs-target="#plantillaModal">
+                    <span class="fa fa-sheet-plastic"></span>&nbsp;Nueva Plantilla
+                </button>
+                </div>
+             </div>
             <asp:HiddenField ID="MyHiddenControl" value="name" runat="server" />
             <asp:HiddenField ID="MyHiddenControl2" value="name" runat="server" ValidateRequestMode="Disabled"/>
             <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
@@ -30,7 +34,6 @@
                                 <asp:GridView ID="GridPlantillas" runat="server"
                                     AutoGenerateColumns="false"
                                     CssClass="table table-striped table-hover"
-                                    GridLines="None"
                                     EnableViewState="true"
                                     OnRowDataBound="GridPlantillas_RowDataBound"
                                     OnRowCommand="GridPlantillas_RowCommand">
@@ -64,6 +67,8 @@
                     </div>
                 </ContentTemplate>
             </asp:UpdatePanel>
+
+
             <div class="modal fade" id="exampleModalDelete" data-bs-backdrop="false"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class="modal-content">
@@ -82,7 +87,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal fade" id="exampleModalUpdate" data-bs-backdrop="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">

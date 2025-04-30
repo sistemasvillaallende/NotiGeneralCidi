@@ -197,7 +197,7 @@
                 <h2 class="accordion-header" id="headingGeneral">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseGeneral" aria-expanded="false" aria-controls="collapseGeneral">
-                    <i class="fa fa-home me-2"></i> General
+                    <i class="fa fa-globe me-2"></i> General
                   </button>
                 </h2>
                 <div id="collapseGeneral" class="accordion-collapse collapse" aria-labelledby="headingGeneral"
@@ -231,7 +231,7 @@
                 <h2 class="accordion-header" id="headingPlantilla">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsePlantilla" aria-expanded="false" aria-controls="collapsePlantilla">
-                    <i class="fa fa-home me-2"></i> Plantillas
+                    <i class="fa fa-list me-2"></i> Plantillas
                   </button>
                 </h2>
                 <div id="collapsePlantilla" class="accordion-collapse collapse" aria-labelledby="headingPlantilla"
