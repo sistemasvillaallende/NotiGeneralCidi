@@ -43,6 +43,16 @@ namespace NotificacionesCIDI.Secure
                             spanIcono.Attributes.Add("class", "fa fa-car-side");
                             spanSubsistema.InnerHtml = "Automotores";
                             break;
+                        case 8:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-globe");
+                            spanSubsistema.InnerHtml = "General";
+                            break;
+                        case 20:
+                            spanIcono.Attributes.Remove("class");
+                            spanIcono.Attributes.Add("class", "fa fa-user");
+                            spanSubsistema.InnerHtml = "Personal";
+                            break;
                         default:
                             break;
                     }

@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6" style="margin-bottom: 20px;">
+            <div class="col-4" style="margin-bottom: 20px;">
                 <div class="form-group">
                     <label>Estado</label>
                     <asp:DropDownList ID="DDLEstEnv" CssClass="form-control" runat="server"
@@ -26,12 +26,17 @@
                     </asp:DropDownList>
                 </div>
             </div>
-            <div class="col-6" style="text-align: left; padding-top: 23px;">
+            <div class="col-4" style="text-align: left; padding-top: 23px;">
                 <button type="button" id="btnNoti" class="btn btn-outline-primary"
                     data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <span class="fa fa-sheet-plastic"></span>&nbsp;Notificación
                 </button>
             </div>
+           <div class="col-4 d-flex justify-content-end" style="margin-top:22px">
+                 <a href="/Secure/NotificacionesGeneral.aspx?subsistema=<%= subsistema %>" class="fs-6 text-decoration-none" style="color: #367fa9"> 
+                     <i class="fa-solid fa-arrow-left"></i> Volver
+                 </a>
+           </div>
         </div>
         <div class="row">
             <div class="col-12">

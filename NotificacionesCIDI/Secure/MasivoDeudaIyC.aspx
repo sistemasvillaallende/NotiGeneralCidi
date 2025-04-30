@@ -135,7 +135,7 @@
         }
     </script>
     <asp:ScriptManager ID="ScriptManager1" ClientIDMode="AutoId" runat="server"></asp:ScriptManager>
-    <div class="wrapper" style="padding-right: 4%; padding-left: 2%">
+    <div class="wrapper" style="padding-right: 4%;">
         <div class="content-wrapper">
             <section class="content">
                 <div class="box">
@@ -171,7 +171,7 @@
                                     <asp:ListBox ID="lstCalles" Height="250px"
                                         CssClass="form-control" runat="server"
                                         Style="width: 100%; height: 37.6px;"
-                                        SelectionMode="Multiple"></asp:ListBox>
+                                        SelectionMode="Multiple" onchange="checkSelection()"></asp:ListBox>
                                 </div>
                                 <div class="col-md-1">
                                     <label class="label">Desde</label>
@@ -216,9 +216,19 @@
                 </div>
                 <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
                     <div class="row">
-                        <div class="12" style="text-align: right">
+                        <div class="col-md-12 mb-4 d-flex justify-content-end">
+                             <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
+                                 <i class="fa-solid fa-arrow-left"></i> Volver
+                             </a>
+                        </div>
+                     </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2>Generar Dataset Notificación</h2>
+                        </div>
+                        <div class="col-md-8" style="text-align: right">
                             <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
-                                <i class="fa fa-list" aria-hidden="true"></i>Plantilla
+                                <i class="fa fa-list" aria-hidden="true"></i> Plantillas
                             </a>
                             <button runat="server" id="btnGenerarNoti" onserverclick="btnGenerarNoti_ServerClick"
                                 type="button" class="btn btn-outline-primary">
@@ -231,11 +241,11 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row" style="margin-top: 20px;">
+                    <div class="row" style="margin-top: 20px; margin-right:15px;">
                         <div class="col-md-12"
-                            style="height: 320px; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
+                             style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
                             <asp:GridView ID="gvDeuda" CssClass="table" runat="server"
-                                OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False"
+                                OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False" EmptyDataText="No hay resultados..."
                                 CellPadding="4" ForeColor="#333333" GridLines="None">
                                 <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
                                 <Columns>
@@ -403,7 +413,6 @@
         });
 
 
-
         // para agregar spinner en generar notificaciones
         if (window.jQuery) {
             $(document).ready(function () {
@@ -429,7 +438,8 @@
                 });
             });
         }
-
+        // fin de  // para agregar spinner en generar notificaciones
+        // Selecciona todos los checkboxs del dataset
         function SelectAllCheckboxes(spanChk) {
             var oItem = spanChk.children;
             var theBox = (spanChk.type == "checkbox") ? spanChk : spanChk.children.item[0];
@@ -442,6 +452,32 @@
                         elm[i].click();
                 }
         }
+        // fin de  // Selecciona todos los checkboxs del dataset
+        // solamente se habilita desde y hasta con una sola calle 
+        function checkSelection() {
+            var listBox = document.getElementById('<%= lstCalles.ClientID %>');
+            var txtDesde = document.getElementById('<%= txtDesde.ClientID %>');
+            var txtHasta = document.getElementById('<%= txtHasta.ClientID %>');
+
+            var selectedCount = 0;
+            for (var i = 0; i < listBox.options.length; i++) {
+                if (listBox.options[i].selected) {
+                    selectedCount++;
+                }
+            }
+
+            if (selectedCount === 1) {
+                txtDesde.disabled = false;
+                txtHasta.disabled = false;
+            } else {
+                txtDesde.disabled = true;
+                txtHasta.disabled = true;
+                txtDesde.value = '';
+                txtHasta.value = '';
+            }
+        }
+        // fin de  // solamente se habilita desde y hasta con una sola calle
+
 
     </script>
 </asp:Content>

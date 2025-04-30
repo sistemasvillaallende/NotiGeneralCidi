@@ -7,7 +7,7 @@
 	.modal-confirm {		
 		color: #636363;
 		width: 365px !important;
-		margin: 150px auto 0;
+		margin: 330px auto 0;
 	}
 
     .modal-plantillas {
@@ -23,12 +23,15 @@
         
 	}
 
-    .modal-dialog.modal-confirm {
+      .modal-dialog .modal-confirm {
         display: flex;
         align-items: center;
-        min-height: calc(100% - 1rem);
+        justify-content: center;
+        min-height: 100vh; 
+        margin: 0 auto; 
+        pointer-events: none; 
     }
-	.modal-confirm ..modal-content {
+	.modal-confirm .modal-content {
 		padding: 25px !important;
 		border-radius: 5px;
 		border: none;
@@ -116,7 +119,7 @@
             }
         </script>
         <asp:ScriptManager ID="ScriptManager1" runat="server" ClientIDMode="AutoId" />
-        <div class="wrapper">
+        <div class="wrapper" style="padding-right:4%;">
             <div class="content-wrapper">
                 <section class="content">
                     <div class="box">
@@ -159,7 +162,17 @@
                         </div>
                         <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
                             <div class="row">
-                                <div class="12" style="text-align: right">
+                                <div class="col-md-12 mb-4 d-flex justify-content-end">
+                                    <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
+                                        <i class="fa-solid fa-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                 <div class="col-md-4">
+                                     <h2>Generar Dataset Notificación</h2>
+                                 </div>
+                                <div class="col-md-8" style="text-align: right">
                                     <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
                                         <i class="fa fa-list" aria-hidden="true"></i> Plantillas
                                     </a>                
@@ -174,11 +187,11 @@
                                     </button>                                                                      
                                 </div>
                             </div>
-                            <div class="row" style="margin-top: 20px;">
+                            <div class="row" style="margin-top: 20px; margin-right:15px;">
                                 <div class="col-md-12"
-                                    style="max-height: 75vh; overflow-y: auto; border: solid lightgray; border-radius: 15px;">
+                                    style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="gvDeuda" CssClass="table table-striped table-hover"
+                                        <asp:GridView ID="gvDeuda" CssClass="table"
                                             runat="server" OnRowDataBound="gvDeuda_RowDataBound"
                                             AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
                                             GridLines="None">

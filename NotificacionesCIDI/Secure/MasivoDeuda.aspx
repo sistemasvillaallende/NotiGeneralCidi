@@ -121,7 +121,7 @@ EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBe
             }
         </script>
         <asp:ScriptManager ID="ScriptManager1" ClientIDMode="AutoId" runat="server"></asp:ScriptManager>
-        <div class="wrapper">
+        <div class="wrapper" style="padding-right:4%;">
             <div class="content-wrapper">
                 <section class="content">
                     <div class="box">
@@ -218,8 +218,18 @@ EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBe
                             <asp:HiddenField ID="MyHiddenControl" value="name" runat="server" />
                             <asp:HiddenField ID="MyHiddenControl2" value="name" runat="server" ValidateRequestMode="Disabled"/>
                             <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
+                                 <div class="row">
+                                    <div class="col-md-12 mb-4 d-flex justify-content-end">
+                                        <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
+                                            <i class="fa-solid fa-arrow-left"></i> Volver
+                                        </a>
+                                    </div>
+                                </div>                               
                                 <div class="row">
-                                    <div class="12" style="text-align: right">
+                                     <div class="col-md-4">
+                                         <h2>Generar Dataset Notificación</h2>
+                                     </div>
+                                    <div class="col-md-8" style="text-align: right">
                                         <a class="btn btn-outline-danger"onclick="abrirModalPlantillas();">
                                             <i class="fa fa-list" aria-hidden="true"></i> Plantillas
                                         </a>
@@ -234,15 +244,15 @@ EnableEventValidation="false" MasterPageFile="~/Master/MasterPage.master" CodeBe
                                     </div>
                                 </div>
 
-                                <div class="row" style="margin-top: 20px;">
+                                <div class="row" style="margin-top: 20px;  margin-right:15px;">
                                     <div class="col-md-12"
-                                        style="max-height: 75vh; overflow-y: auto; border: solid lightgray; border-radius: 15px;">
+                                        style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
                                         <div class="table-responsive">
-                                            <asp:GridView ID="gvDeuda" CssClass="table table-striped table-hover"
-                                                runat="server" OnRowDataBound="gvDeuda_RowDataBound"
+                                            <asp:GridView ID="gvDeuda" CssClass="table"
+                                                runat="server" OnRowDataBound="gvDeuda_RowDataBound" 
                                                 AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
-                                                GridLines="None" AlternatingRowStyle-BackColor="White"
-                                                AlternatingRowStyle-ForeColor="#284775">
+                                                GridLines="None"  >
+                                                <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
                                                 <Columns>
                                                     <asp:TemplateField HeaderText="Seleccionar">
                                                         <HeaderTemplate>
