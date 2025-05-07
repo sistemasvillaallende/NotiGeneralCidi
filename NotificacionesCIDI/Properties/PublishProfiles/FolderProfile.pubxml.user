@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\DEV\Muni2025\NotificadorGenetralCidi\NotiGeneralCidi\NotificacionesCIDI\bin\app.publish\</_PublishTargetUrl>
-    <History>True|2025-04-29T12:15:42.8218030Z||;</History>
+    <History>True|2025-04-30T11:57:08.7530838Z||;True|2025-04-30T08:56:48.0977436-03:00||;True|2025-04-29T09:15:42.8218030-03:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -6605,19 +6605,19 @@
       <publishTime>04/21/2025 10:48:51</publishTime>
     </File>
     <File Include="bin/BLL.dll">
-      <publishTime>04/29/2025 09:30:36</publishTime>
+      <publishTime>04/30/2025 08:56:37</publishTime>
     </File>
     <File Include="bin/BLL.pdb">
-      <publishTime>04/29/2025 09:30:36</publishTime>
+      <publishTime>04/30/2025 08:56:37</publishTime>
     </File>
     <File Include="bin/ClosedXML.dll">
-      <publishTime>09/08/2013 16:55:06</publishTime>
+      <publishTime>08/09/2013 16:55:06</publishTime>
     </File>
     <File Include="bin/DAL.dll">
-      <publishTime>04/29/2025 09:30:35</publishTime>
+      <publishTime>04/30/2025 08:56:33</publishTime>
     </File>
     <File Include="bin/DAL.pdb">
-      <publishTime>04/29/2025 09:30:35</publishTime>
+      <publishTime>04/30/2025 08:56:33</publishTime>
     </File>
     <File Include="bin/DocumentFormat.OpenXml.dll">
       <publishTime>06/17/2011 19:41:18</publishTime>
@@ -6629,16 +6629,16 @@
       <publishTime>05/24/2018 13:38:22</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>08/03/2023 04:09:56</publishTime>
+      <publishTime>03/08/2023 04:09:56</publishTime>
     </File>
     <File Include="bin/NotificacionesCIDI.dll">
-      <publishTime>04/29/2025 10:43:26</publishTime>
+      <publishTime>05/07/2025 11:21:58</publishTime>
     </File>
     <File Include="bin/NotificacionesCIDI.pdb">
-      <publishTime>04/29/2025 10:43:26</publishTime>
+      <publishTime>05/07/2025 11:21:58</publishTime>
     </File>
     <File Include="bin/RestSharp.dll">
-      <publishTime>04/10/2024 08:49:30</publishTime>
+      <publishTime>10/04/2024 08:49:30</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>04/21/2025 10:48:53</publishTime>
@@ -6782,7 +6782,7 @@
       <publishTime>02/19/2020 10:05:18</publishTime>
     </File>
     <File Include="bin/System.Memory.dll">
-      <publishTime>08/05/2022 03:31:02</publishTime>
+      <publishTime>05/08/2022 03:31:02</publishTime>
     </File>
     <File Include="bin/System.Numerics.Vectors.dll">
       <publishTime>05/15/2018 13:29:44</publishTime>
@@ -6806,40 +6806,40 @@
       <publishTime>04/21/2025 10:48:53</publishTime>
     </File>
     <File Include="Master/MasterPage.master">
-      <publishTime>04/29/2025 10:41:58</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/DetNotificacionesGeneral.aspx">
-      <publishTime>04/29/2025 10:25:24</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/Error.aspx">
       <publishTime>04/21/2025 10:48:53</publishTime>
     </File>
     <File Include="Secure/Inicio.aspx">
-      <publishTime>04/28/2025 09:48:54</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/MasivoDeuda.aspx">
-      <publishTime>04/28/2025 09:48:54</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/MasivoDeudaAuto.aspx">
-      <publishTime>04/28/2025 13:13:07</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/MasivoDeudaGeneral.aspx">
-      <publishTime>04/28/2025 09:48:54</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/MasivoDeudaIyC.aspx">
-      <publishTime>04/28/2025 23:23:37</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/NotificacionesGeneral.aspx">
-      <publishTime>04/29/2025 10:43:15</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/Personal.aspx">
-      <publishTime>04/28/2025 09:48:54</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Secure/Plantillas.aspx">
-      <publishTime>04/22/2025 10:14:58</publishTime>
+      <publishTime>04/30/2025 08:54:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/29/2025 10:43:28</publishTime>
+      <publishTime>05/07/2025 11:22:00</publishTime>
     </File>
   </ItemGroup>
 </Project>

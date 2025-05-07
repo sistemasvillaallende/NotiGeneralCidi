@@ -2218,6 +2218,7 @@
     <Compile Include="Secure\DetNotificacionesGeneral.aspx.designer.cs">
       <DependentUpon>DetNotificacionesGeneral.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Secure\EnvioNotificacion.cs" />
     <Compile Include="Secure\Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
