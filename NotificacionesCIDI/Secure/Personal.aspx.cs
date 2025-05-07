@@ -100,7 +100,12 @@ namespace NotificacionesCIDI.Secure
             }
             gvDeuda.DataSource = personal;
             gvDeuda.DataBind();
-            gvDeuda.UseAccessibleHeader = true;
+
+            if (gvDeuda.Rows.Count > 0)
+            {
+                gvDeuda.UseAccessibleHeader = true;
+                gvDeuda.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
             Session.Add("registros_notificar", personal);
         }
 
