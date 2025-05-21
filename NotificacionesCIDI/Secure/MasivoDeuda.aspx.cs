@@ -369,7 +369,7 @@ namespace NotificacionesCIDI.Secure
                 }
                 InsertDetalleNotificacion(lst);
                 InsertNotificacionGeneral(obj);
-                Response.Redirect($"../Secure/DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
+                Response.Redirect($"./DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
             }
             catch (Exception ex)
             {
