@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DAL;
@@ -239,7 +240,7 @@ namespace NotificacionesCIDI.Secure
                 string nombre, apellido;
                 foreach (var item in lstSeleccionados)
                 {
-                    if (item.Cuit != null && item.Cuit.Length == 11)
+                    if (item.Cuit.Trim() != null && item.Cuit.Trim().Length == 11)
                     {
                         string nombreCompleto = item.Nombre;
                         SepararNombreApellido(nombreCompleto, out nombre, out apellido);
@@ -328,12 +329,41 @@ namespace NotificacionesCIDI.Secure
                     RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
                 };
 
+                EnvioNotificacion objDet = new EnvioNotificacion();
+                objDet.cuerpoNotif=contenidoPersonalizado;
+                objDet.cuit_filter = cuit;
+                objDet.Nro_notificacion = Nro_notificacion;
+                objDet.Nro_Emision = Nro_Emision;
+                objDet.subsistema=subsistemaNombre;
+
+                var json = new JavaScriptSerializer().Serialize(objDet);
                 var client = new RestClient(options);
+
+                var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion", Method.Post);
+
+                request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                                string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
+                request.AddHeader("Cookie", cookieHeaderValue);
+                request.AddParameter("data", json); // esto lo pone en el cuerpo como form-data
+
+                var response = client.Execute(request); // SINCRÓNICO
+
+                if (response.IsSuccessful)
+                {
+                    string contenido = response.Content;
+                    // procesar respuesta
+                }
+                else
+                {
+                    // manejar error
+                    string error = response.ErrorMessage;
+                }
+                /*var client = new RestClient(options);
                 var request = new RestRequest($"/EnvioNotificacionCIDI/enviarNotificacion?cuerpoNotif={contenidoPersonalizado}&cuit_filter={cuit}&Nro_Emision={Nro_Emision}&Nro_notificacion={Nro_notificacion}&subsistemaNombre={subsistemaNombre}", Method.Post);
                 string cookieHeaderValue = HttpContext.Current.Request.Headers["Cookie"];
                 request.AddHeader("Cookie", cookieHeaderValue);
 
-                RestResponse response = client.Execute(request);
+                RestResponse response = client.Execute(request);*/
 
             }
             catch (Exception)

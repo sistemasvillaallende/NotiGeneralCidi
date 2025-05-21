@@ -56,6 +56,11 @@ namespace NotificacionesCIDI.Secure
 
             gvPlantilla.DataSource = listaNotas;
             gvPlantilla.DataBind();
+            if (listaNotas.Count > 0)
+            {
+                gvPlantilla.UseAccessibleHeader = true;
+                gvPlantilla.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
 
         }
         private void fillClasificacionPersonal()
@@ -100,7 +105,11 @@ namespace NotificacionesCIDI.Secure
             }
             gvDeuda.DataSource = personal;
             gvDeuda.DataBind();
-            gvDeuda.UseAccessibleHeader = true;
+            if (personal.Count > 0)
+            {
+                gvDeuda.UseAccessibleHeader = true;
+                gvDeuda.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
             Session.Add("registros_notificar", personal);
         }
 
@@ -183,6 +192,7 @@ namespace NotificacionesCIDI.Secure
                 InsertDetalleNotificacion(lst);
                 InsertNotificacionGeneral(obj);
                 Response.Redirect($"./DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
+
             }
             catch (Exception ex)
             {

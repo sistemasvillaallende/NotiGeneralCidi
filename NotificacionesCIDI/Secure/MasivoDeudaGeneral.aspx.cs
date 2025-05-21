@@ -55,6 +55,11 @@ namespace NotificacionesCIDI.Secure
 
             gvPlantilla.DataSource = listaNotas;
             gvPlantilla.DataBind();
+            if (listaNotas.Count > 0)
+            {
+                gvPlantilla.UseAccessibleHeader = true;
+                gvPlantilla.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
 
         }
 

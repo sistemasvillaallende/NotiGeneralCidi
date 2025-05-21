@@ -94,7 +94,11 @@ namespace NotificacionesCIDI.Secure
 
             gvDeuda.DataSource = filtroIndyCom;
             gvDeuda.DataBind();
-            gvDeuda.UseAccessibleHeader = true;
+            if (filtroIndyCom.Count > 0)
+            {
+                gvDeuda.UseAccessibleHeader = true;
+                gvDeuda.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
             Session.Add("registros_notificar", filtroIndyCom);
         }
 
@@ -120,6 +124,11 @@ namespace NotificacionesCIDI.Secure
 
             gvPlantilla.DataSource = listaNotas;
             gvPlantilla.DataBind();
+            if (listaNotas.Count > 0)
+            {
+                gvPlantilla.UseAccessibleHeader = true;
+                gvPlantilla.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
 
         }
 
