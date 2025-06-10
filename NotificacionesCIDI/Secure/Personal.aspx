@@ -119,7 +119,7 @@
             }
         </script>
         <asp:ScriptManager ID="ScriptManager1" runat="server" ClientIDMode="AutoId" />
-        <div class="wrapper" style="padding-right:4%;">
+        <div class="wrapper" style="padding-right: 4%;">
             <div class="content-wrapper">
                 <section class="content">
                     <div class="box">
@@ -130,28 +130,25 @@
                                         <h1>Filtros</h1>
                                     </div>
                                 </div>
-                                <div class="row">                                   
+                                <div class="row">
                                     <div class="col-md-4">
                                         <label>Clasificacion Personal</label>
-                                        <asp:ListBox ID="lstClasificacionPersonal" Height="203" CssClass="form-control" runat="server"
-                                            SelectionMode="Multiple"></asp:ListBox>
-                                    </div>             
+                                        <asp:ListBox ID="lstClasificacionPersonal" Height="203" CssClass="form-control" runat="server"></asp:ListBox>
+                                    </div>
                                     <br />
+                                    <div class="col-md-3" style="text-align: right; padding-top: 23px;">
+                                        <button type="button" class="btn btn-outline-primary" id="btnFiltros">
+                                            <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
+                                        </button>
+                                    </div>
                                 </div>
-                            <div class="row">
-                                <div class="col-md-12" style="text-align: right;">
-                                    <button type="button" class="btn btn-outline-primary" id="btnFiltros" runat="server"
-                                        onserverclick="btnFiltros_ServerClick">
-                                        <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
-                                    </button>
-                                </div>
-                            <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="true" Text="">
-                            </asp:Label>
-                            </div> 
+                                <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="true" Text="">
+                                </asp:Label>
                             </div>
-                          </div>   
-                        <asp:HiddenField ID="MyHiddenControl" value="name" runat="server" />
-                        <asp:HiddenField ID="MyHiddenControl2" value="name" runat="server"
+
+                        </div>
+                        <asp:HiddenField ID="MyHiddenControl" Value="name" runat="server" />
+                        <asp:HiddenField ID="MyHiddenControl2" Value="name" runat="server"
                             ValidateRequestMode="Disabled" />
                         <div class="progress progress-striped active" id="divProgressBar" style="display: none;">
                             <strong>Procesando consulta...</strong>
@@ -160,218 +157,425 @@
                                 <span class="sr-only">45% completado</span>
                             </div>
                         </div>
-                        <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
+                        <div id="divResultados" runat="server" style="display: none; margin-top: 20px;">
                             <div class="row">
                                 <div class="col-md-12 mb-4 d-flex justify-content-end">
-                                    <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
-                                        <i class="fa-solid fa-arrow-left"></i> Volver
+                                    <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9">
+                                        <i class="fa-solid fa-arrow-left"></i>Volver
                                     </a>
                                 </div>
                             </div>
                             <div class="row">
-                                 <div class="col-md-4">
-                                     <h2>Generar Dataset Notificación</h2>
-                                 </div>
+                                <div class="col-md-4">
+                                    <h2>Generar Dataset Notificación</h2>
+                                </div>
                                 <div class="col-md-8" style="text-align: right">
                                     <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
-                                        <i class="fa fa-list" aria-hidden="true"></i> Plantillas
-                                    </a>                
-                                    <button runat="server" id="btnGenerarNoti"
-                                        onserverclick="btnGenerarNoti_ServerClick"
-                                        type="button" class="btn btn-outline-primary" >
-                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación </button>
-                                        <button type="button" runat="server" id="btnExportExcel"
-                                        onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
-                                        data-toggle="modal" data-target="#page-change-name">
-                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel                                           
-                                    </button>                                                                      
+                                        <i class="fa fa-list" aria-hidden="true"></i>Plantillas
+                                    </a>
+                                    <button id="btnGenerarNoti" type="button" class="btn btn-outline-primary" onclick="procesarYGenerarNotificaciones()">
+                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación
+                                    </button>
+                                    <button type="button" id="btnExportExcel" class="btn btn-outline-secondary" onclick="exportarSeleccionadosDirecto()">
+                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel  
+                                    
+                                    </button>
                                 </div>
                             </div>
-                            <div class="row" style="margin-top: 20px; margin-right:15px;">
-                                <div class="col-md-12"
-                                    style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
-                                    <div class="table-responsive">
-                                        <asp:GridView ID="gvDeuda" CssClass="table"
-                                            runat="server" OnRowDataBound="gvDeuda_RowDataBound"
-                                            AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333"
-                                            GridLines="None">
-                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
-                                            <Columns>
-                                                <asp:TemplateField HeaderText="Seleccionar">
-                                                    <HeaderTemplate>
-                                                        <input type="checkbox" id="chkAll" name="chkAll"
-                                                            onclick="javascript: SelectAllCheckboxes(this)" />
-                                                    </HeaderTemplate>
-                                                    <ItemTemplate>
-                                                        <asp:CheckBox ID="chkSelect" runat="server" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:BoundField DataField="cuil" ControlStyle-Width="10%"
-                                                    HeaderText="Cuil" />
-                                                <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
-                                                    HeaderText="Nombre completo" />                                               
-                                                <asp:BoundField DataField="des_clasif_per" ControlStyle-Width="10%"
-                                                    HeaderText="Clasificacion" />
-                                            </Columns>
-                                        </asp:GridView>
-                                    </div>
-                                    <div class="table-responsive mt-3">
-                                        <asp:GridView ID="gvConceptos" CssClass="table table-striped table-hover"
-                                            AutoGenerateColumns="false" OnRowCommand="gvConceptos_RowCommand"
-                                            DataKeyNames="cuit"
-                                            EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
-                                            ForeColor="#333333" GridLines="None">
-                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
-                                            <Columns>
-                                                <asp:BoundField DataField="Cuit" ControlStyle-Width="10%"
-                                                    HeaderText="CUIT">
-                                                    <HeaderStyle HorizontalAlign="Center" />
-                                                    <ItemStyle HorizontalAlign="left" />
-                                                </asp:BoundField>
-                                            </Columns>
-                                        </asp:GridView>
-                                    </div>
-                                </div>
+                            <div style="margin-top: 20px;">
+                                <table id="tablaPersonal" class="display" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="selectAll" class="filaCheckbox" data-id="AH019FU" /></th>
+                                            <th>CUIL</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Clasificacion</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
         </div>
-         <div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="ModalErrorLabel" aria-hidden="true">
-             <div class="modal-dialog modal-confirm">
-                 <div class="modal-content">
-                     <div class="modal-header">
-                         <div class="icon-box">
-			                   <i class="fa fa-exclamation-circle fa-4x" aria-hidden="true"></i>
-                         </div>
-                          <div style="width: 100%; text-align: center;">
-                             <h4 class="modal-title">Error</h4>
-                         </div>
-                     </div>
-                     <div class="modal-body">
-                         <p style="text-align: center">
-                              <span id="modalErrorTexto"></span>
-                         </p>
-                     </div>
-                     <div class="modal-footer">
-                         <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cerrar</button>
-                     </div>
-                 </div>
-             </div>
-         </div>
-    <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-plantillas">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Lista de planillas</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
-                            OnRowDataBound="gvPlantilla_RowDataBound"
-                            OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
-                            ForeColor="#333333" GridLines="None" EnableViewState="true"
-                            ShowHeader="false" ShowFooter="false"
-                            CellPadding="0" CellSpacing="0"
-                            DataKeyNames="id,contenido">
-                            <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                            </AlternatingRowStyle>
-                            <Columns>
-                                <asp:TemplateField HeaderText="Seleccionar">
-                                    <ItemTemplate>
-                                        <asp:CheckBox ID="chkSeleccionar" runat="server"  onclick="SoloUnCheckbox(this); event.cancelBubble=true;"/>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
-                                    HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
-                            </Columns>
-                        </asp:GridView>
+        <div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="ModalErrorLabel" aria-hidden="true">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box">
+                            <i class="fa fa-exclamation-circle fa-4x" aria-hidden="true"></i>
+                        </div>
+                        <div style="width: 100%; text-align: center;">
+                            <h4 class="modal-title">Error</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">  
-                <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" CssClass="btn btn-primary" OnClick="btnObtenerSeleccionados_Click" />
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-body">
+                        <p style="text-align: center">
+                            <span id="modalErrorTexto"></span>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-block" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-plantillas">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Lista de plantillas</h4>
+                        <button type="button" class="btn-close small me-1" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.8);"></button>
+                    </div>
+                    <div class="modal-body body-plantillas" style="margin-right: 20px; margin-left: 20px;">
+                        <div class="form-group">
+                            <table id="tablaPlantillas" class="table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre de Plantilla</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnSeleccionar" class="btn btn-primary">Seleccionar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css" />
+        <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
 
         <script>
-             function abrirModalPlantillas() {
-                        $('#plantillaModalNotas').modal('show');
-                    }
-                  
-                    // Funcion para poder seelccionar el check cuando aprieto cualquier lugar del gridview
-                    function SeleccionarFila(fila, checkBoxId) {
-                        var chk = document.getElementById(checkBoxId);
-                
-                        if (chk !== null) {
-                            chk.checked = !chk.checked;
-                            SoloUnCheckbox(chk);
-                        }
-                    }
+             
+            // Abrir modal de plantillas y mostrar el dataTable con las plantillas
+            function abrirModalPlantillas() {
+                $('#plantillaModalNotas').modal('show');
 
-                    // Funcion para solo seleccionar un checkbox
-                    function SoloUnCheckbox(chk) {
-                        var grid = document.getElementById('<%= gvPlantilla.ClientID %>');
-                        var checkboxes = grid.getElementsByTagName('input');
+                if (!$.fn.DataTable.isDataTable('#tablaPlantillas')) {
+                    $.ajax({
+                        url: 'Personal.aspx/ObtenerPlantillas',
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify({}),
+                        success: function (response) {
+                            let datos = JSON.parse(response.d);
 
-                        for (var i = 0; i < checkboxes.length; i++) {
-                            var tipo = checkboxes[i].type;
-                            if (tipo === 'checkbox' && checkboxes[i] !== chk) {
-                                checkboxes[i].checked = false;
-                            }
-                        }
-                    }
+                            $('#tablaPlantillas').DataTable({
+                                data: datos,
+                                columns: [
+                                    {
+                                        data: 'id',
+                                        title: 'Seleccionar',
+                                        orderable: false,
+                                        render: function (data, type, row) {
+                                            return `<input type="checkbox" name="plantilla" value="${data}" onclick="SoloUnCheckbox(this)">`;
+                                        }
+                                    },
+                                    {
+                                        data: 'nom_plantilla',
+                                        title: 'Nombre de Plantilla'
+                                    }
+                                ],
+                                paging: true,
+                                searching: true,
+                                info: false,
+                                language: {
+                                    emptyTable: "No hay plantillas disponibles"
+                                }
+                            });
 
-            // para agregar spinner en generar notificaciones
-            if (window.jQuery) {
-                $(document).ready(function() {
-                    $('#<%= btnGenerarNoti.ClientID %>').on('click', function(e) {
-                        var $btn = $(this);
-                        
-                        if ($btn.prop('disabled')) {
-                            e.preventDefault();
-                            return false;
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error al cargar plantillas:', status, error);
+                            console.error('Respuesta completa:', xhr.responseText);
+
+                            $('#tablaPlantillas tbody').html(
+                                '<tr><td colspan="2" class="text-center text-danger">Error al cargar plantillas</td></tr>'
+                            );
                         }
-                        
-                        $btn.prop('disabled', true)
-                            .addClass('disabled')
-                            .html('<span class="spinner-border spinner-border-sm mr-1"></span> Procesando...');
-                        
-                        setTimeout(function() {
-                            $btn.prop('disabled', false)
-                                .removeClass('disabled')
-                                .html('<span class="fa fa-sheet-plastic"></span> Generar notificación');
-                        }, 30000);
-                        
-                        return true;
                     });
-                });
-            } else {
-                console.error('jQuery is not loaded');
+                } else {
+
+                    $('#tablaPlantillas').DataTable().clear().destroy();
+                    abrirModalPlantillas();
+                }
             }
 
-            // para seleccionar todos los checkboxs
-            function SelectAllCheckboxes(spanChk) {
-                var oItem = spanChk.children;
-                var theBox = (spanChk.type == "checkbox") ? spanChk : spanChk.children.item[0];
-                xState = theBox.checked;
+            //  PERMITIR SELECCIONAR SOLO UN CHECKBOX DE LAS PLANTILLAS
+            function SoloUnCheckbox(checkbox) {
+                $('input[name="plantilla"]').not(checkbox).prop('checked', false);
+            }
 
-                elm = theBox.form.elements;
-                for (i = 0; i < elm.length; i++)
-                    if (elm[i].type == "checkbox" && elm[i].id != theBox.id) {
-                        if (elm[i].checked != xState)
-                            elm[i].click();
+            let plantillaSeleccionada = null;
+            // BOTON SELECCIONAR PLANTILLAS Y GUARDARLOS EN EL CODE BEHIND
+            $('#btnSeleccionar').on('click', function (e) {
+                e.preventDefault();
+
+                let seleccionado = $('input[name="plantilla"]:checked').val();
+
+                if (!seleccionado) {
+                    alert("Seleccioná una plantilla.");
+                    return false;
+                }
+
+                plantillaSeleccionada = parseInt(seleccionado);
+
+                $.ajax({
+                    type: "POST",
+                    url: "Personal.aspx/GuardarPlantillaEnSesion",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ idPlantilla: parseInt(seleccionado) }),
+                    beforeSend: function () {
+                        console.log("Enviando datos:", JSON.stringify({ idPlantilla: parseInt(seleccionado) }));
+                    },
+                    success: function (response) {
+                        $('#plantillaModalNotas').modal('hide');
+                        $('#divResultados').show();
+                        $('#divFiltros').hide();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Status:", status);
+                        console.log("Error:", error);
+                        console.log("Response Text:", xhr.responseText);
+                        console.log("Status Code:", xhr.status);
+                        alert("Error al guardar plantilla en sesión: " + error);
                     }
+                });
+
+                return false;
+            });
+
+
+            // PARA SELECCIONAR TODOS LOS ELEMENTOS DE LA TABLA 
+            $(document).on('change', '#selectAll', function () {
+                let isChecked = $(this).is(':checked');
+                $('.filaCheckbox').prop('checked', isChecked);
+            });
+
+
+            ////// MANEJAMOS ACA LOS VALORES SELECCIONADOS 
+
+            $('#btnFiltros').on('click', function () {
+                let clasificacionPersonal = parseInt($('#<%= lstClasificacionPersonal.ClientID %>').val()) || 0;
+               
+
+                $.ajax({
+                    type: "POST",
+                    url: "Personal.aspx/fillGrillaJSON",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        codClasif: clasificacionPersonal,
+                    }),
+                    success: function (response) {
+                        let datos = JSON.parse(response.d);
+                        cargarDatos(datos);
+
+                        $('#' + '<%= divResultados.ClientID %>').show();
+                        $('#' + '<%= divFiltros.ClientID %>').hide();
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", xhr.responseText);
+                    }
+                });
+            });
+
+            function cargarDatos(datos) {
+
+                let tabla = $('#tablaPersonal').DataTable({
+                    destroy: true,
+                    data: datos,
+                    paging: false,
+                    columns: [
+                        {
+                            data: null,
+                            orderable: false,
+                            className: 'select-checkbox',
+                            defaultContent: '',
+                            render: function (data, type, row, meta) {
+                                return `<input type="checkbox" class="filaCheckbox" data-id="${row.dominio}">`;
+                            }
+                        },
+                        { data: 'cuil' },
+                        { data: 'nombre' },
+                        { data: 'des_clasif_per' },
+                        
+                    ],
+                    drawCallback: function () {
+                        // Esto vuelve a vincular el checkbox de "seleccionar todos"
+                        $('#selectAll').off('change').on('change', function () {
+                            let checked = this.checked;
+                            tabla.rows().every(function () {
+                                let $checkbox = $(this.node()).find('input.filaCheckbox');
+                                $checkbox.prop('checked', checked);
+                            });
+                        });
+                    }
+                });
             }
+
+            function obtenerSeleccionados() {
+                let seleccionados = [];
+
+                if (tablaPersonal && $.fn.dataTable.isDataTable('#tablaPersonal')) {
+                    try {
+                        tablaAutos.rows().every(function () {
+                            let $checkbox = $(this.node()).find('input.filaCheckbox');
+                            if ($checkbox.is(':checked')) {
+                                let rowData = tablaAutos.row(this).data();
+                                seleccionados.push({
+                                    cuil: rowData.cuil,
+                                    nombre: rowData.nombre,
+                                    des_clasif_per: rowData.des_clasif_per,
+                                });
+                            }
+                        });
+                    } catch (error) {
+                        console.log("Error al obtener seleccionados:", error);
+                        $('#tablaPersonal tbody input.filaCheckbox:checked').each(function () {
+                            let $checkbox = $(this);
+                            let $row = $checkbox.closest('tr');
+                            seleccionados.push({
+                                cuil: $row.find('td:eq(1)').text(),
+                                nombre: $row.find('td:eq(2)').text(),
+                                des_clasif_per: $row.find('td:eq(3)').text(),                               
+                            });
+                        });
+                    }
+                } else {
+                    console.log("La tabla no está inicializada, usando método alternativo");
+                    // Método alternativo usando jQuery directamente
+                    $('#tablaPersonal tbody input.filaCheckbox:checked').each(function () {
+                        let $checkbox = $(this);
+                        let $row = $checkbox.closest('tr');
+                        seleccionados.push({
+                            cuil: $row.find('td:eq(1)').text(),
+                            nombre: $row.find('td:eq(2)').text(),
+                            des_clasif_per: $row.find('td:eq(3)').text(),  
+                        });
+                    });
+                }
+
+                console.log("Seleccionados:", seleccionados);
+                return seleccionados;
+            }
+
+
+            function enviarSeleccionados() {
+                let seleccionados = obtenerSeleccionados();
+
+                console.log("aca tengo los seleccionados para enviar antes de enviar ", seleccionados);
+
+                if (seleccionados.length === 0) {
+                    $('#modalErrorTexto').text('Por favor seleccione al menos un elemento.');
+                    $('#modalError').modal('show');
+
+                    restaurarBotonGenerar();
+                    return;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "Personal.aspx/ProcesarSeleccionados",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        personalSeleccionados: seleccionados
+                    }),
+                    success: function (response) {
+                        console.log("Respuesta completa del servidor:", response);
+                        console.log("response.d:", response.d);
+
+                        if (response.d === "OK") {
+                            console.log("Datos procesados correctamente");
+                            if (typeof window.callbackDespuesDeSeleccionar === 'function') {
+                                window.callbackDespuesDeSeleccionar();
+                            }
+                        } else {
+                            $('#modalErrorTexto').text('Error: ' + response.d);
+                            $('#modalError').modal('show');
+                            console.error("Error detallado:", response.d);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error al enviar datos:", xhr.responseText);
+                        $('#modalErrorTexto').text('Error al procesar la solicitud');
+                        $('#modalError').modal('show');
+                    }
+                });
+            }
+
+            function generarNotificacionesDesdeJS() {
+                $.ajax({
+                    type: "POST",
+                    url: "Personal.aspx/ContinuarGenerarNotificaciones",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.d.startsWith('OK:')) {
+                            var params = response.d.substring(3);
+                            window.location.href = './DetNotificacionesGeneral.aspx' + params;
+                        } else {
+                            $('#modalErrorTexto').text(response.d);
+                            $('#modalError').modal('show');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $('#modalErrorTexto').text('Error al generar notificaciones: ' + error);
+                        $('#modalError').modal('show');
+                    }
+                });
+            }
+
+
+            function procesarYGenerarNotificaciones() {
+                if (!plantillaSeleccionada) {
+                    $('#modalErrorTexto').text('Debe seleccionar una plantilla.');
+                    $('#modalError').modal('show');
+                    return;
+                }
+
+
+                var $btn = $('#btnGenerarNoti');
+                $btn.prop('disabled', true)
+                    .addClass('disabled')
+                    .html('<span class="spinner-border spinner-border-sm me-1"></span> Procesando...');
+
+
+                // Definir callback para después de procesar seleccionados
+                window.callbackDespuesDeSeleccionar = function () {
+                    generarNotificacionesDesdeJS();
+                };
+
+                // Enviar seleccionados (que ejecutará el callback si todo sale bien)
+                enviarSeleccionados();
+            }
+
+
+            function restaurarBotonGenerar() {
+                var $btn = $('#btnGenerarNoti');
+                $btn.prop('disabled', false)
+                    .removeClass('disabled')
+                    .html('<span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación');
+            }
+
+
+
+
+
 
  
         </script>

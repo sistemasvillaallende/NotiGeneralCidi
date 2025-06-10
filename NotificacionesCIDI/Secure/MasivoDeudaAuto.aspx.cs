@@ -4,12 +4,15 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Services;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DAL;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using Newtonsoft.Json;
+using NotificacionesCIDI.Helpers;
 using RestSharp;
 
 namespace NotificacionesCIDI.Secure
@@ -25,16 +28,19 @@ namespace NotificacionesCIDI.Secure
             if (!IsPostBack)
             {
                 subsistema = Convert.ToInt32(Request.QueryString["subsistema"]);
-                Session["subsistema"] = subsistema;
-                Session["id_plantilla"] = null;
-                Session.Remove("id_plantilla");
-                fillNotas();
+                HttpContext.Current.Session["subsistema"] = subsistema;
+                if (Request.QueryString["action"] == "downloadExcel")
+                {
+                    DescargarExcel();
+                    return;
+                }
             }
         }
 
-        private void fillGrilla(int anioDesde, int anioHasta, bool exento)
+        [System.Web.Services.WebMethod]
+        public static string fillGrillaJSON(int anioDesde, int anioHasta, bool exento)
         {
-
+            string urlBase = ConfigurationManager.AppSettings["urlBase"];
             var options = new RestClientOptions(urlBase)
             {
                 MaxTimeout = -1,
@@ -47,22 +53,18 @@ namespace NotificacionesCIDI.Secure
 
             if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
             {
-                lstFiltrada = JsonConvert.DeserializeObject<List<DAL.MasivoDeudaAuto>>(response.Content);
+                return response.Content;
             }
-
-            gvDeuda.DataSource = lstFiltrada;
-            gvDeuda.DataBind();
-            if (lstFiltrada.Count > 0)
+            else
             {
-                gvDeuda.UseAccessibleHeader = true;
-                gvDeuda.HeaderRow.TableSection = TableRowSection.TableHeader;
+                return "[]";
             }
-            Session.Add("registros_notificar", lstFiltrada);
         }
 
-        private void fillNotas()
+        [System.Web.Services.WebMethod]
+        public static string ObtenerPlantillas()
         {
-
+            string urlBase = ConfigurationManager.AppSettings["urlBase"];
             List<DAL.NotasPlantillas> lst = null;
             var options = new RestClientOptions(urlBase)
             {
@@ -76,97 +78,71 @@ namespace NotificacionesCIDI.Secure
 
             if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
             {
-                lst = JsonConvert.DeserializeObject<List<DAL.NotasPlantillas>>(response.Content);
+                return response.Content;
             }
-
-            var listaNotas = lst
-                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
-                   .ToList();
-
-            gvPlantilla.DataSource = listaNotas;
-            gvPlantilla.DataBind();
-            if (listaNotas.Count > 0)
+            else
             {
-                gvPlantilla.UseAccessibleHeader = true;
-                gvPlantilla.HeaderRow.TableSection = TableRowSection.TableHeader;
-            }
-        }
-
-
-        protected void btnFiltros_ServerClick(object sender, EventArgs e)
-        {
-            int anioDesde = Convert.ToInt32(txtAnio.Text);
-            int anioHasta = Convert.ToInt32(TextBox1.Text);
-
-            bool exento = false;//chkExento.Checked;
-
-            switch (DDLExento.SelectedItem.Value)
-            {
-                case "0":
-                    exento = false;
-                    break;
-                case "1":
-                    exento = true;
-                    break;
-                default:
-                    break;
+                return "[]";
             }
 
-            fillGrilla(anioDesde, anioHasta, exento);
-            divFiltros.Visible = false;
-            divResultados.Visible = true;
         }
 
-        protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-        }
-
-
-        protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+        [System.Web.Services.WebMethod]
+        public static string GuardarPlantillaEnSesion(int idPlantilla)
         {
             try
             {
-                List<DAL.MasivoDeudaAuto> todosLosRegistros = (List<DAL.MasivoDeudaAuto>)Session["registros_notificar"];
+                HttpContext.Current.Session["PlantillaSeleccionada"] = idPlantilla;
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.Message;
+            }
+        }
 
-                List<DAL.MasivoDeudaAuto> lstFiltrada = new List<DAL.MasivoDeudaAuto>();
+        [WebMethod]
+        public static string ProcesarSeleccionados(List<DAL.MasivoDeudaAuto> autosSeleccionados)
+        {
+            try
+            {
+                HttpContext.Current.Session["AutosSeleccionados"] = autosSeleccionados;
 
-                foreach (GridViewRow row in gvDeuda.Rows)
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return "Error: a" + ex.Message;
+            }
+        }
+
+        [WebMethod]
+        public static string ContinuarGenerarNotificaciones()
+        {
+            try
+            {
+                List<DAL.MasivoDeudaAuto> lstFiltrada = (List<DAL.MasivoDeudaAuto>)HttpContext.Current.Session["AutosSeleccionados"];
+
+                if (lstFiltrada == null || lstFiltrada.Count == 0)
                 {
-                    CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSelect");
-
-                    if (chkSeleccionar != null && chkSeleccionar.Checked)
-                    {
-                        int index = row.RowIndex;
-                        lstFiltrada.Add(todosLosRegistros[index]);
-                    }
+                    return "Error: No se encontraron registros seleccionados.";
                 }
 
-                if (lstFiltrada.Count == 0)
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
-                    "$('#modalErrorTexto').text('Debe seleccionar algun registro.');" +
-                    "$('#modalError').modal('show');", true);
-                    return;
-                }
+                int idPlantilla = Convert.ToInt32(HttpContext.Current.Session["PlantillaSeleccionada"]);
+                int subsistema = Convert.ToInt32(HttpContext.Current.Session["subsistema"]);
 
-                int nroNotificacion = 1;
+
                 NotificacionGeneral obj = new NotificacionGeneral();
-                List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
-                int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
-                if (Session["id_plantilla"] == null)
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
-                    "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
-                    "$('#modalError').modal('show');", true);
-                    return;
-                }
-                var plantilla = GetPlantillaByPk(idPlantilla);
-                string contenidoPlantilla = plantilla.contenido;
-                int subsistema = Convert.ToInt32(Session["subsistema"]);
-                obj.Nro_Emision = GetMaxNroEmision() + 1;
+                var plantilla = Helper.GetPlantillaByPk(idPlantilla);
+                string contenidoPlantilla = plantilla.contenido;               
+                obj.Nro_Emision = Helper.GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
                 obj.Cantidad_Reg = lstFiltrada.Count();
                 obj.id_plantilla = idPlantilla;
+
+                List<DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
+                int nroNotificacion = 1;
+
                 foreach (var item in lstFiltrada)
                 {
                     if (item.cuit != null && item.cuit.Length == 11)
@@ -182,207 +158,116 @@ namespace NotificacionesCIDI.Secure
                         lst.Add(obj2);
                     }
                 }
-                InsertDetalleNotificacion(lst);
-                InsertNotificacionGeneral(obj);
-                Response.Redirect($"./DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
+
+                Helper.InsertDetalleNotificacion(lst);
+                Helper.InsertNotificacionGeneral(obj);
+
+                return $"OK:?nro_emision={obj.Nro_Emision}&subsistema={subsistema}";
             }
             catch (Exception ex)
             {
-                throw ex;
+                return "Error: " + ex.Message;
             }
         }
 
-        private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
+        [WebMethod]
+        public static string GuardarSeleccionadosParaExport(List<DAL.MasivoDeudaAuto> autosSeleccionados)
         {
             try
             {
-                var options = new RestClientOptions(urlBase)
+                if (autosSeleccionados == null || autosSeleccionados.Count == 0)
                 {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-
-                var client = new RestClient(options);
-                var requestInsert = new RestRequest("DetalleNotificador/insertMasivo", Method.Post);
-                requestInsert.AddJsonBody(lst);
-
-                RestResponse responseInsert = client.Execute(requestInsert);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-
-        private void InsertNotificacionGeneral(NotificacionGeneral obj)
-        {
-            try
-            {
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-
-                var client = new RestClient(options);
-                var requestInsert = new RestRequest("NotificadorGeneral/insertNuevaNotificacion", Method.Post);
-                requestInsert.AddJsonBody(obj);
-
-                RestResponse responseInsert = client.Execute(requestInsert);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-
-        private NotasPlantillas GetPlantillaByPk(int idPlantilla)
-        {
-            try
-            {
-                NotasPlantillas plantilla = null;
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-
-                var client = new RestClient(options);
-                var request = new RestRequest($"Plantillas/getPlantillaByPk?id={idPlantilla}", Method.Get);
-                RestResponse response = client.Execute(request);
-
-                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
-                {
-                    plantilla = JsonConvert.DeserializeObject<NotasPlantillas>(response.Content);
+                    return "Error: No hay registros seleccionados.";
                 }
-                return plantilla;
 
+                HttpContext.Current.Session["AutosParaExportar"] = autosSeleccionados;
+                return "OK";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return "Error: " + ex.Message;
             }
-
         }
 
-        private int GetMaxNroEmision()
+        [WebMethod]
+        public static string GenerarExcel()
         {
             try
             {
-                int MaxValue = 0;
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
+                var autosSeleccionados = (List<DAL.MasivoDeudaAuto>)HttpContext.Current.Session["AutosParaExportar"];
 
-                var client = new RestClient(options);
-                var request = new RestRequest("NotificadorGeneral/getMaxNroEmision", Method.Get);
-                RestResponse response = client.Execute(request);
-
-                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+                if (autosSeleccionados == null || autosSeleccionados.Count == 0)
                 {
-                    MaxValue = JsonConvert.DeserializeObject<Int32>(response.Content);
+                    return "Error: No hay datos en sesión para exportar.";
                 }
-                return MaxValue;
 
+                string fileName = "NotificacionAuto_Seleccionados_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                HttpContext.Current.Session["ExcelFileName"] = fileName;
+
+                return "OK";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
-            }
-
-        }
-
-        protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                CheckBox chk = (CheckBox)e.Row.FindControl("chkSeleccionar");
-
-                if (chk != null)
-                {
-                    e.Row.Attributes["onclick"] = $"javascript:SeleccionarFila(this, '{chk.ClientID}');";
-                }
-                e.Row.Attributes["style"] = "cursor:pointer;";
+                return "Error: " + ex.Message;
             }
         }
 
-        protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-
-        }
-
-        protected void btnObtenerSeleccionados_Click(object sender, EventArgs e)
-        {
-            foreach (GridViewRow row in gvPlantilla.Rows)
-            {
-                CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSeleccionar");
-                if (chkSeleccionar.Checked)
-                {
-                    int id_plantilla = Convert.ToInt32(gvPlantilla.DataKeys[row.RowIndex]["id"]);
-
-                    Session["id_plantilla"] = id_plantilla;
-                }
-            }
-        }
-
-
-        protected void btnExportExcel_ServerClick(object sender, EventArgs e)
+        private void DescargarExcel()
         {
             try
             {
-                lstFiltrada = (List<DAL.MasivoDeudaAuto>)Session["registros_notificar"];
+                var autosSeleccionados = (List<DAL.MasivoDeudaAuto>)Session["AutosParaExportar"];
 
-                if (lstFiltrada == null || lstFiltrada.Count == 0)
+                if (autosSeleccionados == null || autosSeleccionados.Count == 0)
                 {
-                    lblError.Text = "No hay datos para exportar.";
                     return;
                 }
 
                 Response.Clear();
                 Response.Buffer = true;
                 Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("content-disposition", "attachment;filename=NotificacionAuto_Export_" + DateTime.Now.ToString("yyyyMMdd") + ".xls");
+                Response.AddHeader("content-disposition", "attachment;filename=NotificacionAuto_Seleccionados_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls");
                 Response.Charset = "";
-
-                Page.EnableViewState = false;
 
                 using (StringWriter sw = new StringWriter())
                 {
-                    HtmlTextWriter hw = new HtmlTextWriter(sw);
-                    gvDeuda.AllowPaging = false;
-                    gvDeuda.DataSource = lstFiltrada;
-                    gvDeuda.DataBind();
-                    gvDeuda.Columns[0].Visible = false;
-                    gvDeuda.HeaderStyle.ForeColor = System.Drawing.Color.Black;
-                    gvDeuda.HeaderStyle.BackColor = System.Drawing.Color.LightGray;
-                    gvDeuda.RowStyle.BackColor = System.Drawing.Color.White;
+                    sw.WriteLine("<table border='1'>");
 
-                    gvDeuda.RenderControl(hw);
-                    gvDeuda.Columns[0].Visible = true;
+                    sw.WriteLine("<tr style='background-color: #D3D3D3; color: black; font-weight: bold;'>");
+                    sw.WriteLine("<td>Dominio</td>");
+                    sw.WriteLine("<td>CUIT</td>");
+                    sw.WriteLine("<td>Nombre</td>");
+                    sw.WriteLine("<td>Apellido</td>");
+                    sw.WriteLine("<td>Año</td>");
+                    sw.WriteLine("<td>Exento</td>");
+                    sw.WriteLine("</tr>");
+
+                    // Escribir datos
+                    foreach (var auto in autosSeleccionados)
+                    {
+                        sw.WriteLine("<tr>");
+                        sw.WriteLine($"<td>{auto.dominio ?? ""}</td>");
+                        sw.WriteLine($"<td>{auto.cuit ?? ""}</td>");
+                        sw.WriteLine($"<td>{auto.nombre ?? ""}</td>");
+                        sw.WriteLine($"<td>{auto.apellido ?? ""}</td>");
+                        sw.WriteLine($"<td>{auto.anio}</td>");
+                        sw.WriteLine($"<td>{(auto.exento ? "SI" : "NO")}</td>");
+                        sw.WriteLine("</tr>");
+                    }
+
+                    sw.WriteLine("</table>");
+
                     Response.Write(sw.ToString());
                     Response.End();
                 }
             }
             catch (System.Threading.ThreadAbortException)
             {
-                Response.End();
             }
             catch (Exception ex)
             {
-                string errorMessage = $"Export Error: {ex.Message}\nStack Trace: {ex.StackTrace}";
-                lblError.Text = "Error al exportar: " + ex.Message;
-                System.Diagnostics.Debug.WriteLine(errorMessage);
-            }
-        }
 
-        public override void VerifyRenderingInServerForm(Control control)
-        {
+            }
         }
 
 

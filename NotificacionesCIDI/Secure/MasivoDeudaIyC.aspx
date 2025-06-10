@@ -151,29 +151,32 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2">
-                                    <label class="label">Activo</label>
-                                    <asp:DropDownList ID="DDLExento" runat="server" CssClass="form-control">
-                                        <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                <div class="col-md-1">
+                                    <label class="label">Dado de Baja</label>
+                                    <asp:DropDownList ID="Activo" runat="server" CssClass="form-control">
                                         <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                        <asp:ListItem Value="1" Text="Si"></asp:ListItem>
 
                                     </asp:DropDownList>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-1">
                                     <label class="label">Zona</label>
-                                    <asp:ListBox ID="lstZonas" Style="width: 100%"
+                                    <asp:ListBox ID="lstZonas" Style="width: 100%; height: 243.8px;"
                                         CssClass="form-control" runat="server"
                                         SelectionMode="Multiple"></asp:ListBox>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <label class="label">Activo</label>
-                                    <asp:ListBox ID="lstCalles" Height="250px"
+                                <div class="col-md-3"  >
+                                    <label class="label">Calles</label>
+                                    <div class="input-group mb-2">
+                                        <input type="text" id="txtSearchCalle" class="form-control" placeholder="Buscar calle..." />
+                                    </div>
+                                    <asp:ListBox ID="lstCalles" 
                                         CssClass="form-control" runat="server"
-                                        Style="width: 100%; height: 37.6px;"
+                                        Style="width: 100%; height: 200px;"
                                         SelectionMode="Multiple" onchange="checkSelection()"></asp:ListBox>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <label class="label">Desde</label>
                                     <asp:TextBox
                                         ID="txtDesde"
@@ -183,7 +186,7 @@
                                         runat="server">
                                     </asp:TextBox>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <label class="label">Hasta</label>
                                     <asp:TextBox
                                         ID="txtHasta"
@@ -193,12 +196,11 @@
                                         runat="server"> 
                                     </asp:TextBox>
                                 </div>
-                                <div class="col-md-2">
-                                    <button type="button" style="margin-top: 27px;" class="btn btn-outline-primary" id="btnFiltros"
-                                        runat="server" onserverclick="btnFiltros_ServerClick">
-                                        <span class="fa fa-filter"></span>&nbsp;&nbsp;Aplicar Filtro
-                                    </button>
-                                </div>
+                                <div class="col-md-3" style="text-align: right; padding-top: 23px;">
+                                     <button type="button" class="btn btn-outline-primary" id="btnFiltros">
+                                         <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
+                                     </button>
+                                 </div>
                             </div>
                         </div>
                     </div>
@@ -214,7 +216,7 @@
                         <span class="sr-only">45% completado</span>
                     </div>
                 </div>
-                <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
+                <div id="divResultados" runat="server" style="display: none; margin-top: 20px;">
                     <div class="row">
                         <div class="col-md-12 mb-4 d-flex justify-content-end">
                              <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
@@ -230,58 +232,34 @@
                             <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
                                 <i class="fa fa-list" aria-hidden="true"></i> Plantillas
                             </a>
-                            <button runat="server" id="btnGenerarNoti" onserverclick="btnGenerarNoti_ServerClick"
-                                type="button" class="btn btn-outline-primary">
-                                <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación
-                            </button>
-                            <button type="button" runat="server" id="btnExportExcel"
-                                onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
-                                data-toggle="modal" data-target="#page-change-name">
-                                <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel                                           
-                            </button>
+                              <button id="btnGenerarNoti" type="button" class="btn btn-outline-primary" onclick="procesarYGenerarNotificaciones()"> 
+                                  <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación
+                              </button>
+                              <button type="button" id="btnExportExcel" class="btn btn-outline-secondary" onclick="exportarSeleccionadosDirecto()">
+                                      <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel  
+                              </button>
                         </div>
                     </div>
-                    <div class="row" style="margin-top: 20px; margin-right:15px;">
-                        <div class="col-md-12"
-                             style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
-                            <asp:GridView ID="gvDeuda" CssClass="table" runat="server"
-                                OnRowDataBound="gvDeuda_RowDataBound" AutoGenerateColumns="False" EmptyDataText="No hay resultados..."
-                                CellPadding="4" ForeColor="#333333" GridLines="None">
-                                <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
-                                <Columns>
-                                    <asp:TemplateField HeaderText="Seleccionar">
-                                        <HeaderTemplate>
-                                            <input type="checkbox" id="chkAll" name="chkAll"
-                                                onclick="javascript: SelectAllCheckboxes(this)" />
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <asp:CheckBox ID="chkSelect" runat="server" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:BoundField DataField="legajo" ControlStyle-Width="10%"
-                                        HeaderText="Denominacion"></asp:BoundField>
-                                    <asp:BoundField DataField="nombre" ControlStyle-Width="10%"
-                                        HeaderText="Nombre"></asp:BoundField>
-                                    <asp:BoundField DataField="apellido" ControlStyle-Width="10%"
-                                        HeaderText="Apellido"></asp:BoundField>
-                                    <asp:BoundField DataField="cuit" ControlStyle-Width="10%"
-                                        HeaderText="CUIT"></asp:BoundField>
-                                    <asp:BoundField DataField="cod_rubro" ControlStyle-Width="10%"
-                                        HeaderText="Cod_rubro"></asp:BoundField>
-                                    <asp:BoundField DataField="concepto" ControlStyle-Width="10%"
-                                        HeaderText="Concepto "></asp:BoundField>
-                                    <asp:BoundField DataField="nom_calle" ControlStyle-Width="10%"
-                                        HeaderText="Calle"></asp:BoundField>
-                                    <asp:BoundField DataField="Nom_barrio" ControlStyle-Width="10%"
-                                        HeaderText="Nom_barrio"></asp:BoundField>
-
-                                </Columns>
-                            </asp:GridView>
-                        </div>
+                    <div style="margin-top: 20px;">
+                          <table id="tablaIyC" class="display" style="width: 100%">
+                              <thead>
+                                  <tr>
+                                      <th>
+                                          <input type="checkbox" id="selectAll" class="filaCheckbox" data-id="AH019FU" /></th>
+                                      <th>Denominación</th>
+                                      <th>Nombre</th>
+                                      <th>Apellido</th>
+                                      <th>CUIT</th>
+                                      <th>Cod_rubro</th>
+                                      <th>Concepto</th>
+                                      <th>Calle</th>
+                                      <th>Nom_barrio</th>
+                                      <th>Baja</th>
+                                  </tr>
+                              </thead>
+                          </table>
                     </div>
                 </div>
-
-
             </section>
         </div>
     </div>
@@ -302,7 +280,7 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger btn-block" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -326,36 +304,26 @@
         </div>
     </div>
     <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-plantillas">
+        <div class="modal-dialog modal-xl modal-plantillas">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Lista de planillas</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title">Lista de plantillas</h4>
+                    <button type="button" class="btn-close small me-1" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.8);"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body body-plantillas" style=" margin-right:20px ; margin-left:20px;">
                     <div class="form-group">
-                        <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
-                            OnRowDataBound="gvPlantilla_RowDataBound"
-                            OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
-                            ForeColor="#333333" GridLines="None" EnableViewState="true"
-                            ShowHeader="false" ShowFooter="false"
-                            CellPadding="0" CellSpacing="0"
-                            DataKeyNames="id,contenido">
-                            <AlternatingRowStyle BackColor="White" ForeColor="#284775"></AlternatingRowStyle>
-                            <Columns>
-                                <asp:TemplateField HeaderText="Seleccionar">
-                                    <ItemTemplate>
-                                        <asp:CheckBox ID="chkSeleccionar" runat="server" onclick="SoloUnCheckbox(this); event.cancelBubble=true;" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
-                                    HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
-                            </Columns>
-                        </asp:GridView>
+                        <table id="tablaPlantillas" class="table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de Plantilla</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" CssClass="btn btn-primary" OnClick="btnObtenerSeleccionados_Click" />
+                    <button type="button" id="btnSeleccionar" class="btn btn-primary">Seleccionar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
@@ -365,39 +333,191 @@
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- 2. Después cargá Select2 JS y CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
 
     <script>
 
+
+
+
+
+function inicializarBuscador() {
+            var $listBox = $("#<%= lstCalles.ClientID %>");
+            var allOptions = [];
+
+            $listBox.find("option").each(function () {
+                allOptions.push({
+                    value: $(this).val(),
+                    text: $(this).text()
+                });
+            });
+
+            $("#txtSearchCalle").off("input");
+
+            $("#txtSearchCalle").on("input", function () {
+                var searchText = $(this).val().toLowerCase();
+
+                $listBox.empty();
+
+                $.each(allOptions, function (i, option) {
+                    if (searchText === '' || option.text.toLowerCase().indexOf(searchText) > -1) {
+                        $listBox.append(new Option(option.text, option.value));
+                    }
+                });
+            });
+        }
+
+
         //// Modal de plantillas
+        // Abrir modal de plantillas y mostrar el dataTable con las plantillas
         function abrirModalPlantillas() {
             $('#plantillaModalNotas').modal('show');
-        }
 
-        // Funcion para poder seelccionar el check cuando aprieto cualquier lugar del gridview
-        function SeleccionarFila(fila, checkBoxId) {
-            var chk = document.getElementById(checkBoxId);
+            if (!$.fn.DataTable.isDataTable('#tablaPlantillas')) {
+                $.ajax({
+                    url: 'MasivoDeudaIyC.aspx/ObtenerPlantillas',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify({}),
+                    success: function (response) {
+                        let datos = JSON.parse(response.d);
 
-            if (chk !== null) {
-                chk.checked = !chk.checked;
-                SoloUnCheckbox(chk);
+                        $('#tablaPlantillas').DataTable({
+                            data: datos,
+                            columns: [
+                                {
+                                    data: 'id',
+                                    title: 'Seleccionar',
+                                    orderable: false,
+                                    render: function (data, type, row) {
+                                        return `<input type="checkbox" name="plantilla" value="${data}" onclick="SoloUnCheckbox(this)">`;
+                                    }
+                                },
+                                {
+                                    data: 'nom_plantilla',
+                                    title: 'Nombre de Plantilla'
+                                }
+                            ],
+                            paging: true,
+                            searching: true,
+                            info: false,
+                            language: {
+                                emptyTable: "No hay plantillas disponibles"
+                            }
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error al cargar plantillas:', status, error);
+                        console.error('Respuesta completa:', xhr.responseText);
+
+                        $('#tablaPlantillas tbody').html(
+                            '<tr><td colspan="2" class="text-center text-danger">Error al cargar plantillas</td></tr>'
+                        );
+                    }
+                });
+            } else {
+
+                $('#tablaPlantillas').DataTable().clear().destroy();
+                abrirModalPlantillas();
             }
         }
 
-        // Funcion para solo seleccionar un checkbox
-        function SoloUnCheckbox(chk) {
-            var grid = document.getElementById('<%= gvPlantilla.ClientID %>');
-            var checkboxes = grid.getElementsByTagName('input');
+        //  PERMITIR SELECCIONAR SOLO UN CHECKBOX DE LAS PLANTILLAS
+        function SoloUnCheckbox(checkbox) {
+            $('input[name="plantilla"]').not(checkbox).prop('checked', false);
+        }
 
-            for (var i = 0; i < checkboxes.length; i++) {
-                var tipo = checkboxes[i].type;
-                if (tipo === 'checkbox' && checkboxes[i] !== chk) {
-                    checkboxes[i].checked = false;
+        let plantillaSeleccionada = null;
+        // BOTON SELECCIONAR PLANTILLAS Y GUARDARLOS EN EL CODE BEHIND
+        $('#btnSeleccionar').on('click', function (e) {
+            e.preventDefault();
+
+            let seleccionado = $('input[name="plantilla"]:checked').val();
+
+            if (!seleccionado) {
+                alert("Seleccioná una plantilla.");
+                return false;
+            }
+
+            plantillaSeleccionada = parseInt(seleccionado);
+
+            $.ajax({
+                type: "POST",
+                url: "MasivoDeudaAuto.aspx/GuardarPlantillaEnSesion",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ idPlantilla: parseInt(seleccionado) }),
+                beforeSend: function () {
+                    console.log("Enviando datos:", JSON.stringify({ idPlantilla: parseInt(seleccionado) }));
+                },
+                success: function (response) {
+                    $('#plantillaModalNotas').modal('hide');
+                    $('#divResultados').show();
+                    $('#divFiltros').hide();
+                },
+                error: function (xhr, status, error) {
+                    console.log("Status:", status);
+                    console.log("Error:", error);
+                    console.log("Response Text:", xhr.responseText);
+                    console.log("Status Code:", xhr.status);
+                    alert("Error al guardar plantilla en sesión: " + error);
                 }
-            }
+            });
+
+            return false;
+        });
+
+
+        // PARA SELECCIONAR TODOS LOS ELEMENTOS DE LA TABLA 
+        $(document).on('change', '#selectAll', function () {
+            let isChecked = $(this).is(':checked');
+            $('.filaCheckbox').prop('checked', isChecked);
+        });
+
+        $('#btnFiltros').on('click', function () {
+
+            let dado_baja = $('#<%= Activo.ClientID %>').val() === '1' ? true : false;
+            console.log(dado_baja)
+
+            let cod_zona = ($('#<%= lstZonas.ClientID %>').val() || [])[0] ?? null;
+            console.log("zonas:", cod_zona);
+
+            let cod_calle = parseInt($('#<%= lstCalles.ClientID %>').val());
+            console.log(cod_calle)
+
+            // Obtener valores de rango numérico
+            let desde = parseInt($('#<%= txtDesde.ClientID %>').val()) || 0;
+            let hasta = parseInt($('#<%= txtHasta.ClientID %>').val()) || 0;
+
+            console.log(hasta)
+            console.log(desde)
+
+            $.ajax({
+                type: "POST",
+                url: "MasivoDeudaIyC.aspx/fillGrillaJSON",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({
+                    dado_baja: dado_baja,
+                    cod_zona: cod_zona,
+                    cod_calle: cod_calle,
+                    desde: desde,
+                    hasta: hasta
+                }),
+                success: function (response) {
+                    let datos = JSON.parse(response.d);
+                    cargarDatos(datos);
+                    $('#' + '<%= divResultados.ClientID %>').show();
+            $('#' + '<%= divFiltros.ClientID %>').hide();
+        },
+        error: function (xhr, status, error) {
+            console.error("Error:", xhr.responseText);
         }
+    });
+        });
 
         /////////////////////////////
 
@@ -413,32 +533,50 @@
         });
 
 
-        // para agregar spinner en generar notificaciones
-        if (window.jQuery) {
-            $(document).ready(function () {
-                $('#<%= btnGenerarNoti.ClientID %>').on('click', function (e) {
-                    var $btn = $(this);
+        function cargarDatos(datos) {
 
-                    if ($btn.prop('disabled')) {
-                        e.preventDefault();
-                        return false;
+            let tabla = $('#tablaIyC').DataTable({
+                destroy: true,
+                data: datos,
+                paging: false,
+                columns: [
+                    {
+                        data: null,
+                        orderable: false,
+                        className: 'select-checkbox',
+                        defaultContent: '',
+                        render: function (data, type, row, meta) {
+                            return `<input type="checkbox" class="filaCheckbox" data-id="${row.dominio}">`;
+                        }
+                    },
+                    { data: 'legajo' },
+                    { data: 'nombre' },
+                    { data: 'apellido' },
+                    { data: 'cuit' },
+                    { data: 'cod_rubro' },
+                    { data: 'concepto' },
+                    { data: 'nom_calle' },
+                    { data: 'nom_barrio' },
+                    {
+                        data: 'Baja',
+                        render: function (data) {
+                            return data ? 'Sí' : 'No';
+                        }
                     }
-
-                    $btn.prop('disabled', true)
-                        .addClass('disabled')
-                        .html('<span class="spinner-border spinner-border-sm mr-1"></span> Procesando...');
-
-                    setTimeout(function () {
-                        $btn.prop('disabled', false)
-                            .removeClass('disabled')
-                            .html('<span class="fa fa-sheet-plastic"></span> Generar notificación');
-                    }, 30000);
-
-                    return true;
-                });
+                ],
+                drawCallback: function () {
+                    // Esto vuelve a vincular el checkbox de "seleccionar todos"
+                    $('#selectAll').off('change').on('change', function () {
+                        let checked = this.checked;
+                        tabla.rows().every(function () {
+                            let $checkbox = $(this.node()).find('input.filaCheckbox');
+                            $checkbox.prop('checked', checked);
+                        });
+                    });
+                }
             });
         }
-        // fin de  // para agregar spinner en generar notificaciones
+
         // Selecciona todos los checkboxs del dataset
         function SelectAllCheckboxes(spanChk) {
             var oItem = spanChk.children;
@@ -467,7 +605,7 @@
             }
 
             if (selectedCount === 1) {
-                txtDesde.disabled = false;
+                txtDesde.disabled = false; 
                 txtHasta.disabled = false;
             } else {
                 txtDesde.disabled = true;
@@ -477,6 +615,168 @@
             }
         }
         // fin de  // solamente se habilita desde y hasta con una sola calle
+
+       function obtenerSeleccionados() {
+            let seleccionados = [];
+
+            // Verificar si tablaIyC existe y es una instancia válida de DataTable
+            if (typeof tablaIyC !== 'undefined' && tablaIyC && $.fn.dataTable.isDataTable('#tablaIyC')) {
+                try {
+                    tablaIyC.rows().every(function () {
+                        let $checkbox = $(this.node()).find('input.filaCheckbox');
+                        if ($checkbox.is(':checked')) {
+                            console.log("Comercio seleccionado");
+                            let rowData = tablaIyC.row(this).data();
+                            seleccionados.push({
+                                legajo: rowData.legajo,
+                                cuit: rowData.cuit,
+                                nombre: rowData.nombre,
+                                apellido: rowData.apellido,
+                                nom_calle: rowData.nom_calle,
+                                nom_barrio: rowData.nom_barrio,
+                                concepto: rowData.concepto,
+                                cod_rubro: rowData.cod_rubro
+                            });
+                        }
+                    });
+                } catch (error) {
+                    console.log("Error al obtener seleccionados:", error);
+                    // Método alternativo usando jQuery directamente
+                    $('#tablaIyC tbody input.filaCheckbox:checked').each(function () {
+                        let $checkbox = $(this);
+                        let $row = $checkbox.closest('tr');
+                        let legajo = $checkbox.data('id'); 
+
+                        seleccionados.push({
+                            legajo: $row.find('td:eq(1)').text(),
+                            nombre: $row.find('td:eq(2)').text(), 
+                            apellido: $row.find('td:eq(3)').text(),
+                            cuit: $row.find('td:eq(4)').text(),
+                            cod_rubro: $row.find('td:eq(5)').text(),
+                            concepto: $row.find('td:eq(6)').text(),
+                            nom_calle: $row.find('td:eq(7)').text(),
+                            nom_barrio: $row.find('td:eq(8)').text()
+                        });
+                    });
+                }
+            } else {
+                console.log("La tabla no está inicializada, usando método alternativo");
+                $('#tablaIyC tbody input.filaCheckbox:checked').each(function () {
+                    let $checkbox = $(this);
+                    let $row = $checkbox.closest('tr');
+                    let legajo = $checkbox.data('id'); 
+
+                    seleccionados.push({
+                        legajo: $row.find('td:eq(1)').text(),
+                        nombre: $row.find('td:eq(2)').text(),
+                        apellido: $row.find('td:eq(3)').text(),
+                        cuit: $row.find('td:eq(4)').text(),
+                        cod_rubro: $row.find('td:eq(5)').text(),
+                        concepto: $row.find('td:eq(6)').text(),
+                        nom_calle: $row.find('td:eq(7)').text(),
+                        nom_barrio: $row.find('td:eq(8)').text()
+                    });
+                });
+            }
+
+            console.log("Comercios seleccionados:", seleccionados);
+            return seleccionados;
+        }
+
+        function enviarSeleccionados() {
+            let seleccionados = obtenerSeleccionados();
+
+            console.log("Comercios para enviar antes de enviar:", seleccionados);
+
+            if (seleccionados.length === 0) {
+                $('#modalErrorTexto').text('Por favor seleccione al menos un comercio.');
+                $('#modalError').modal('show');
+                restaurarBotonGenerar();
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "MasivoDeudaIyC.aspx/ProcesarSeleccionados", 
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({
+                    comerciosSeleccionados: seleccionados 
+                }),
+                success: function (response) {
+                    console.log("Respuesta completa del servidor:", response);
+                    console.log("response.d:", response.d);
+
+                    if (response.d === "OK") {
+                        console.log("Comercios procesados correctamente");
+                        if (typeof window.callbackDespuesDeSeleccionar === 'function') {
+                            window.callbackDespuesDeSeleccionar();
+                        }
+                    } else {
+                        $('#modalErrorTexto').text('Error: ' + response.d);
+                        $('#modalError').modal('show');
+                        console.error("Error detallado:", response.d);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error al enviar datos:", xhr.responseText);
+                    $('#modalErrorTexto').text('Error al procesar la solicitud');
+                    $('#modalError').modal('show');
+                }
+            });
+        }
+
+        function generarNotificacionesDesdeJS() {
+            $.ajax({
+                type: "POST",
+                url: "MasivoDeudaIyC.aspx/ContinuarGenerarNotificaciones", 
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.d.startsWith('OK:')) {
+                        var params = response.d.substring(3);
+                        window.location.href = './DetNotificacionesGeneral.aspx' + params;
+                    } else {
+                        $('#modalErrorTexto').text(response.d);
+                        $('#modalError').modal('show');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#modalErrorTexto').text('Error al generar notificaciones: ' + error);
+                    $('#modalError').modal('show');
+                }
+            });
+        }
+
+        function procesarYGenerarNotificaciones() {
+            if (!plantillaSeleccionada) {
+                $('#modalErrorTexto').text('Debe seleccionar una plantilla.');
+                $('#modalError').modal('show');
+                return;
+            }
+
+            var $btn = $('#btnGenerarNoti');
+            $btn.prop('disabled', true)
+                .addClass('disabled')
+                .html('<span class="spinner-border spinner-border-sm me-1"></span> Procesando...');
+            console.log("aca entro");
+            window.callbackDespuesDeSeleccionar = function () {
+                generarNotificacionesDesdeJS();
+            };
+            console.log("aca salio");
+
+            enviarSeleccionados();
+        }
+
+        function restaurarBotonGenerar() {
+            var $btn = $('#btnGenerarNoti');
+            $btn.prop('disabled', false)
+                .removeClass('disabled')
+                .html('<span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación');
+        }
+
+
+
 
 
     </script>
