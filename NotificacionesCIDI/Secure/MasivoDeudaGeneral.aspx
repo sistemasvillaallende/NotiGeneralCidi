@@ -108,6 +108,70 @@
 		outline: none;
 	}
 
+        .table-example {
+        max-width: 300px;
+        margin: 0 auto;
+        font-size: 0.875rem !important;
+    }
+    
+    .table-example th {
+        background-color: #495057 !important;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .table-example td {
+        text-align: center;
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+    }
+    
+    .modal-dialog-centered {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem);
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .table-excel-wrapper {
+        display: table;
+        margin: 0 auto; 
+        margin-top: 1rem;
+    }
+
+    .table-excel {
+        border-collapse: collapse;
+        font-family: Calibri, sans-serif;
+        font-size: 14px;
+    }
+
+    .table-excel th,
+    .table-excel td {
+        border: 1px solid #b6b6b6;
+        padding: 6px 12px;
+        min-width: 140px;
+        max-width: 140px;
+        text-align: left;
+        background-color: #fff;
+    }
+
+    .table-excel th {
+        background-color: #f9f9f9;
+        color: #000;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table-excel td.selected {
+        border: 2px solid #00b050;
+        box-shadow: inset 0 0 0 1px white;
+    }
+
 </style>
         <script type="text/javascript">
             var pbControl = null;
@@ -253,6 +317,67 @@
                   </div>
               </div>
           </div>
+
+        <div class="modal fade" id="modalEjemplo" data-bs-backdrop="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="" style="margin-top:12px">
+                            <i class="fa-solid fa-table me-2"></i>
+                            Formato Requerido - Archivo Excel
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.7);"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="alert alert-info mb-4">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            Su archivo Excel debe tener exactamente este formato
+                        </div>
+                        <div class="table-responsive mb-4">
+                            <div class="table-excel-wrapper">
+
+                            <table class="table-excel">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="text-center">CUIT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>20123456789</td>
+                                    </tr>
+                                    <tr>
+                                        <td>27876543214</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="selected">30112233445</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23998877661</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted fst-italic">...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>
+                        <div class="alert alert-warning mb-0">
+                            <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                            <strong>Importante:</strong>
+                            <ul class="list-unstyled mb-0 mt-2">
+                                <li>• La columna debe llamarse exactamente <strong>"CUIT"</strong></li>
+                                <li>• Formato: <strong>solo números</strong> (sin guiones ni espacios)</li>
+                                <li>• ❌ No usar guiones → <code>20-30123456-7</code></li>
+                                <li>• ❌ No usar espacios → <code>20 301234567</code></li>
+                                <li>• ✅ Correcto → <code>20301234567</code></li>
+                                <li>• Archivo en formato <strong>.xlsx</strong> o <strong>.xls</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="modalConceptos">
             <div class="modal-dialog modal-upload">
                 <div class="modal-content">
@@ -261,6 +386,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="text-end mb-3">
+                    <button type="button" class="btn btn-outline-info btn-sm" onclick="verEjemplo()">
+                        <i class="fa-solid fa-eye me-1"></i>
+                        Ver formato requerido
+                    </button>
+                </div>
                         <div class="form-group">
                             <label  class="pt-2 pb-3">Subir archivo</label>
                             <asp:FileUpload ID="fUploadConceptos" CssClass="form-control" runat="server" onchange="hideErrorMessage()" />
@@ -319,6 +450,31 @@
 
 
         <script>
+
+            function mostrarModalConCuit() {
+                var modalEjemplo = new bootstrap.Modal(document.getElementById('modalEjemplo'));
+                modalEjemplo.show();
+            }
+
+            // Función para ver ejemplo desde el modal de subida
+            function verEjemplo() {
+                var modalConceptos = bootstrap.Modal.getInstance(document.getElementById('modalConceptos'));
+                modalConceptos.hide();
+
+                setTimeout(function () {
+                    var modalEjemplo = new bootstrap.Modal(document.getElementById('modalEjemplo'));
+                    modalEjemplo.show();
+                }, 300);
+            }
+
+            // Función para ocultar mensaje de error
+            function hideErrorMessage() {
+                var lblError = document.getElementById('<%= lblFileError.ClientID %>');
+        if (lblError) {
+            lblError.style.display = 'none';
+        }
+    }
+
              function abrirModalPlantillas() {
                         $('#plantillaModalNotas').modal('show');
             }
