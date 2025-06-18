@@ -2,7 +2,50 @@
     Inherits="NotificacionesCIDI.Secure.Plantillas" MasterPageFile="~/Master/MasterPage.master"  
     Debug="true" ValidateRequest="false" Title="Plantillas" %>
 
-    <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+    <style>
+
+            .custom-table td {
+                padding: 0.5rem 0.75rem; 
+                vertical-align: middle;
+                 font-size: 0.9rem !important;
+            }
+
+            .custom-table th {
+                padding: 0.5rem 0.75rem;
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+            .custom-table .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+        .text-end {
+            text-align: right !important;
+        }
+
+        .table-responsive {
+            max-width: 100%;
+        }
+
+        .custom-table th:first-child,
+        .custom-table td:first-child {
+            width: 15%; 
+        }
+
+        .custom-table th:nth-child(2),
+        .custom-table td:nth-child(2) {
+            width: 65%; 
+        }
+
+        .custom-table th:last-child,
+        .custom-table td:last-child {
+            width: 10%; 
+        }
+    </style>
          <div class="container-fluid" style="padding-right: 4%; padding-left: 2%;">
              <div class="row">
                 <div class="col-12" style="padding: 0px;">
@@ -33,7 +76,7 @@
                             <div class="table-responsive">
                                 <asp:GridView ID="GridPlantillas" runat="server"
                                     AutoGenerateColumns="false"
-                                    CssClass="table table-striped table-hover"
+                                    CssClass="table table-striped table-hover table-sm custom-table"
                                     EnableViewState="true"
                                     OnRowDataBound="GridPlantillas_RowDataBound"
                                     OnRowCommand="GridPlantillas_RowCommand">
@@ -41,6 +84,8 @@
                                         <asp:BoundField DataField="id" HeaderText="Numero Plantilla" />
                                         <asp:BoundField DataField="nom_plantilla" HeaderText="Nombre de la Plantilla"/>
                                         <asp:TemplateField HeaderText="Acciones">
+                                            <HeaderStyle CssClass="text-center" Width="150px" />
+                                                <ItemStyle CssClass="text-end" />
                                             <ItemTemplate>
                                                 <asp:LinkButton
                                                     ID="btnEditar"
@@ -109,9 +154,12 @@
             <div class="modal fade" id="plantillaModal" tabindex="-1" aria-labelledby="plantillaModalLabel" aria-hidden="true">
                 <div class=" modal-dialog modal-lg">
                     <div class=" modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" style="text-align: left;">Nueva Plantilla</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-header d-flex justify-content-between align-items-start">
+                            <div>
+                                <h4 class="modal-title" style="text-align: left;">Nueva Plantilla</h4>
+                                <h8 class="text-muted mb-0">Revisá que los datos estén correctos antes de continuar.</h8>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.7);"></button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
@@ -122,11 +170,11 @@
                         </div>
                         <div class="modal-footer">
                             <div class="d-flex flex-row gap-3 ">
-                                <button type="button" class=" btn btn-primary " onclick="insertVariable('{nombre}')">Insertar Nombre</button>
-                                <button type="button" class=" btn btn-primary " onclick="insertVariable('{apellido}')">Insertar Apellido</button>
-                                <button type="button" class=" btn btn-primary " onclick="insertVariable('{cuit}')">Insertar CUIT</button>
-                                <button type="button" class=" btn btn-primary " onclick="generarNotas()">GENERAR PLANTILLA</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{nombre}')">Insertar Nombre</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{apellido}')">Insertar Apellido</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{cuit}')">Insertar CUIT</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm" onclick="generarNotas()">Guardar Plantilla</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                                 <asp:TextBox ID="hiddenInput2" runat="server" TextMode="MultiLine" Style="display: none;" ValidateRequestMode="Disabled"></asp:TextBox>
                                 <asp:Literal ID="litNotasGeneradas" runat="server"></asp:Literal>
@@ -139,10 +187,13 @@
             <div class="modal fade" id="plantillaModalEditar" tabindex="-1" aria-labelledby="plantillaModalLabel" aria-hidden="true">
                 <div class=" modal-dialog modal-lg">
                     <div class=" modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" style="text-align: left;">Editar Plantilla</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                         <div class="modal-header d-flex justify-content-between align-items-start">
+                             <div>
+                                 <h4 class="modal-title" style="text-align: left;">Editar Plantilla</h4>
+                                 <h8 class="text-muted mb-0">Por favor, revise y actualice la información de la plantilla antes de guardar.</h8>
+                             </div>
+                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.7);"></button>
+                         </div>
                         <div class="modal-body">
                             <div class="form-group">
                                 <div id="editor-container-editar"
@@ -152,12 +203,12 @@
                         </div>
                         <div class="modal-footer">
                             <div class="d-flex flex-row gap-3 ">
-                                <button type="button" class=" btn btn-primary " onclick="insertVariableEditar('{nombre}')">Insertar Nombre</button>
-                                <button type="button" class=" btn btn-primary " onclick="insertVariableEditar('{apellido}')">Insertar Apellido</button>
-                                <button type="button" class=" btn btn-primary " onclick="insertVariableEditar('{cuit}')">Insertar CUIT</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{nombre}')">Insertar Nombre</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{apellido}')">Insertar Apellido</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{cuit}')">Insertar CUIT</button>
                                 <asp:Button ID="btnGuardarCambios" runat="server" Text="Guardar Cambios" 
-                                     CssClass="btn btn-primary" OnClick="btnGuardarCambios_Click"  OnClientClick="return prepararContenido();" />
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                     CssClass="btn btn-outline-primary btn-sm" OnClick="btnGuardarCambios_Click"  OnClientClick="return prepararContenido();" />
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                                 <asp:TextBox ID="hiddenInput3" runat="server" TextMode="MultiLine" Style="display: none;" ValidateRequestMode="Disabled"></asp:TextBox>
                                 <asp:Literal ID="litNotasGeneradas2" runat="server"></asp:Literal>
@@ -210,6 +261,7 @@
                                 [{ 'header': [1, 2, 3, false] }],
                                 [{ 'size': ['small', false, 'large', 'huge'] }], 
                                 ['bold', 'italic', 'underline'],
+                                ['link'],
                                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                                 ['clean']
                                     ]
@@ -225,6 +277,7 @@
                                             [{ 'header': [1, 2, 3, false] }],
                                             [{ 'size': ['small', false, 'large', 'huge'] }],
                                             ['bold', 'italic', 'underline'],
+                                            ['link'],
                                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                                             ['clean']
                                         ]
