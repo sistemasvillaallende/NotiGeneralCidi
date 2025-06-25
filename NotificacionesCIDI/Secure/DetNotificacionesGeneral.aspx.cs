@@ -75,12 +75,12 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-                gvMasivosAut.DataSource = lst;
-                gvMasivosAut.DataBind();
+                gvNotGeneral.DataSource = lst;
+                gvNotGeneral.DataBind();
                 if (lst.Count > 0)
                 {
-                    gvMasivosAut.UseAccessibleHeader = true;
-                    gvMasivosAut.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    gvNotGeneral.UseAccessibleHeader = true;
+                    gvNotGeneral.HeaderRow.TableSection = TableRowSection.TableHeader;
                 }
             }
             catch (Exception ex)
@@ -127,8 +127,8 @@ namespace NotificacionesCIDI.Secure
             }
 
             List<DetalleNotificadorDTO> filteredList = FilterData(lst, selectedValue);
-            gvMasivosAut.DataSource = filteredList;
-            gvMasivosAut.DataBind();
+            gvNotGeneral.DataSource = filteredList;
+            gvNotGeneral.DataBind();
         }
 
         protected List<DetalleNotificadorDTO> FilterData(List<DetalleNotificadorDTO> lst, int estadoCidi)
@@ -222,13 +222,15 @@ namespace NotificacionesCIDI.Secure
                 string subsistemaNombre = GetSubsistema(subsistema);
                 List<DAL.DetNotificacionGeneral> lstCompleted = CargarDetallesNotificacionesCompleta(nroEmision);
                 List<DAL.DetNotificacionGeneral> lstSeleccionados = new List<DAL.DetNotificacionGeneral>();
+                string denominacion = null;
 
-                foreach (GridViewRow row in gvMasivosAut.Rows)
+                foreach (GridViewRow row in gvNotGeneral.Rows)
                 {
                     CheckBox cb = (CheckBox)row.FindControl("chkSelect");
                     if (cb != null && cb.Checked)
                     {
                         int nroNotificacion = Convert.ToInt32(row.Cells[1].Text);
+                        denominacion = row.Cells[3].Text;
                         var registroEncontrado = lstCompleted.FirstOrDefault(item => item.Nro_Notificacion == nroNotificacion);
                         if (registroEncontrado != null)
                         {
@@ -244,7 +246,7 @@ namespace NotificacionesCIDI.Secure
                     {
                         string nombreCompleto = item.Nombre;
                         SepararNombreApellido(nombreCompleto, out nombre, out apellido);
-                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit);
+                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit,denominacion );
                         EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion,subsistemaNombre);
                     }
                 }
@@ -254,36 +256,6 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
-
-      
-        //private DAL.Subsistema GetSubsistemaByTipo(int tipoSubsistema)
-        //{
-        //    try
-        //    {
-        //        DAL.Subsistema nombreSubsistema = null;
-        //        var options = new RestClientOptions(urlBase)
-        //        {
-        //            MaxTimeout = -1,
-        //            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-        //        };
-
-        //        var client = new RestClient(options);
-        //        var request = new RestRequest($"/Subsistema/getSubsistemaByTipo?tipo_subsitema={tipoSubsistema}", Method.Get);
-        //        RestResponse response = client.Execute(request);
-
-        //        if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
-        //        {
-        //            nombreSubsistema = JsonConvert.DeserializeObject<DAL.Subsistema>(response.Content);
-        //        }
-        //        return nombreSubsistema;
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-        //}
 
         // Tuve que colocar este switch ya que el endpoint arriba no me trae PERSONAL y GENERAL
         private string GetSubsistema(object subsistema)
@@ -310,12 +282,13 @@ namespace NotificacionesCIDI.Secure
         }
 
 
-        private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
+        private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit, string denominacion)
         {
             string resultado = plantilla;
             resultado = resultado.Replace("{nombre}", nombre);
             resultado = resultado.Replace("{apellido}", apellido);
             resultado = resultado.Replace("{cuit}", cuit);
+            resultado = resultado.Replace("{denominación}", denominacion);
             return resultado;
         }
 

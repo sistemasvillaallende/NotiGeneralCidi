@@ -11,6 +11,8 @@ using System.IO;
 using System.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Web.Services;
+using System.Text;
 
 namespace NotificacionesCIDI.Secure
 {
@@ -63,18 +65,12 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
             List<DAL.MasivoDeudaGeneral> lst = new List<DAL.MasivoDeudaGeneral>();
-
-            //fillGrilla(cod_barrio, cod_calle, cod_zona, desde, hasta);
             divFiltros.Visible = false;
             divResultados.Visible = true;
         }
-
-
-
 
         protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -283,7 +279,7 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        protected void btnConceptos_x_legajos_Click(object sender, EventArgs e)
+        protected void btnImportExcel_Click(object sender, EventArgs e)
         {
             try
             {
@@ -299,7 +295,7 @@ namespace NotificacionesCIDI.Secure
                 {
                     lblFileError.Visible = true;
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
-               "$('#modalConceptos').modal('show');", true);
+               "$('#modalImportExcel').modal('show');", true);
 
 
                 }
@@ -355,8 +351,8 @@ namespace NotificacionesCIDI.Secure
                 }
                 if (dt.Rows.Count > 0)
                 {
-                    List<DAL.MasivoDeudaGeneral> lst = new List<DAL.MasivoDeudaGeneral>();
-                    lst = pasarALstConcepto2(dt);
+                    List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
+                    lst = pasarALst(dt);
                     Session["registros_notificar"] = lst;
                     gvConceptos.DataSource = lst;
                     gvConceptos.DataBind();
@@ -370,31 +366,42 @@ namespace NotificacionesCIDI.Secure
         }
 
 
-        private List<DAL.MasivoDeudaGeneral> pasarALstConcepto2(DataTable dt)
+        private List<ModeloNotificacionGeneral> pasarALst(DataTable dt)
         {
-            List<DAL.MasivoDeudaGeneral> lstConcepto = new List<DAL.MasivoDeudaGeneral>();
+            List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
             string cuit = String.Empty;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
 
-                DAL.MasivoDeudaGeneral obj = new DAL.MasivoDeudaGeneral();
+                ModeloNotificacionGeneral obj = new ModeloNotificacionGeneral();
                 if (dt.Rows[i]["cuit"] != DBNull.Value)
                 {
-                    cuit = Convert.ToString(dt.Rows[i]["cuit"]);
-
-                    obj = GetVecinoDigitalByCuit(cuit);
-
-                    if(obj != null)
-                    {
-                    lstConcepto.Add(obj);
-
-                    }
-
+                    obj.Cuit = Convert.ToString(dt.Rows[i]["cuit"]);
                 }
+
+                if (dt.Rows[i]["Nombre"] != DBNull.Value)
+                {
+                    obj.Nombre = Convert.ToString(dt.Rows[i]["Nombre"]);
+                }
+
+                if (dt.Rows[i]["Apellido"] != DBNull.Value)
+                {
+                    obj.Apellido = Convert.ToString(dt.Rows[i]["Apellido"]);
+                }
+
+                if (dt.Rows[i]["Domicilio"] != DBNull.Value)
+                {
+                    obj.Domicilio = Convert.ToString(dt.Rows[i]["Domicilio"]);
+                }
+
+                if (dt.Rows[i]["Denominacion"] != DBNull.Value)
+                {
+                    obj.Denominacion = Convert.ToString(dt.Rows[i]["Denominacion"]);
+                }
+                lst.Add(obj);
             }
 
-
-            return lstConcepto;
+            return lst;
         }
 
         private DAL.MasivoDeudaGeneral GetVecinoDigitalByCuit(string cuit)
@@ -456,10 +463,7 @@ namespace NotificacionesCIDI.Secure
             {
                 throw;
             }
-
-
         }
-
         protected void gvConceptos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             try
@@ -571,6 +575,67 @@ namespace NotificacionesCIDI.Secure
         {
         }
 
+        protected void btnDescargarModelo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                GenerarExcelConHtmlTextWriter();
+            }
+            catch (Exception ex)
+            {
+                // falta maejar mejor este error
+                Response.Write($"<script>alert('Error al generar el archivo: {ex.Message}');</script>");
+            }
+        }
+
+        private void GenerarExcelConHtmlTextWriter()
+        {
+            Response.Clear();
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", "attachment;filename=Modelo_Datos.xls");
+
+            using (StringWriter sw = new StringWriter())
+            {
+                using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+                {
+
+                    hw.WriteLine("<html xmlns:o=\"urn:schemas-microsoft-com:office:office\"");
+                    hw.WriteLine("xmlns:x=\"urn:schemas-microsoft-com:office:excel\"");
+                    hw.WriteLine("xmlns=\"http://www.w3.org/TR/REC-html40\">");
+                    hw.WriteLine("<head>");
+                    hw.WriteLine("<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">");
+                    hw.WriteLine("<meta name=ProgId content=Excel.Sheet>");
+                    hw.WriteLine("<meta name=Generator content=\"Microsoft Excel 15\">");
+                    hw.WriteLine("<!--[if gte mso 9]><xml>");
+                    hw.WriteLine("<x:ExcelWorkbook>");
+                    hw.WriteLine("<x:ExcelWorksheets>");
+                    hw.WriteLine("<x:ExcelWorksheet>");
+                    hw.WriteLine("<x:Name>Modelo_Datos</x:Name>");
+                    hw.WriteLine("<x:WorksheetOptions><x:DefaultRowHeight>285</x:DefaultRowHeight></x:WorksheetOptions>");
+                    hw.WriteLine("</x:ExcelWorksheet>");
+                    hw.WriteLine("</x:ExcelWorksheets>");
+                    hw.WriteLine("</x:ExcelWorkbook>");
+                    hw.WriteLine("</xml><![endif]-->");
+                    hw.WriteLine("</head>");
+                    hw.WriteLine("<body>");
+                    hw.WriteLine("<table>");
+
+                    hw.WriteLine("<tr>");
+                    string[] headers = { "CUIT", "Nombre", "Apellido", "Domicilio", "Denominacion" };
+
+                    foreach (string header in headers)
+                    {
+                        hw.WriteLine($"<td>{header}</td>");
+                    }
+                    hw.WriteLine("</tr>");
+
+                    hw.WriteLine("</table>");
+                    Response.Write(sw.ToString());
+                }
+            }
+
+            Response.End();
+        }
 
     }
 }

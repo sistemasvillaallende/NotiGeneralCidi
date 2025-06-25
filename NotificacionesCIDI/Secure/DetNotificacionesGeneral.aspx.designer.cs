@@ -42,13 +42,13 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.WebControls.DropDownList DDLEstEnv;
 
         /// <summary>
-        /// Control gvMasivosAut.
+        /// Control gvNotGeneral.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvMasivosAut;
+        protected global::System.Web.UI.WebControls.GridView gvNotGeneral;
 
         /// <summary>
         /// Control divContenido.

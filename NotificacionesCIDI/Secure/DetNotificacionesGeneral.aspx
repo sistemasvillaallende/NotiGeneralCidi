@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-12">
                 <asp:GridView AutoGenerateColumns="false" CssClass="table table-striped table-hover"
-                    ID="gvMasivosAut" runat="server" DataKeyNames="Nro_Notificacion">
+                    ID="gvNotGeneral" runat="server" DataKeyNames="Nro_Notificacion">
                     <Columns>
                         <asp:TemplateField HeaderText="Seleccionar">
                             <HeaderTemplate>
@@ -61,11 +61,7 @@
                                 </div>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Denominacion">
-                            <ItemTemplate>
-                                <%# Eval("Denominacion") %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField DataField="Denominacion" HeaderText="Denominacion" />
                         <asp:TemplateField HeaderText="Estado Cidi">
                             <ItemTemplate>
                                 <%# GetEstadoCidi(Eval("Cod_estado_cidi")) %>
@@ -144,7 +140,7 @@
                         $btn.prop('disabled', false)
                             .removeClass('disabled')
                             .html('<span class="fa fa-sheet-plastic"></span> Generar notificación');
-                    }, 30000);
+                    }, 80000);
 
                     return true;
                 });

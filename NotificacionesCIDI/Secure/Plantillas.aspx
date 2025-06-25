@@ -173,6 +173,7 @@
                                 <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{nombre}')">Insertar Nombre</button>
                                 <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{apellido}')">Insertar Apellido</button>
                                 <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{cuit}')">Insertar CUIT</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm" onclick="insertVariable('{denominación}')">Insertar Denominación</button>
                                 <button type="button" class=" btn btn-outline-primary btn-sm" onclick="generarNotas()">Guardar Plantilla</button>
                                 <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
                             </div>
@@ -206,6 +207,7 @@
                                 <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{nombre}')">Insertar Nombre</button>
                                 <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{apellido}')">Insertar Apellido</button>
                                 <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{cuit}')">Insertar CUIT</button>
+                                <button type="button" class=" btn btn-outline-primary btn-sm " onclick="insertVariableEditar('{denominación}')">Insertar Denominación</button>
                                 <asp:Button ID="btnGuardarCambios" runat="server" Text="Guardar Cambios" 
                                      CssClass="btn btn-outline-primary btn-sm" OnClick="btnGuardarCambios_Click"  OnClientClick="return prepararContenido();" />
                                 <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>

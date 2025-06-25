@@ -206,7 +206,7 @@
                                                 <i class="fa fa-upload" aria-hidden="true"></i> Cargar Excel
                                             </a>
                                             <span class="text-muted ml-3">Nota: El archivo Excel debe contener únicamente una columna de CUIT en la primera columna.</span>
-                                        </div>
+                                        </div>                                     
                                         <div style="width:200px">
                                         <asp:Label ID="lblUploadStatus" runat="server" CssClass="alert alert-success d-block mt-3"  Visible="false"></asp:Label>
                                         </div>
@@ -282,10 +282,14 @@
                                                 </asp:TemplateField>
                                                  <asp:BoundField DataField="Cuit" ControlStyle-Width="10%"
                                                      HeaderText="CUIT" />
-                                                  <asp:BoundField DataField="Nombre" ControlStyle-Width="10%"
-                                                     HeaderText="Nombre" />
-                                                 <asp:BoundField DataField="Apellido" ControlStyle-Width="10%"
-                                                     HeaderText="Apellido" />
+                                                <asp:BoundField DataField="Nombre" ControlStyle-Width="10%"
+                                                    HeaderText="Nombre" />
+                                                <asp:BoundField DataField="Apellido" ControlStyle-Width="10%"
+                                                    HeaderText="Apellido" />
+                                                <asp:BoundField DataField="Domicilio" ControlStyle-Width="10%"
+                                                    HeaderText="Domicilio" />
+                                                <asp:BoundField DataField="Denominacion" ControlStyle-Width="10%"
+                                                    HeaderText="Denominacion" />
                                             </Columns>
                                         </asp:GridView>
                                     </div>
@@ -331,37 +335,53 @@
                     <div class="modal-body text-center">
                         <div class="alert alert-info mb-4">
                             <i class="fa-solid fa-info-circle me-2"></i>
-                            Su archivo Excel debe tener exactamente este formato
+                            <asp:Button ID="btnDescargarModelo" runat="server"
+                                Text="Descargar Modelo Excel"
+                                CssClass="btn-download"
+                                OnClick="btnDescargarModelo_Click" />
                         </div>
                         <div class="table-responsive mb-4">
                             <div class="table-excel-wrapper">
 
-                            <table class="table-excel">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th class="text-center">CUIT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>20123456789</td>
-                                    </tr>
-                                    <tr>
-                                        <td>27876543214</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="selected">30112233445</td>
-                                    </tr>
-                                    <tr>
-                                        <td>23998877661</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted fst-italic">...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <table class="table table-excel table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-center">CUIT</th>
+                                            <th class="text-center">Nombre</th>
+                                            <th class="text-center">Apellido</th>
+                                            <th class="text-center">Domicilio</th>
+                                            <th class="text-center">Denominacion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>20123456789</td>
+                                            <td>Juan Carlos</td>
+                                            <td>Pérez</td>
+                                            <td>Av. Córdoba 1234</td>
+                                            <td>ABC106</td>
+                                        </tr>
+                                        <tr>
+                                            <td>27876543214</td>
+                                            <td>María Elena</td>
+                                            <td>González</td>
+                                            <td>San Martín 567</td>
+                                            <td>1260</td>
+                                        </tr>
+                                        <tr class="selected">
+                                            <td>30112233445</td>
+                                            <td>Roberto</td>
+                                            <td>Fernández</td>
+                                            <td>Belgrano 890</td>
+                                            <td>CIR: 01 - SEC: 03 - MAN: 1 - PAR: 0159 - P_H: 599</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted fst-italic text-center" colspan="5">...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                     </div>
                         <div class="alert alert-warning mb-0">
                             <i class="fa-solid fa-exclamation-triangle me-2"></i>
                             <strong>Importante:</strong>
@@ -378,18 +398,18 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="modalConceptos">
+        <div class="modal fade" id="modalImportExcel">
             <div class="modal-dialog modal-upload">
                 <div class="modal-content">
-                    <div class="modal-header">                       
+                    <div class="modal-header">
                         <h4 class="modal-title">Subir lista de Cuit</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="text-end mb-3">
-                    <button type="button" class="btn btn-outline-info btn-sm" onclick="verEjemplo()">
-                        <i class="fa-solid fa-eye me-1"></i>
-                        Ver formato requerido
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="verEjemplo()">
+                                <i class="fa-solid fa-eye me-1"></i>
+                                Ver formato requerido
                     </button>
                 </div>
                         <div class="form-group">
@@ -401,9 +421,9 @@
                     </div>
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>
-                        <asp:Button ID="btnConceptos_x_legajos" CssClass="btn btn-primary"
+                        <asp:Button ID="btnImportExcel" CssClass="btn btn-primary"
                             OnClientClick="this.disabled=true;this.value = 'Procesando...'" UseSubmitBehavior="false"
-                            OnClick="btnConceptos_x_legajos_Click" runat="server" Text="Aceptar" />
+                            OnClick="btnImportExcel_Click" runat="server" Text="Aceptar" />
                     </div>
                 </div>
             </div>
@@ -451,6 +471,7 @@
 
         <script>
 
+
             function mostrarModalConCuit() {
                 var modalEjemplo = new bootstrap.Modal(document.getElementById('modalEjemplo'));
                 modalEjemplo.show();
@@ -458,7 +479,7 @@
 
             // Función para ver ejemplo desde el modal de subida
             function verEjemplo() {
-                var modalConceptos = bootstrap.Modal.getInstance(document.getElementById('modalConceptos'));
+                var modalConceptos = bootstrap.Modal.getInstance(document.getElementById('modalImportExcel'));
                 modalConceptos.hide();
 
                 setTimeout(function () {
@@ -480,7 +501,7 @@
             }
 
             function abrirmodalConceptos() {
-                $('#modalConceptos').modal('show');
+                $('#modalImportExcel').modal('show');
             }
                   
                     // Funcion para poder seelccionar el check cuando aprieto cualquier lugar del gridview

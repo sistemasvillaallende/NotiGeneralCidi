@@ -114,6 +114,15 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.WebControls.GridView gvConceptos;
 
         /// <summary>
+        /// Control btnDescargarModelo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDescargarModelo;
+
+        /// <summary>
         /// Control fUploadConceptos.
         /// </summary>
         /// <remarks>
@@ -132,13 +141,13 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.WebControls.Label lblFileError;
 
         /// <summary>
-        /// Control btnConceptos_x_legajos.
+        /// Control btnImportExcel.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnConceptos_x_legajos;
+        protected global::System.Web.UI.WebControls.Button btnImportExcel;
 
         /// <summary>
         /// Control gvPlantilla.

@@ -486,8 +486,6 @@
             });
         }
 
-        ///
-
 
         function obtenerSeleccionados() {
             let seleccionados = [];
@@ -647,8 +645,6 @@
                 .removeClass('disabled')
                 .html('<span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación');
         }
-
-
 
 
         ///////////////////////////////////// IMPRIMIR EXCEL ////////////////////////////////////////777
