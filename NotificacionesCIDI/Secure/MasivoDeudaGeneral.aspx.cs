@@ -81,9 +81,9 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-                List<DAL.MasivoDeudaGeneral> todosLosRegistros = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
+                List<ModeloNotificacionGeneral> todosLosRegistros = (List<ModeloNotificacionGeneral>)Session["registros_notificar"];
 
-                List<DAL.MasivoDeudaGeneral> lstFiltrada = new List<DAL.MasivoDeudaGeneral>();
+                List<ModeloNotificacionGeneral> lstFiltrada = new List<ModeloNotificacionGeneral>();
 
                 foreach (GridViewRow row in gvConceptos.Rows)
                 {
@@ -124,14 +124,15 @@ namespace NotificacionesCIDI.Secure
                 obj.id_plantilla = idPlantilla;
                 foreach (var item in lstFiltrada)
                 {
-                    if (item.cuit != null && item.cuit.Length == 11)
+                    if (item.Cuit != null && item.Cuit.Length == 11)
                     {
                         DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
                         obj2.Nro_Emision = obj.Nro_Emision;
                         obj2.Nro_Notificacion = nroNotificacion;
                         nroNotificacion++;
-                        obj2.Cuit = item.cuit;
-                        obj2.Nombre = $"{item.nombre} {item.apellido}";
+                        obj2.Cuit = item.Cuit;
+                        obj2.Nombre = $"{item.Nombre} {item.Apellido}";
+                        obj2.Dominio = item.Denominacion;
                         obj2.Cod_estado_cidi = 0;
                         lst.Add(obj2);
                     }
