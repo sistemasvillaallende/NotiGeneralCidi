@@ -496,7 +496,6 @@
                     tablaAutos.rows().every(function () {
                         let $checkbox = $(this.node()).find('input.filaCheckbox');
                         if ($checkbox.is(':checked')) {
-                            console.log("hola")
                             let rowData = tablaAutos.row(this).data();
                             seleccionados.push({
                                 dominio: rowData.dominio,

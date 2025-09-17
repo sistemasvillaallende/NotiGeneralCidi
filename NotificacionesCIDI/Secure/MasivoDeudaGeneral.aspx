@@ -205,7 +205,7 @@
                                             <a class="btn btn-primary" onclick="abrirmodalConceptos();">
                                                 <i class="fa fa-upload" aria-hidden="true"></i> Cargar Excel
                                             </a>
-                                            <span class="text-muted ml-3">Nota: El archivo Excel debe contener únicamente una columna de CUIT en la primera columna.</span>
+                                            <span class="text-muted ml-3">Nota: Descargar el modelo en Excel para cargar el excel.</span>
                                         </div>                                     
                                         <div style="width:200px">
                                         <asp:Label ID="lblUploadStatus" runat="server" CssClass="alert alert-success d-block mt-3"  Visible="false"></asp:Label>
@@ -265,8 +265,7 @@
                                 <div class="col-md-12"
                                      style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
                                         <asp:GridView ID="gvConceptos" CssClass="table "
-                                            AutoGenerateColumns="false" OnRowCommand="gvConceptos_RowCommand"
-                                            OnRowDeleting="gvConceptos_RowDeleting" DataKeyNames="cuit"
+                                            AutoGenerateColumns="false" DataKeyNames="cuit"
                                             EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
                                             ForeColor="#333333" GridLines="None">
                                             <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
@@ -428,46 +427,38 @@
                 </div>
             </div>
         </div>
-    <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-plantillas">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Lista de planillas</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <asp:GridView ID="gvPlantilla" CssClass="table" runat="server"
-                            OnRowDataBound="gvPlantilla_RowDataBound"
-                            OnRowCommand="gvPlantilla_RowCommand" AutoGenerateColumns="False"
-                            CellPadding="4" ForeColor="#333333" GridLines="None" EnableViewState="true"
-                            DataKeyNames="id,contenido">
-                            <AlternatingRowStyle BackColor="White" ForeColor="#284775">
-                            </AlternatingRowStyle>
-                            <Columns>
-                                <asp:TemplateField HeaderText="Seleccionar">
-                                    <ItemTemplate>
-                                        <asp:CheckBox ID="chkSeleccionar" runat="server"  onclick="SoloUnCheckbox(this); event.cancelBubble=true;"/>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField DataField="nom_plantilla" ControlStyle-Width="10%"
-                                    HeaderText="Nombre Plantilla" SortExpression="nom_plantilla" />
-                            </Columns>
-                        </asp:GridView>
-                    </div>
-                </div>
-                <div class="modal-footer">  
-                <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" CssClass="btn btn-primary" OnClick="btnObtenerSeleccionados_Click" />
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+   <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl modal-plantillas">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h4 class="modal-title">Lista de plantillas</h4>
+                 <button type="button" class="btn-close small me-1" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.8);"></button>
+             </div>
+             <div class="modal-body body-plantillas" style=" margin-right:20px ; margin-left:20px;">
+                 <div class="form-group">
+                     <table id="tablaPlantillas" class="table" style="width:100%">
+                         <thead>
+                             <tr>
+                                 <th>Nombre de Plantilla</th>
+                             </tr>
+                         </thead>
+                         <tbody></tbody>
+                     </table>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" id="btnSeleccionar" class="btn btn-primary">Seleccionar</button>
+                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+             </div>
+         </div>
+     </div>
+ </div>
 
-        <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
 
         <script>
 
@@ -496,9 +487,6 @@
         }
     }
 
-             function abrirModalPlantillas() {
-                        $('#plantillaModalNotas').modal('show');
-            }
 
             function abrirmodalConceptos() {
                 $('#modalImportExcel').modal('show');
@@ -514,18 +502,6 @@
                         }
                     }
 
-                    // Funcion para solo seleccionar un checkbox
-                    function SoloUnCheckbox(chk) {
-                        var grid = document.getElementById('<%= gvPlantilla.ClientID %>');
-                        var checkboxes = grid.getElementsByTagName('input');
-
-                        for (var i = 0; i < checkboxes.length; i++) {
-                            var tipo = checkboxes[i].type;
-                            if (tipo === 'checkbox' && checkboxes[i] !== chk) {
-                                checkboxes[i].checked = false;
-                            }
-                        }
-                    }
 
 // para agregar spinner en generar notificaciones
             if (window.jQuery) {
@@ -574,5 +550,105 @@
                             elm[i].click();
                     }
             }
+
+
+            function abrirModalPlantillas() {
+                $('#plantillaModalNotas').modal('show');
+
+                if (!$.fn.DataTable.isDataTable('#tablaPlantillas')) {
+                    $.ajax({
+                        url: 'MasivoDeudaGeneral.aspx/ObtenerPlantillas',
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify({}),
+                        success: function (response) {
+                            let datos = JSON.parse(response.d);
+
+                            $('#tablaPlantillas').DataTable({
+                                data: datos,
+                                columns: [
+                                    {
+                                        data: 'id',
+                                        title: 'Seleccionar',
+                                        orderable: false,
+                                        render: function (data, type, row) {
+                                            return `<input type="checkbox" name="plantilla" value="${data}" onclick="SoloUnCheckbox(this)">`;
+                                        }
+                                    },
+                                    {
+                                        data: 'nom_plantilla',
+                                        title: 'Nombre de Plantilla'
+                                    }
+                                ],
+                                paging: true,
+                                searching: true,
+                                info: false,
+                                language: {
+                                    emptyTable: "No hay plantillas disponibles"
+                                }
+                            });
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error al cargar plantillas:', status, error);
+                            console.error('Respuesta completa:', xhr.responseText);
+
+                            $('#tablaPlantillas tbody').html(
+                                '<tr><td colspan="2" class="text-center text-danger">Error al cargar plantillas</td></tr>'
+                            );
+                        }
+                    });
+                } else {
+
+                    $('#tablaPlantillas').DataTable().clear().destroy();
+                    abrirModalPlantillas();
+                }
+            }
+
+            //  PERMITIR SELECCIONAR SOLO UN CHECKBOX DE LAS PLANTILLAS
+            function SoloUnCheckbox(checkbox) {
+                $('input[name="plantilla"]').not(checkbox).prop('checked', false);
+            }
+
+            let plantillaSeleccionada = null;
+            // BOTON SELECCIONAR PLANTILLAS Y GUARDARLOS EN EL CODE BEHIND
+            $('#btnSeleccionar').on('click', function (e) {
+                e.preventDefault();
+
+                let seleccionado = $('input[name="plantilla"]:checked').val();
+
+                if (!seleccionado) {
+                    alert("Seleccioná una plantilla.");
+                    return false;
+                }
+
+                plantillaSeleccionada = parseInt(seleccionado);
+
+                $.ajax({
+                    type: "POST",
+                    url: "MasivoDeudaGeneral.aspx/GuardarPlantillaEnSesion",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ idPlantilla: parseInt(seleccionado) }),
+                    beforeSend: function () {
+                        console.log("Enviando datos:", JSON.stringify({ idPlantilla: parseInt(seleccionado) }));
+                    },
+                    success: function (response) {
+                        $('#plantillaModalNotas').modal('hide');
+                        $('#divResultados').show();
+                        $('#divFiltros').hide();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Status:", status);
+                        console.log("Error:", error);
+                        console.log("Response Text:", xhr.responseText);
+                        console.log("Status Code:", xhr.status);
+                        alert("Error al guardar plantilla en sesión: " + error);
+                    }
+                });
+
+                return false;
+            });
         </script>
     </asp:Content>

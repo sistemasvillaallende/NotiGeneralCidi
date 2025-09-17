@@ -30,40 +30,67 @@ namespace NotificacionesCIDI.Secure
                 Session["subsistema"] = subsistema;
                 Session["id_plantilla"] = null;
                 Session.Remove("id_plantilla");
-                fillNotas();
 
             }
         }
 
-        private void fillNotas()
+        [System.Web.Services.WebMethod]
+        public static string ObtenerPlantillas()
         {
-            List<NotasPlantillas> plantillas = null;
+            string urlBase = ConfigurationManager.AppSettings["urlBase"];
+            List<DAL.NotasPlantillas> lst = null;
             var options = new RestClientOptions(urlBase)
             {
+                MaxTimeout = -1,
                 RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
             };
             var client = new RestClient(options);
             var request = new RestRequest("Plantillas/getPlantillas", Method.Get);
+
             RestResponse response = client.Execute(request);
 
             if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
             {
-                plantillas = JsonConvert.DeserializeObject<List<NotasPlantillas>>(response.Content);
+                return response.Content;
             }
-
-            var listaNotas = plantillas
-                   .Select(n => new { n.id, n.nom_plantilla, n.contenido })
-                   .ToList();
-
-            gvPlantilla.DataSource = listaNotas;
-            gvPlantilla.DataBind();
-            if (listaNotas.Count > 0)
+            else
             {
-                gvPlantilla.UseAccessibleHeader = true;
-                gvPlantilla.HeaderRow.TableSection = TableRowSection.TableHeader;
+                return "[]";
             }
-
         }
+
+        [System.Web.Services.WebMethod]
+        public static string GuardarPlantillaEnSesion(int idPlantilla)
+        {
+            try
+            {
+                HttpContext.Current.Session["PlantillaSeleccionada"] = idPlantilla;
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.Message;
+            }
+        }
+
+
+        [WebMethod]
+        public static string ProcesarSeleccionados(List<ModeloNotificacionGeneral> seleccionados)
+        {
+            try
+            {
+                HttpContext.Current.Session["seleccionados"] = seleccionados;
+
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return "Error: a" + ex.Message;
+            }
+        }
+
+
+
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
@@ -72,9 +99,6 @@ namespace NotificacionesCIDI.Secure
             divResultados.Visible = true;
         }
 
-        protected void gvDeuda_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-        }
 
 
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
@@ -107,8 +131,8 @@ namespace NotificacionesCIDI.Secure
                 int nroNotificacion = 1;
                 NotificacionGeneral obj = new NotificacionGeneral();
                 List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
-                int idPlantilla = Convert.ToInt32(Session["id_plantilla"]);
-                if (Session["id_plantilla"] == null)
+                int idPlantilla = Convert.ToInt32(Session["PlantillaSeleccionada"]);
+                if (Session["PlantillaSeleccionada"] == null)
                 {
                     ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
                     "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
@@ -355,7 +379,7 @@ namespace NotificacionesCIDI.Secure
                     List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
                     lst = pasarALst(dt);
                     Session["registros_notificar"] = lst;
-                    gvConceptos.DataSource = lst;
+                    gvConceptos.DataSource = lst; 
                     gvConceptos.DataBind();
                     if (gvConceptos.Rows.Count > 0)
                     {
@@ -463,59 +487,6 @@ namespace NotificacionesCIDI.Secure
             catch (Exception)
             {
                 throw;
-            }
-        }
-        protected void gvConceptos_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            try
-            {
-                if (e.CommandName == "Page")
-                    return;
-                if (e.CommandName == "delete")
-                {
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        protected void gvConceptos_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-
-        }
-        protected void gvPlantilla_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                CheckBox chk = (CheckBox)e.Row.FindControl("chkSeleccionar");
-
-                if (chk != null)
-                {
-                    e.Row.Attributes["onclick"] = $"javascript:SeleccionarFila(this, '{chk.ClientID}');";
-                }
-                e.Row.Attributes["style"] = "cursor:pointer;";
-            }
-        }
-
-        protected void gvPlantilla_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-
-        }
-
-        protected void btnObtenerSeleccionados_Click(object sender, EventArgs e)
-        {
-            foreach (GridViewRow row in gvPlantilla.Rows)
-            {
-                CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSeleccionar");
-                if (chkSeleccionar.Checked)
-                {
-                    int id_plantilla = Convert.ToInt32(gvPlantilla.DataKeys[row.RowIndex]["id"]);
-
-                    Session["id_plantilla"] = id_plantilla;
-
-
-                }
             }
         }
 

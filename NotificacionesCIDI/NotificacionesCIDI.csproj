@@ -2263,6 +2263,7 @@
     <Compile Include="Secure\MasivoDeudaIyC.aspx.designer.cs">
       <DependentUpon>MasivoDeudaIyC.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Secure\ModeloNotificacionGeneral.cs" />
     <Compile Include="Secure\NotificacionesGeneral.aspx.cs">
       <DependentUpon>NotificacionesGeneral.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
