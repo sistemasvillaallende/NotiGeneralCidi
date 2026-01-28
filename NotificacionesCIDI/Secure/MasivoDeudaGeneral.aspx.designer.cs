@@ -42,15 +42,6 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.WebControls.Label lblUploadStatus;
 
         /// <summary>
-        /// Control btnFiltros.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnFiltros;
-
-        /// <summary>
         /// Control lblError.
         /// </summary>
         /// <remarks>
@@ -78,24 +69,6 @@ namespace NotificacionesCIDI.Secure
         protected global::System.Web.UI.WebControls.HiddenField MyHiddenControl2;
 
         /// <summary>
-        /// Control divResultados.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divResultados;
-
-        /// <summary>
-        /// Control btnGenerarNoti.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnGenerarNoti;
-
-        /// <summary>
         /// Control btnExportExcel.
         /// </summary>
         /// <remarks>
@@ -103,50 +76,5 @@ namespace NotificacionesCIDI.Secure
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnExportExcel;
-
-        /// <summary>
-        /// Control gvConceptos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvConceptos;
-
-        /// <summary>
-        /// Control btnDescargarModelo.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDescargarModelo;
-
-        /// <summary>
-        /// Control fUploadConceptos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fUploadConceptos;
-
-        /// <summary>
-        /// Control lblFileError.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFileError;
-
-        /// <summary>
-        /// Control btnImportExcel.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnImportExcel;
     }
 }

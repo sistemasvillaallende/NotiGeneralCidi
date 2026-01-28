@@ -24,7 +24,7 @@
     }
 
     .modal-title {
-		text-align: center !important ;
+		text-align: left !important ;
 		font-size: 26px !important;
 		margin: 10px 15px 10px 0px !important;
         
@@ -212,14 +212,7 @@
                                         </div>
                                     </div>
                                 </div>                                
-                            <div class="row">
-                                <div class="col-md-12" style="text-align: right;">
-                                    <button type="button" class="btn btn-outline-primary" id="btnFiltros" runat="server"
-                                        onserverclick="btnFiltros_ServerClick">
-                                        <span class="fa fa-filter"></span>&nbsp;Aplicar Filtros
-                                    </button>
-                                </div>
-                            </div>
+                            
                             <asp:Label ID="lblError" runat="server" ForeColor="Red" Font-Bold="true" Text="">
                             </asp:Label>
                             </div>
@@ -234,13 +227,8 @@
                                 <span class="sr-only">45% completado</span>
                             </div>
                         </div>
-                        <div id="divResultados" runat="server" visible="false" style="margin-top: 20px;">
-                             <div class="row">
-                                <div class="col-md-12 mb-4 d-flex justify-content-end">
-                                    <a href="javascript:history.back()" class=" fs-6 text-decoration-none" style="color: #367fa9"> 
-                                        <i class="fa-solid fa-arrow-left"></i> Volver
-                                    </a>
-                                </div>
+                        <div id="divResultados"  style="display: none; margin-top: 20px;">
+                             <div class="row">                             
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
@@ -250,11 +238,12 @@
                                     <a class="btn btn-outline-danger" onclick="abrirModalPlantillas();">
                                         <i class="fa fa-list" aria-hidden="true"></i> Plantillas
                                     </a>
-                                    <button runat="server" id="btnGenerarNoti"
-                                        onserverclick="btnGenerarNoti_ServerClick"
+                                    <button  id="btnGenerarNoti"
+                                        onclick="generarNotificacion();"
                                         type="button" class="btn btn-outline-primary" >
-                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación </button>
-                                        <button type="button" runat="server" id="btnExportExcel"
+                                        <span class="fa fa-sheet-plastic"></span>&nbsp;Generar notificación 
+                                    </button>
+                                    <button type="button" runat="server" id="btnExportExcel"
                                         onserverclick="btnExportExcel_ServerClick" class="btn btn-outline-success"
                                         data-toggle="modal" data-target="#page-change-name">
                                         <span class="fa fa-sheet-plastic"></span>&nbsp;Exportar a Excel                                           
@@ -262,37 +251,19 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 20px; margin-right:15px;">
-                                <div class="col-md-12"
-                                     style="margin-left: 15px; height: 70vh; overflow-y: scroll; border: solid lightgray; border-radius: 15px;">
-                                        <asp:GridView ID="gvConceptos" CssClass="table "
-                                            AutoGenerateColumns="false" DataKeyNames="cuit"
-                                            EmptyDataText="No hay resultados..." runat="server" CellPadding="4"
-                                            ForeColor="#333333" GridLines="None">
-                                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
-                                            <Columns>
-                                                <asp:TemplateField HeaderText="Seleccionar">
-                                                    <HeaderTemplate>
-                                                        <input type="checkbox" id="chkAll" name="chkAll"
-                                                            onclick="javascript: SelectAllCheckboxes(this)" />
-                                                    </HeaderTemplate>
-                                                    <ItemTemplate>
-                                                        <asp:CheckBox ID="chkSelect" runat="server" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                 <asp:BoundField DataField="Cuit" ControlStyle-Width="10%"
-                                                     HeaderText="CUIT" />
-                                                <asp:BoundField DataField="Nombre" ControlStyle-Width="10%"
-                                                    HeaderText="Nombre" />
-                                                <asp:BoundField DataField="Apellido" ControlStyle-Width="10%"
-                                                    HeaderText="Apellido" />
-                                                <asp:BoundField DataField="Domicilio" ControlStyle-Width="10%"
-                                                    HeaderText="Domicilio" />
-                                                <asp:BoundField DataField="Denominacion" ControlStyle-Width="10%"
-                                                    HeaderText="Denominacion" />
-                                            </Columns>
-                                        </asp:GridView>
-                                    </div>
+                            <div class="col-md-12" style="margin-left: 15px;">
+                                <table id="tableDatosExcel" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <!-- Las columnas se generarán dinámicamente -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Los datos se cargarán dinámicamente -->
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </section>
@@ -321,146 +292,95 @@
               </div>
           </div>
 
-        <div class="modal fade" id="modalEjemplo" data-bs-backdrop="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-info text-white">
-                        <h5 class="" style="margin-top:12px">
-                            <i class="fa-solid fa-table me-2"></i>
-                            Formato Requerido - Archivo Excel
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.7);"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <div class="alert alert-info mb-4">
-                            <i class="fa-solid fa-info-circle me-2"></i>
-                            <asp:Button ID="btnDescargarModelo" runat="server"
-                                Text="Descargar Modelo Excel"
-                                CssClass="btn-download"
-                                OnClick="btnDescargarModelo_Click" />
-                        </div>
-                        <div class="table-responsive mb-4">
-                            <div class="table-excel-wrapper">
-
-                                <table class="table table-excel table-striped">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th class="text-center">CUIT</th>
-                                            <th class="text-center">Nombre</th>
-                                            <th class="text-center">Apellido</th>
-                                            <th class="text-center">Domicilio</th>
-                                            <th class="text-center">Denominacion</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>20123456789</td>
-                                            <td>Juan Carlos</td>
-                                            <td>Pérez</td>
-                                            <td>Av. Córdoba 1234</td>
-                                            <td>ABC106</td>
-                                        </tr>
-                                        <tr>
-                                            <td>27876543214</td>
-                                            <td>María Elena</td>
-                                            <td>González</td>
-                                            <td>San Martín 567</td>
-                                            <td>1260</td>
-                                        </tr>
-                                        <tr class="selected">
-                                            <td>30112233445</td>
-                                            <td>Roberto</td>
-                                            <td>Fernández</td>
-                                            <td>Belgrano 890</td>
-                                            <td>CIR: 01 - SEC: 03 - MAN: 1 - PAR: 0159 - P_H: 599</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-muted fst-italic text-center" colspan="5">...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="alert alert-warning mb-0">
-                            <i class="fa-solid fa-exclamation-triangle me-2"></i>
-                            <strong>Importante:</strong>
-                            <ul class="list-unstyled mb-0 mt-2">
-                                <li>• La columna debe llamarse exactamente <strong>"CUIT"</strong></li>
-                                <li>• Formato: <strong>solo números</strong> (sin guiones ni espacios)</li>
-                                <li>• ❌ No usar guiones → <code>20-30123456-7</code></li>
-                                <li>• ❌ No usar espacios → <code>20 301234567</code></li>
-                                <li>• ✅ Correcto → <code>20301234567</code></li>
-                                <li>• Archivo en formato <strong>.xlsx</strong> o <strong>.xls</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade" id="modalImportExcel">
             <div class="modal-dialog modal-upload">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Subir lista de Cuit</h4>
+                        <h4 class="modal-title">Importar Excel a notificar</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="text-end mb-3">
-                            <button type="button" class="btn btn-outline-info btn-sm" onclick="verEjemplo()">
-                                <i class="fa-solid fa-eye me-1"></i>
-                                Ver formato requerido
-                    </button>
-                </div>
                         <div class="form-group">
-                            <label  class="pt-2 pb-3">Subir archivo</label>
-                            <asp:FileUpload ID="fUploadConceptos" CssClass="form-control" runat="server" onchange="hideErrorMessage()" />
-                            <asp:Label ID="lblFileError" runat="server" CssClass="text-danger" 
-                                Text="*Archivo no ha sido seleccionado" Visible="false"></asp:Label>
+                            <label class="pt-2 pb-3">Subir archivo</label>
+                            <input type="file" id="fileExcel" class="form-control" accept=".xlsx,.xls" />
+                            <span id="lblFileError" class="text-danger" style="display: none;">*Archivo no ha sido seleccionado</span>
+                        </div>
+                        <div id="divProgress" style="display: none;" class="mt-3">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%">
+                                    Procesando...
+                       
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-danger">Cancelar</button>
-                        <asp:Button ID="btnImportExcel" CssClass="btn btn-primary"
-                            OnClientClick="this.disabled=true;this.value = 'Procesando...'" UseSubmitBehavior="false"
-                            OnClick="btnImportExcel_Click" runat="server" Text="Aceptar" />
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="btnImportExcel" class="btn btn-primary" onclick="importarExcel()">Aceptar</button>
                     </div>
                 </div>
             </div>
         </div>
-   <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-     <div class="modal-dialog modal-xl modal-plantillas">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h4 class="modal-title">Lista de plantillas</h4>
-                 <button type="button" class="btn-close small me-1" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.8);"></button>
-             </div>
-             <div class="modal-body body-plantillas" style=" margin-right:20px ; margin-left:20px;">
-                 <div class="form-group">
-                     <table id="tablaPlantillas" class="table" style="width:100%">
-                         <thead>
-                             <tr>
-                                 <th>Nombre de Plantilla</th>
-                             </tr>
-                         </thead>
-                         <tbody></tbody>
-                     </table>
-                 </div>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" id="btnSeleccionar" class="btn btn-primary">Seleccionar</button>
-                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-             </div>
-         </div>
-     </div>
- </div>
 
-    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+        <div class="modal fade" id="plantillaModalNotas" tabindex="-1" aria-labelledby="plantillaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="modal-title" >Nueva Plantilla</h4>
+                            <h8 class="text-muted mb-0">Revisá que los datos estén correctos antes de continuar.</h8>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="transform: scale(0.7);"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Nombre de la plantilla</label>
+                                <input type="text" id="txtNombrePlantilla" class="form-control" placeholder="Ingrese un nombre para la plantilla">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Variables disponibles</label>
+                                <select id="selectVariables" class="form-select" onchange="insertarVariableAutomatica()">
+                                    <option value="">Seleccione una variable para insertar</option>
+                                    <!-- Se cargarán dinámicamente las columnas del Excel -->
+                                </select>
+                                <small class="text-muted">Seleccione una variable para insertarla automáticamente en el cursor</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contenido de la plantilla</label>
+                            <div id="editor-container" style="height: 40vh; width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="d-flex flex-row gap-3">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="guardarPlantillaEnServidor()">
+                                <i class="fa fa-save"></i>Guardar Plantilla
+       
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">
+                                <i class="fa fa-times"></i>Cancelar
+       
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css" />
     <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
 
         <script>
+
+            
+            ///////////////////////
 
 
             function mostrarModalConCuit() {
@@ -481,7 +401,7 @@
 
             // Función para ocultar mensaje de error
             function hideErrorMessage() {
-                var lblError = document.getElementById('<%= lblFileError.ClientID %>');
+                var lblError = document.getElementById('lblFileError');
         if (lblError) {
             lblError.style.display = 'none';
         }
@@ -506,7 +426,7 @@
 // para agregar spinner en generar notificaciones
             if (window.jQuery) {
                 $(document).ready(function() {
-                    $('#<%= btnGenerarNoti.ClientID %>').on('click', function(e) {
+                    $('btnGenerarNoti').on('click', function(e) {
                         var $btn = $(this);
                         
                         if ($btn.prop('disabled')) {
@@ -534,7 +454,7 @@
 
             function hideErrorMessage() {
                 // Hide the error message when a file is selected
-                document.getElementById('<%= lblFileError.ClientID %>').style.display = 'none';
+                document.getElementById('lblFileError').style.display = 'none';
             }
 
             // para seleccionar todos los checkboxs
@@ -611,44 +531,595 @@
                 $('input[name="plantilla"]').not(checkbox).prop('checked', false);
             }
 
-            let plantillaSeleccionada = null;
-            // BOTON SELECCIONAR PLANTILLAS Y GUARDARLOS EN EL CODE BEHIND
-            $('#btnSeleccionar').on('click', function (e) {
-                e.preventDefault();
+            //let plantillaSeleccionada = null;
+            //// BOTON SELECCIONAR PLANTILLAS Y GUARDARLOS EN EL CODE BEHIND
+            //$('#btnSeleccionar').on('click', function (e) {
+            //    e.preventDefault();
 
-                let seleccionado = $('input[name="plantilla"]:checked').val();
+            //    let seleccionado = $('input[name="plantilla"]:checked').val();
 
-                if (!seleccionado) {
-                    alert("Seleccioná una plantilla.");
-                    return false;
+            //    if (!seleccionado) {
+            //        alert("Seleccioná una plantilla.");
+            //        return false;
+            //    }
+
+            //    plantillaSeleccionada = parseInt(seleccionado);
+
+            //    $.ajax({
+            //        type: "POST",
+            //        url: "MasivoDeudaGeneral.aspx/GuardarPlantillaEnSesion",
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        data: JSON.stringify({ idPlantilla: parseInt(seleccionado) }),
+            //        beforeSend: function () {
+            //            console.log("Enviando datos:", JSON.stringify({ idPlantilla: parseInt(seleccionado) }));
+            //        },
+            //        success: function (response) {
+            //            $('#plantillaModalNotas').modal('hide');
+            //            $('#divResultados').show();
+            //            $('#divFiltros').hide();
+            //        },
+            //        error: function (xhr, status, error) {
+            //            console.log("Status:", status);
+            //            console.log("Error:", error);
+            //            console.log("Response Text:", xhr.responseText);
+            //            console.log("Status Code:", xhr.status);
+            //            alert("Error al guardar plantilla en sesión: " + error);
+            //        }
+            //    });
+
+            //    return false;
+            //});
+
+            ////////// Excel
+
+            let tablaDatos = null; // Variable global para el DataTable
+            let datosExcelActuales = null; // Guardar los datos actuales
+
+
+            function importarExcel() {
+                const fileInput = document.getElementById('fileExcel');
+                const file = fileInput.files[0];
+                const lblError = document.getElementById('lblFileError');
+                const btnImport = document.getElementById('btnImportExcel');
+                const divProgress = document.getElementById('divProgress');
+
+                // Validar que se haya seleccionado un archivo
+                if (!file) {
+                    lblError.style.display = 'block';
+                    return;
                 }
 
-                plantillaSeleccionada = parseInt(seleccionado);
+                lblError.style.display = 'none';
 
-                $.ajax({
-                    type: "POST",
-                    url: "MasivoDeudaGeneral.aspx/GuardarPlantillaEnSesion",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: JSON.stringify({ idPlantilla: parseInt(seleccionado) }),
-                    beforeSend: function () {
-                        console.log("Enviando datos:", JSON.stringify({ idPlantilla: parseInt(seleccionado) }));
-                    },
-                    success: function (response) {
-                        $('#plantillaModalNotas').modal('hide');
-                        $('#divResultados').show();
-                        $('#divFiltros').hide();
-                    },
-                    error: function (xhr, status, error) {
-                        console.log("Status:", status);
-                        console.log("Error:", error);
-                        console.log("Response Text:", xhr.responseText);
-                        console.log("Status Code:", xhr.status);
-                        alert("Error al guardar plantilla en sesión: " + error);
+                // Validar extensión
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (extension !== 'xlsx' && extension !== 'xls') {
+                    alert('Por favor seleccione un archivo Excel válido (.xlsx o .xls)');
+                    return;
+                }
+
+                // Deshabilitar botón y mostrar progreso
+                btnImport.disabled = true;
+                btnImport.textContent = 'Procesando...';
+                divProgress.style.display = 'block';
+
+                // Crear FormData para enviar el archivo
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Obtener URL base del web.config
+                const urlBase = '<%= ConfigurationManager.AppSettings["urlBase"] %>';
+
+                // Enviar archivo al endpoint
+                fetch(urlBase + 'api/excel/parse', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al procesar el archivo');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Datos del Excel:', data);
+
+                        // Aquí procesas los datos recibidos
+                        procesarDatosExcel(data);
+
+                        // Cerrar modal
+                        $('#modalImportExcel').modal('hide');
+
+                        // Limpiar input
+                        fileInput.value = '';
+
+                       // alert('Archivo procesado correctamente. ' + data.rowCount + ' filas encontradas.');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al procesar el archivo: ' + error.message);
+                    })
+                    .finally(() => {
+                        // Restaurar botón y ocultar progreso
+                        btnImport.disabled = false;
+                        btnImport.textContent = 'Aceptar';
+                        divProgress.style.display = 'none';
+                    });
+            }
+
+            function procesarDatosExcel(data) {
+                console.log('Procesando datos:', data);
+
+                // Destruir DataTable anterior si existe
+                if (tablaDatos !== null) {
+                    tablaDatos.destroy();
+                    $('#tableDatosExcel').empty();
+                }
+
+                // Validar que haya datos
+                if (!data.rows || data.rows.length === 0) {
+                    alert('El archivo no contiene datos');
+                    return;
+                }
+
+                // Construir las columnas dinámicamente
+                let columns = [
+                    {
+                        title: '<input type="checkbox" id="chkAll" onclick="seleccionarTodos(this)" />',
+                        data: null,
+                        orderable: false,
+                        width: '50px',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return `<input type="checkbox" class="chkRow" data-index="${meta.row}" />`;
+                        }
+                    }
+                ];
+
+                // Agregar las columnas del Excel
+                data.columns.forEach(col => {
+                    columns.push({
+                        title: col,
+                        data: col,
+                        defaultContent: ''
+                    });
+                });
+
+                // Inicializar DataTable
+                tablaDatos = $('#tableDatosExcel').DataTable({
+                    data: data.rows,
+                    columns: columns,
+                    paging: true,
+                    pageLength: 25,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    responsive: true,
+                    language: {
+                        emptyTable: "No hay datos disponibles",
+                        search: "Buscar:",
+                        lengthMenu: "Mostrar _MENU_ registros",
+                        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        paginate: {
+                            first: "Primero",
+                            last: "Último",
+                            next: "Siguiente",
+                            previous: "Anterior"
+                        }
                     }
                 });
 
-                return false;
+                console.log('DataTable creado con', data.rowCount, 'filas');
+                mostrarResultados();
+                cargarVariablesDisponibles(data);
+            }
+ 
+            function mostrarResultados() {
+                document.getElementById('divResultados').style.display = 'block';
+            }
+
+            /// FALTA PLANTILLA Y FALTA NOTIFICAR
+
+            // Función para seleccionar/deseleccionar todos
+            function seleccionarTodos(checkbox) {
+                $('.chkRow').prop('checked', checkbox.checked);
+            }
+
+            // Función para obtener filas seleccionadas
+            function obtenerFilasSeleccionadas() {
+                let seleccionadas = [];
+
+                $('.chkRow:checked').each(function () {
+                    let index = $(this).data('index');
+                    let rowData = tablaDatos.row(index).data();
+                    seleccionadas.push(rowData);
+                });
+
+                return seleccionadas;
+            }
+
+            // Función para generar notificación
+            function generarNotificacion() {
+                let seleccionadas = obtenerFilasSeleccionadas();
+
+                if (seleccionadas.length === 0) {
+                    alert('Debe seleccionar al menos un registro');
+                    return;
+                }
+
+                console.log('Generando notificación para:', seleccionadas);
+
+                // Aquí puedes llamar a tu endpoint para generar la notificación
+                // Por ejemplo:
+                /*
+                $.ajax({
+                    url: 'TuPagina.aspx/GenerarNotificacion',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify({ datos: seleccionadas }),
+                    success: function(response) {
+                        alert('Notificación generada correctamente');
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error al generar notificación');
+                    }
+                });
+                */
+            }
+
+
+
+            /////////////////////// Insertar variables dinamicas en editor
+
+
+            ////////////////////// Configuracion Plantillas
+
+            var quill;
+            var quillEditor = null;
+
+            $(document).ready(function () {
+                // Inicializar Quill
+                quill = new Quill('#editor-container', {
+                    theme: 'snow',
+                    modules: {
+
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            [{ 'size': ['small', false, 'large', 'huge'] }],
+                            ['bold', 'italic', 'underline'],
+                            ['link'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            ['clean']
+                        ]
+                    }
+                });
+
+
+                // Limpiar Quill cuando se cierra el modal
+                $('#plantillaModalNotas').on('hidden.bs.modal', function () {
+                    if (quill) {
+                        quill.root.innerHTML = '';
+                    }
+                    $('#hiddenInput2').val('');
+                });
+
             });
+
+            function setQuillContent(content) {
+                if (quillEditor) {
+                    quillEditor.root.innerHTML = content;
+                }
+            }
+
+
+            let columnasDisponibles = []; // Columnas del Excel cargado
+
+            function cargarVariablesDisponibles(data) {
+                const select = document.getElementById('selectVariables');
+                select.innerHTML = '<option value="">Seleccione una variable para insertar</option>';
+
+                if (!data.columns) {
+                    alert('Primero debe cargar un archivo Excel');
+                    return;
+                }
+
+                columnasDisponibles = data.columns;
+                console.log("columnas", columnasDisponibles);
+
+                columnasDisponibles.forEach(columna => {
+                    const option = document.createElement('option');
+                    option.value = `{${columna}}`;
+                    option.textContent = columna;
+                    select.appendChild(option);
+                });
+            }
+            function insertarVariableAutomatica() {
+                const select = document.getElementById('selectVariables');
+                const variable = select.value;
+
+                // Si no hay variable seleccionada, no hacer nada
+                if (!variable) {
+                    return;
+                }
+
+                // Insertar la variable en el editor
+                insertVariable(variable);
+
+                // Resetear el select a la opción por defecto
+                select.value = '';
+
+                // Mantener el foco en el editor
+                quill.focus();
+            }
+
+            // Insertar variable en el cursor del editor
+            function insertVariable(variable) {
+                if (!quill) {
+                    alert('Editor no inicializado');
+                    return;
+                }
+
+                // Obtener la posición actual del cursor
+                const range = quill.getSelection(true);
+
+                // Insertar la variable en la posición del cursor
+                quill.insertText(range.index, variable + ' ');
+
+                // Mover el cursor después de la variable insertada
+                quill.setSelection(range.index + variable.length + 1);
+            }
+
+
+            ///////////////////////////////////// Guardar Plantilla y seleccionarla
+
+            function guardarPlantillaEnServidor(plantilla) {
+                const urlBase = '<%= ConfigurationManager.AppSettings["urlBase"] %>';
+
+                // Mostrar loading
+                const btnGuardar = event.target;
+                const textoOriginal = btnGuardar.innerHTML;
+                btnGuardar.disabled = true;
+                btnGuardar.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Guardando...';
+
+                fetch(urlBase + 'Plantillas/insertNuevaPlantilla', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(plantilla)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al guardar la plantilla');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Plantilla guardada:', data);
+                        alert('Plantilla guardada correctamente');
+
+                        // Cerrar modal
+                        $('#plantillaModal').modal('hide');
+
+                        // Limpiar campos
+                        document.getElementById('txtNombrePlantilla').value = '';
+                        quillEditor.setText('');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al guardar la plantilla: ' + error.message);
+                    })
+                    .finally(() => {
+                        // Restaurar botón
+                        btnGuardar.disabled = false;
+                        btnGuardar.innerHTML = textoOriginal;
+                    });
+            }
+
+
+
+            //////////////////////////////////////////////// GUARDAR PLANTILLA ////////////////
+
+            let plantillaSeleccionada = null;
+
+            function guardarPlantillaEnServidor() {
+                // Obtener valores del HTML
+                const nombrePlantilla = document.getElementById('txtNombrePlantilla').value.trim();
+                const contenido = quill.root.innerHTML;
+                const contenidoTexto = quill.getText();
+
+                // Validaciones
+                if (!nombrePlantilla) {
+                    alert('Debe ingresar un nombre para la plantilla');
+                    document.getElementById('txtNombrePlantilla').focus();
+                    return;
+                }
+
+                console.log("nombre Plantilla",nombrePlantilla);
+
+                if (!contenidoTexto.trim()) {
+                    alert('El contenido de la plantilla no puede estar vacío');
+                    quill.focus();
+                    return;
+                }
+
+                const urlBase = '<%= ConfigurationManager.AppSettings["urlBase"] %>';
+
+                const btnGuardar = event.target;
+                const textoOriginal = btnGuardar.innerHTML;
+                btnGuardar.disabled = true;
+                btnGuardar.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Guardando...';
+
+                let nuevoId = null;
+
+                // Paso 1: Obtener el ID máximo
+                fetch(urlBase + 'Plantillas/getMaxId', {
+                    method: 'GET'
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al obtener el ID máximo');
+                        }
+                        return response.json();
+                    })
+                    .then(idMax => {
+                        console.log('ID Máximo obtenido:', idMax);
+                        nuevoId = idMax + 1;
+
+                        // Preparar objeto para insertar según tu estructura
+                        const plantillaParaInsertar = {
+                            id: nuevoId,
+                            fecha_alta: new Date().toISOString(),
+                            id_subsistema: 8,
+                            nom_plantilla: nombrePlantilla,
+                            id_secretaria: 0,
+                            id_oficina: 0,
+                            contenido: contenido
+                        };
+
+                        console.log('Insertando plantilla:', plantillaParaInsertar);
+
+                        // Paso 2: Insertar la nueva plantilla
+                        return fetch(urlBase + 'Plantillas/insertNuevaPlantilla', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(plantillaParaInsertar)
+                        });
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al insertar la plantilla');
+                        }
+                        return;
+                    })
+                    .then(resultado => {
+ 
+                        // Paso 3: Guardar el ID en sesión mediante WebMethod
+                        return guardarPlantillaEnSesionWebMethod(nuevoId);
+                    })
+                    .then(resultadoSesion => {
+                        console.log('Plantilla guardada en sesión:', resultadoSesion);
+
+                        alert('Plantilla guardada y seleccionada correctamente');
+
+                        // Cerrar modal
+                        $('#plantillaModalNotas').modal('hide');
+
+                        // Limpiar campos
+                        document.getElementById('txtNombrePlantilla').value = '';
+                        quill.setText('');
+
+                        // Mostrar confirmación visual
+                        //mostrarPlantillaSeleccionada(nombrePlantilla, nuevoId);
+                    })
+                    .catch(error => {
+                        console.error('Error completo:', error);
+                        alert('Error al guardar la plantilla: ' + error.message);
+                    })
+                    .finally(() => {
+                        btnGuardar.disabled = false;
+                        btnGuardar.innerHTML = textoOriginal;
+                    });
+            }
+
+            // Guardar plantilla en sesión usando WebMethod
+            function guardarPlantillaEnSesionWebMethod(idPlantilla) {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: "POST",
+                        url: "MasivoDeudaGeneral.aspx/GuardarPlantillaEnSesion",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({
+                            idPlantilla: parseInt(idPlantilla)                        }),
+                        beforeSend: function () {
+                            console.log("Guardando en sesión:", { idPlantilla });
+                        },
+                        success: function (response) {
+                            if (response.d === "OK") {
+                                plantillaSeleccionada = parseInt(idPlantilla);
+                                resolve(response.d);
+                            } else {
+                                reject(new Error(response.d));
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error al guardar en sesión:", error);
+                            reject(new Error("Error al guardar plantilla en sesión: " + error));
+                        }
+                    });
+                });
+            }
+
+
+            //// Para mandarle al web method 
+
+
+            function generarNotificacion() {
+                let seleccionadas = obtenerFilasSeleccionadas();
+
+                if (seleccionadas.length === 0) {
+                    alert('Debe seleccionar al menos un registro');
+                    return;
+                }
+
+                if (!plantillaSeleccionada) {
+                    alert('Debe crear y seleccionar una plantilla primero');
+                    abrirModalPlantilla();
+                    return;
+                }
+
+                console.log('Generando notificación para:', seleccionadas.length, 'registros');
+                console.log('Registros seleccionados:', seleccionadas);
+
+                // Mostrar loading en el botón
+                const btnGenerar = document.getElementById('btnGenerarNoti');
+                const textoOriginal = btnGenerar.innerHTML;
+                btnGenerar.disabled = true;
+                btnGenerar.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Generando...';
+
+                // Convertir a JSON string cada registro individualmente
+                const registrosComoJson = seleccionadas.map(registro => JSON.stringify(registro));
+
+                console.log('Registros como JSON:', registrosComoJson);
+
+                // Llamar al WebMethod
+                $.ajax({
+                    url: 'MasivoDeudaGeneral.aspx/GenerarNotificacion',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        registrosSeleccionados: registrosComoJson
+                    }),
+                    success: function (response) {
+                        let resultado = JSON.parse(response.d);
+                        console.log('Resultado:', resultado);
+
+                        if (resultado.success) {
+                            alert(resultado.mensaje);
+                            window.location.href = `./DetNotificacionesGeneral.aspx?nro_emision=${resultado.nroEmision}&subsistema=${resultado.subsistema}`;
+                        } else {
+                            alert(resultado.mensaje);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        console.error('Response:', xhr.responseText);
+                        alert('Error al generar notificaciones: ' + error);
+                    },
+                    complete: function () {
+                        btnGenerar.disabled = false;
+                        btnGenerar.innerHTML = textoOriginal;
+                    }
+                });
+            }
+
+
+
         </script>
     </asp:Content>

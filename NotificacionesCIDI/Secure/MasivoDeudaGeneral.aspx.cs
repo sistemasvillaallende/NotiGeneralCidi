@@ -94,87 +94,188 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnFiltros_ServerClick(object sender, EventArgs e)
         {
-            List<DAL.MasivoDeudaGeneral> lst = new List<DAL.MasivoDeudaGeneral>();
-            divFiltros.Visible = false;
-            divResultados.Visible = true;
+            //List<DAL.MasivoDeudaGeneral> lst = new List<DAL.MasivoDeudaGeneral>();
+            //divFiltros.Visible = false;
+            //divResultados.Visible = true;
         }
 
 
 
-        protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+        //protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        List<ModeloNotificacionGeneral> todosLosRegistros = (List<ModeloNotificacionGeneral>)Session["registros_notificar"];
+
+        //        List<ModeloNotificacionGeneral> lstFiltrada = new List<ModeloNotificacionGeneral>();
+
+        //        foreach (GridViewRow row in gvConceptos.Rows)
+        //        {
+        //            CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSelect");
+
+        //            if (chkSeleccionar != null && chkSeleccionar.Checked)
+        //            {
+        //                int index = row.RowIndex;
+        //                lstFiltrada.Add(todosLosRegistros[index]);
+        //            }
+        //        }
+
+        //        if (lstFiltrada.Count == 0)
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
+        //            "$('#modalErrorTexto').text('Debe seleccionar algun registro.');" +
+        //            "$('#modalError').modal('show');", true);
+        //            return;
+        //        }
+
+        //        int nroNotificacion = 1;
+        //        NotificacionGeneral obj = new NotificacionGeneral();
+        //        List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
+        //        int idPlantilla = Convert.ToInt32(Session["PlantillaSeleccionada"]);
+        //        if (Session["PlantillaSeleccionada"] == null)
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
+        //            "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
+        //            "$('#modalError').modal('show');", true);
+        //            return;
+        //        }
+        //        var plantilla = GetPlantillaByPk(idPlantilla);
+        //        string contenidoPlantilla = plantilla.contenido;
+        //        int subsistema = Convert.ToInt32(Session["subsistema"]);
+        //        obj.Nro_Emision = GetMaxNroEmision() + 1;
+        //        obj.subsistema = subsistema;
+        //        obj.Cantidad_Reg = lstFiltrada.Count();
+        //        obj.id_plantilla = idPlantilla;
+        //        foreach (var item in lstFiltrada)
+        //        {
+        //            if (item.Cuit != null && item.Cuit.Length == 11)
+        //            {
+        //                DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
+        //                obj2.Nro_Emision = obj.Nro_Emision;
+        //                obj2.Nro_Notificacion = nroNotificacion;
+        //                nroNotificacion++;
+        //                obj2.Cuit = item.Cuit;
+        //                obj2.Nombre = $"{item.Nombre} {item.Apellido}";
+        //                obj2.Dominio = item.Denominacion;
+        //                obj2.Cod_estado_cidi = 0;
+        //                lst.Add(obj2);
+        //            }
+        //        }
+        //        InsertDetalleNotificacion(lst);
+        //        InsertNotificacionGeneral(obj);
+        //        Response.Redirect($"./DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+        /// <summary>
+        /// ///////Web method para seleccionar los elementos de las filas
+        /// </summary>
+        /// <param name="lst"></param>
+        /// 
+
+        [System.Web.Services.WebMethod]
+        public static string GenerarNotificacion(List<string> registrosSeleccionados)
         {
             try
             {
-                List<ModeloNotificacionGeneral> todosLosRegistros = (List<ModeloNotificacionGeneral>)Session["registros_notificar"];
-
-                List<ModeloNotificacionGeneral> lstFiltrada = new List<ModeloNotificacionGeneral>();
-
-                foreach (GridViewRow row in gvConceptos.Rows)
+                if (registrosSeleccionados == null || registrosSeleccionados.Count == 0)
                 {
-                    CheckBox chkSeleccionar = (CheckBox)row.FindControl("chkSelect");
-
-                    if (chkSeleccionar != null && chkSeleccionar.Checked)
-                    {
-                        int index = row.RowIndex;
-                        lstFiltrada.Add(todosLosRegistros[index]);
-                    }
+                    return JsonConvert.SerializeObject(new { success = false, mensaje = "Debe seleccionar al menos un registro" });
                 }
 
-                if (lstFiltrada.Count == 0)
+                int? idPlantilla = HttpContext.Current.Session["PlantillaSeleccionada"] as int?;
+                if (!idPlantilla.HasValue)
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
-                    "$('#modalErrorTexto').text('Debe seleccionar algun registro.');" +
-                    "$('#modalError').modal('show');", true);
-                    return;
+                    return JsonConvert.SerializeObject(new { success = false, mensaje = "Debe seleccionar una plantilla" });
                 }
 
-                int nroNotificacion = 1;
-                NotificacionGeneral obj = new NotificacionGeneral();
-                List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
-                int idPlantilla = Convert.ToInt32(Session["PlantillaSeleccionada"]);
-                if (Session["PlantillaSeleccionada"] == null)
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "showErrorModal",
-                    "$('#modalErrorTexto').text('Debe seleccionar una plantilla.');" +
-                    "$('#modalError').modal('show');", true);
-                    return;
-                }
-                var plantilla = GetPlantillaByPk(idPlantilla);
+                int subsistema = Convert.ToInt32(HttpContext.Current.Session["subsistema"]);
+
+                // Obtener plantilla
+                var plantilla = GetPlantillaByPk(idPlantilla.Value);
                 string contenidoPlantilla = plantilla.contenido;
-                int subsistema = Convert.ToInt32(Session["subsistema"]);
+
+                // Crear objeto de notificación
+                NotificacionGeneral obj = new NotificacionGeneral();
                 obj.Nro_Emision = GetMaxNroEmision() + 1;
                 obj.subsistema = subsistema;
-                obj.Cantidad_Reg = lstFiltrada.Count();
-                obj.id_plantilla = idPlantilla;
-                foreach (var item in lstFiltrada)
+                obj.Cantidad_Reg = registrosSeleccionados.Count;
+                obj.id_plantilla = idPlantilla.Value;
+
+                List<DAL.DetNotificacionGeneral> lst = new List<DetNotificacionGeneral>();
+                int nroNotificacion = 1;
+
+                foreach (var registroJson in registrosSeleccionados)
                 {
-                    if (item.Cuit != null && item.Cuit.Length == 11)
+                    // Deserializar cada registro
+                    var item = JsonConvert.DeserializeObject<Dictionary<string, string>>(registroJson);
+
+                    // Buscar CUIT en diferentes variaciones
+                    string cuit = ObtenerValorColumna(item, "Cuit", "CUIT", "cuit");
+
+                    if (!string.IsNullOrEmpty(cuit) && cuit.Length == 11)
                     {
                         DetNotificacionGeneral obj2 = new DetNotificacionGeneral();
                         obj2.Nro_Emision = obj.Nro_Emision;
                         obj2.Nro_Notificacion = nroNotificacion;
                         nroNotificacion++;
-                        obj2.Cuit = item.Cuit;
-                        obj2.Nombre = $"{item.Nombre} {item.Apellido}";
-                        obj2.Dominio = item.Denominacion;
+                        obj2.Cuit = cuit;
+
+                        // Guardar el objeto completo como JSON en el campo Nombre
+                        obj2.Nombre = registroJson; // Ya viene como JSON string
+
+                        obj2.Dominio = "";
                         obj2.Cod_estado_cidi = 0;
                         lst.Add(obj2);
                     }
                 }
+
+                if (lst.Count == 0)
+                {
+                    return JsonConvert.SerializeObject(new { success = false, mensaje = "No hay registros válidos para procesar" });
+                }
+
                 InsertDetalleNotificacion(lst);
                 InsertNotificacionGeneral(obj);
-                Response.Redirect($"./DetNotificacionesGeneral.aspx?nro_emision={obj.Nro_Emision}&subsistema={subsistema}");
+
+                return JsonConvert.SerializeObject(new
+                {
+                    success = true,
+                    nroEmision = obj.Nro_Emision,
+                    subsistema = subsistema,
+                    cantidadProcesados = lst.Count,
+                    mensaje = $"Notificación generada correctamente. {lst.Count} registros procesados."
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return JsonConvert.SerializeObject(new { success = false, mensaje = "Error: " + ex.Message });
             }
         }
 
-        private void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
+        // Método auxiliar para obtener valor de columna
+        private static string ObtenerValorColumna(Dictionary<string, string> item, params string[] posiblesNombres)
+        {
+            foreach (var nombre in posiblesNombres)
+            {
+                if (item.ContainsKey(nombre) && !string.IsNullOrWhiteSpace(item[nombre]))
+                {
+                    return item[nombre].Trim();
+                }
+            }
+            return "";
+        }
+
+
+        private static void InsertDetalleNotificacion(List<DAL.DetNotificacionGeneral> lst)
         {
             try
             {
+                string urlBase = ConfigurationManager.AppSettings["urlBase"];
                 var options = new RestClientOptions(urlBase)
                 {
                     MaxTimeout = -1,
@@ -195,10 +296,11 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        private void InsertNotificacionGeneral(NotificacionGeneral obj)
+        private static void InsertNotificacionGeneral(NotificacionGeneral obj)
         {
             try
             {
+                string urlBase = ConfigurationManager.AppSettings["urlBase"];
                 var options = new RestClientOptions(urlBase)
                 {
                     MaxTimeout = -1,
@@ -219,10 +321,11 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        private NotasPlantillas GetPlantillaByPk(int idPlantilla)
+        private static NotasPlantillas GetPlantillaByPk(int idPlantilla)
         {
             try
             {
+                string urlBase = ConfigurationManager.AppSettings["urlBase"];
                 NotasPlantillas plantilla = null;
                 var options = new RestClientOptions(urlBase)
                 {
@@ -248,11 +351,12 @@ namespace NotificacionesCIDI.Secure
 
         }
 
-        private int GetMaxNroEmision()
+        private static int GetMaxNroEmision()
         {
             try
             {
                 int MaxValue = 0;
+                string urlBase = ConfigurationManager.AppSettings["urlBase"];
                 var options = new RestClientOptions(urlBase)
                 {
                     MaxTimeout = -1,
@@ -308,22 +412,22 @@ namespace NotificacionesCIDI.Secure
         {
             try
             {
-                if (fUploadConceptos.HasFile)
-                {
-                    lblFileError.Visible = false;
-                    ImportExcel();
+                //if (fUploadConceptos.HasFile)
+                //{
+                //    lblFileError.Visible = false;
+                //    ImportExcel();
 
-                    lblUploadStatus.Text = "Archivo  subido exitosamente";
-                    lblUploadStatus.Visible = true;
-                }
-                else
-                {
-                    lblFileError.Visible = true;
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
-               "$('#modalImportExcel').modal('show');", true);
+                //    lblUploadStatus.Text = "Archivo  subido exitosamente";
+                //    lblUploadStatus.Visible = true;
+                //}
+                //else
+                //{
+               //     lblFileError.Visible = true;
+               //     ScriptManager.RegisterStartupScript(this, this.GetType(), "keepModalOpen",
+               //"$('#modalImportExcel').modal('show');", true);
 
 
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -331,140 +435,140 @@ namespace NotificacionesCIDI.Secure
             }
         }
 
-        protected void ImportExcel()
-        {
+        //protected void ImportExcel()
+        //{
 
-            string nombreArchivo = uploadFile(fUploadConceptos, "archivos");
-            string path = Server.MapPath("archivos/" + nombreArchivo);
-            using (XLWorkbook workBook = new XLWorkbook(path))
-            {
-                //Read the first Sheet from Excel file.
-                IXLWorksheet workSheet = workBook.Worksheet(1);
+            //string nombreArchivo = uploadFile(fUploadConceptos, "archivos");
+            //string path = Server.MapPath("archivos/" + nombreArchivo);
+            //using (XLWorkbook workBook = new XLWorkbook(path))
+            //{
+            //    //Read the first Sheet from Excel file.
+            //    IXLWorksheet workSheet = workBook.Worksheet(1);
 
-                //Create a new DataTable.
-                DataTable dt = new DataTable();
+            //    //Create a new DataTable.
+            //    DataTable dt = new DataTable();
 
-                //Loop through the Worksheet rows.
-                bool firstRow = true;
-                foreach (IXLRow row in workSheet.Rows())
-                {
-                    //Use the first row to add columns to DataTable.
-                    if (firstRow)
-                    {
-                        foreach (IXLCell cell in row.Cells())
-                        {
-                            dt.Columns.Add(cell.Value.ToString());
-                        }
-                        //Agrego a esta columna que es para agregarle botones para acciones
-                        //dt.Columns.Add("Accion");
-                        firstRow = false;
-                    }
-                    else
-                    {
-                        //Add rows to DataTable.
-                        dt.Rows.Add();
-                        int i = 0;
-                        foreach (IXLCell cell in row.Cells())
-                        {
-                            if (cell.Value.ToString().Length > 0)
-                            {
-                                dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
-                                i++;
-                            }
-                        }
-                    }
-                }
-                if (dt.Rows.Count > 0)
-                {
-                    List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
-                    lst = pasarALst(dt);
-                    Session["registros_notificar"] = lst;
-                    gvConceptos.DataSource = lst; 
-                    gvConceptos.DataBind();
-                    if (gvConceptos.Rows.Count > 0)
-                    {
-                        gvConceptos.UseAccessibleHeader = true;
-                        gvConceptos.HeaderRow.TableSection = TableRowSection.TableHeader;
-                    }
-                }
-            }
-        }
+            //    //Loop through the Worksheet rows.
+            //    bool firstRow = true;
+            //    foreach (IXLRow row in workSheet.Rows())
+            //    {
+            //        //Use the first row to add columns to DataTable.
+            //        if (firstRow)
+            //        {
+            //            foreach (IXLCell cell in row.Cells())
+            //            {
+            //                dt.Columns.Add(cell.Value.ToString());
+            //            }
+            //            //Agrego a esta columna que es para agregarle botones para acciones
+            //            //dt.Columns.Add("Accion");
+            //            firstRow = false;
+            //        }
+            //        else
+            //        {
+            //            //Add rows to DataTable.
+            //            dt.Rows.Add();
+            //            int i = 0;
+            //            foreach (IXLCell cell in row.Cells())
+            //            {
+            //                if (cell.Value.ToString().Length > 0)
+            //                {
+            //                    dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
+            //                    i++;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    if (dt.Rows.Count > 0)
+            //    {
+            //        List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
+            //        lst = pasarALst(dt);
+            //        Session["registros_notificar"] = lst;
+            //        gvConceptos.DataSource = lst; 
+            //        gvConceptos.DataBind();
+            //        if (gvConceptos.Rows.Count > 0)
+            //        {
+            //            gvConceptos.UseAccessibleHeader = true;
+            //            gvConceptos.HeaderRow.TableSection = TableRowSection.TableHeader;
+            //        }
+            //    }
+        //    }
+        //}
 
 
-        private List<ModeloNotificacionGeneral> pasarALst(DataTable dt)
-        {
-            List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
-            string cuit = String.Empty;
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
+        //private List<ModeloNotificacionGeneral> pasarALst(DataTable dt)
+        //{
+            //List<ModeloNotificacionGeneral> lst = new List<ModeloNotificacionGeneral>();
+            //string cuit = String.Empty;
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
 
-                ModeloNotificacionGeneral obj = new ModeloNotificacionGeneral();
-                if (dt.Rows[i]["cuit"] != DBNull.Value)
-                {
-                    obj.Cuit = Convert.ToString(dt.Rows[i]["cuit"]);
-                }
+            //    ModeloNotificacionGeneral obj = new ModeloNotificacionGeneral();
+            //    if (dt.Rows[i]["cuit"] != DBNull.Value)
+            //    {
+            //        obj.Cuit = Convert.ToString(dt.Rows[i]["cuit"]);
+            //    }
 
-                if (dt.Rows[i]["Nombre"] != DBNull.Value)
-                {
-                    obj.Nombre = Convert.ToString(dt.Rows[i]["Nombre"]);
-                }
+            //    if (dt.Rows[i]["Nombre"] != DBNull.Value)
+            //    {
+            //        obj.Nombre = Convert.ToString(dt.Rows[i]["Nombre"]);
+            //    }
 
-                if (dt.Rows[i]["Apellido"] != DBNull.Value)
-                {
-                    obj.Apellido = Convert.ToString(dt.Rows[i]["Apellido"]);
-                }
+            //    if (dt.Rows[i]["Apellido"] != DBNull.Value)
+            //    {
+            //        obj.Apellido = Convert.ToString(dt.Rows[i]["Apellido"]);
+            //    }
 
-                if (dt.Rows[i]["Domicilio"] != DBNull.Value)
-                {
-                    obj.Domicilio = Convert.ToString(dt.Rows[i]["Domicilio"]);
-                }
+            //    if (dt.Rows[i]["Domicilio"] != DBNull.Value)
+            //    {
+            //        obj.Domicilio = Convert.ToString(dt.Rows[i]["Domicilio"]);
+            //    }
 
-                if (dt.Rows[i]["Denominacion"] != DBNull.Value)
-                {
-                    obj.Denominacion = Convert.ToString(dt.Rows[i]["Denominacion"]);
-                }
-                lst.Add(obj);
-            }
+            //    if (dt.Rows[i]["Denominacion"] != DBNull.Value)
+            //    {
+            //        obj.Denominacion = Convert.ToString(dt.Rows[i]["Denominacion"]);
+            //    }
+            //    lst.Add(obj);
+            //}
 
-            return lst;
-        }
+            //return lst;
+        //}
 
-        private DAL.MasivoDeudaGeneral GetVecinoDigitalByCuit(string cuit)
-        {
-            try
-            {
-                DAL.MasivoDeudaGeneral vd = null;
-                var options = new RestClientOptions(urlBase)
-                {
-                    MaxTimeout = -1,
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
+        //private DAL.MasivoDeudaGeneral GetVecinoDigitalByCuit(string cuit)
+        //{
+        //    try
+        //    {
+        //        DAL.MasivoDeudaGeneral vd = null;
+        //        var options = new RestClientOptions(urlBase)
+        //        {
+        //            MaxTimeout = -1,
+        //            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+        //        };
 
-                var client = new RestClient(options);
-                var request = new RestRequest($"NotificadorGenerico/getVecinoDigitalByCuit?cuit={cuit}", Method.Get);
-                RestResponse response = client.Execute(request);
+        //        var client = new RestClient(options);
+        //        var request = new RestRequest($"NotificadorGenerico/getVecinoDigitalByCuit?cuit={cuit}", Method.Get);
+        //        RestResponse response = client.Execute(request);
 
-                if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
-                {
-                    vd = JsonConvert.DeserializeObject<DAL.MasivoDeudaGeneral>(response.Content);
-                }
-                return vd;
+        //        if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+        //        {
+        //            vd = JsonConvert.DeserializeObject<DAL.MasivoDeudaGeneral>(response.Content);
+        //        }
+        //        return vd;
 
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
 
-        }
-        private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
-        {
-            string resultado = plantilla;
-            resultado = resultado.Replace("{nombre}", nombre);
-            resultado = resultado.Replace("{apellido}", apellido);
-            resultado = resultado.Replace("{cuit}", cuit);
-            return resultado;
-        }
+        //}
+        //private string ReemplazarVariables(string plantilla, string nombre, string apellido, string cuit)
+        //{
+        //    string resultado = plantilla;
+        //    resultado = resultado.Replace("{nombre}", nombre);
+        //    resultado = resultado.Replace("{apellido}", apellido);
+        //    resultado = resultado.Replace("{cuit}", cuit);
+        //    return resultado;
+        //}
 
         private void EnviarNotificacion(string contenidoPersonalizado, string cuit, int Nro_Emision, int Nro_notificacion)
         {
@@ -496,118 +600,160 @@ namespace NotificacionesCIDI.Secure
 
         protected void btnExportExcel_ServerClick(object sender, EventArgs e)
         {
-            try
-            {
-                lstFiltrada = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
+        //    try
+        //    {
+        //        lstFiltrada = (List<DAL.MasivoDeudaGeneral>)Session["registros_notificar"];
 
-                if (lstFiltrada == null || lstFiltrada.Count == 0)
-                {
-                    lblError.Text = "No hay datos para exportar.";
-                    return;
-                }
+        //        if (lstFiltrada == null || lstFiltrada.Count == 0)
+        //        {
+        //            lblError.Text = "No hay datos para exportar.";
+        //            return;
+        //        }
 
-                Response.Clear();
-                Response.Buffer = true;
-                Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("content-disposition", "attachment;filename=DeudaGeneral_Export_" + DateTime.Now.ToString("yyyyMMdd") + ".xls");
-                Response.Charset = "";
+        //        Response.Clear();
+        //        Response.Buffer = true;
+        //        Response.ContentType = "application/vnd.ms-excel";
+        //        Response.AddHeader("content-disposition", "attachment;filename=DeudaGeneral_Export_" + DateTime.Now.ToString("yyyyMMdd") + ".xls");
+        //        Response.Charset = "";
 
-                Page.EnableViewState = false;
+        //        Page.EnableViewState = false;
 
-                using (StringWriter sw = new StringWriter())
-                {
-                    HtmlTextWriter hw = new HtmlTextWriter(sw);
-                    gvConceptos.AllowPaging = false;
-                    gvConceptos.DataSource = lstFiltrada;
-                    gvConceptos.DataBind();
-                    gvConceptos.Columns[0].Visible = false;
-                    gvConceptos.HeaderStyle.ForeColor = System.Drawing.Color.Black;
-                    gvConceptos.HeaderStyle.BackColor = System.Drawing.Color.LightGray;
-                    gvConceptos.RowStyle.BackColor = System.Drawing.Color.White;
+        //        using (StringWriter sw = new StringWriter())
+        //        {
+        //            HtmlTextWriter hw = new HtmlTextWriter(sw);
+        //            gvConceptos.AllowPaging = false;
+        //            gvConceptos.DataSource = lstFiltrada;
+        //            gvConceptos.DataBind();
+        //            gvConceptos.Columns[0].Visible = false;
+        //            gvConceptos.HeaderStyle.ForeColor = System.Drawing.Color.Black;
+        //            gvConceptos.HeaderStyle.BackColor = System.Drawing.Color.LightGray;
+        //            gvConceptos.RowStyle.BackColor = System.Drawing.Color.White;
 
-                    gvConceptos.RenderControl(hw);
-                    gvConceptos.Columns[0].Visible = true;
-                    Response.Write(sw.ToString());
-                    Response.End();
-                }
-            }
-            catch (System.Threading.ThreadAbortException)
-            {
-                Response.End();
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = $"Export Error: {ex.Message}\nStack Trace: {ex.StackTrace}";
-                lblError.Text = "Error al exportar: " + ex.Message;
-                System.Diagnostics.Debug.WriteLine(errorMessage);
-            }
+        //            gvConceptos.RenderControl(hw);
+        //            gvConceptos.Columns[0].Visible = true;
+        //            Response.Write(sw.ToString());
+        //            Response.End();
+        //        }
+        //    }
+        //    catch (System.Threading.ThreadAbortException)
+        //    {
+        //        Response.End();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string errorMessage = $"Export Error: {ex.Message}\nStack Trace: {ex.StackTrace}";
+        //        lblError.Text = "Error al exportar: " + ex.Message;
+        //        System.Diagnostics.Debug.WriteLine(errorMessage);
+        //    }
         }
 
-        public override void VerifyRenderingInServerForm(Control control)
-        {
-        }
+        //public override void VerifyRenderingInServerForm(Control control)
+        //{
+        //}
 
-        protected void btnDescargarModelo_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                GenerarExcelConHtmlTextWriter();
-            }
-            catch (Exception ex)
-            {
-                // falta maejar mejor este error
-                Response.Write($"<script>alert('Error al generar el archivo: {ex.Message}');</script>");
-            }
-        }
+        //protected void btnDescargarModelo_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        GenerarExcelConHtmlTextWriter();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // falta maejar mejor este error
+        //        Response.Write($"<script>alert('Error al generar el archivo: {ex.Message}');</script>");
+        //    }
+        //}
 
-        private void GenerarExcelConHtmlTextWriter()
-        {
-            Response.Clear();
-            Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", "attachment;filename=Modelo_Datos.xls");
+        //private void GenerarExcelConHtmlTextWriter()
+        //{
+        //    Response.Clear();
+        //    Response.ContentType = "application/vnd.ms-excel";
+        //    Response.AddHeader("Content-Disposition", "attachment;filename=Modelo_Datos.xls");
 
-            using (StringWriter sw = new StringWriter())
-            {
-                using (HtmlTextWriter hw = new HtmlTextWriter(sw))
-                {
+        //    using (StringWriter sw = new StringWriter())
+        //    {
+        //        using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+        //        {
 
-                    hw.WriteLine("<html xmlns:o=\"urn:schemas-microsoft-com:office:office\"");
-                    hw.WriteLine("xmlns:x=\"urn:schemas-microsoft-com:office:excel\"");
-                    hw.WriteLine("xmlns=\"http://www.w3.org/TR/REC-html40\">");
-                    hw.WriteLine("<head>");
-                    hw.WriteLine("<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">");
-                    hw.WriteLine("<meta name=ProgId content=Excel.Sheet>");
-                    hw.WriteLine("<meta name=Generator content=\"Microsoft Excel 15\">");
-                    hw.WriteLine("<!--[if gte mso 9]><xml>");
-                    hw.WriteLine("<x:ExcelWorkbook>");
-                    hw.WriteLine("<x:ExcelWorksheets>");
-                    hw.WriteLine("<x:ExcelWorksheet>");
-                    hw.WriteLine("<x:Name>Modelo_Datos</x:Name>");
-                    hw.WriteLine("<x:WorksheetOptions><x:DefaultRowHeight>285</x:DefaultRowHeight></x:WorksheetOptions>");
-                    hw.WriteLine("</x:ExcelWorksheet>");
-                    hw.WriteLine("</x:ExcelWorksheets>");
-                    hw.WriteLine("</x:ExcelWorkbook>");
-                    hw.WriteLine("</xml><![endif]-->");
-                    hw.WriteLine("</head>");
-                    hw.WriteLine("<body>");
-                    hw.WriteLine("<table>");
+        //            hw.WriteLine("<html xmlns:o=\"urn:schemas-microsoft-com:office:office\"");
+        //            hw.WriteLine("xmlns:x=\"urn:schemas-microsoft-com:office:excel\"");
+        //            hw.WriteLine("xmlns=\"http://www.w3.org/TR/REC-html40\">");
+        //            hw.WriteLine("<head>");
+        //            hw.WriteLine("<meta http-equiv=Content-Type content=\"text/html; charset=utf-8\">");
+        //            hw.WriteLine("<meta name=ProgId content=Excel.Sheet>");
+        //            hw.WriteLine("<meta name=Generator content=\"Microsoft Excel 15\">");
+        //            hw.WriteLine("<!--[if gte mso 9]><xml>");
+        //            hw.WriteLine("<x:ExcelWorkbook>");
+        //            hw.WriteLine("<x:ExcelWorksheets>");
+        //            hw.WriteLine("<x:ExcelWorksheet>");
+        //            hw.WriteLine("<x:Name>Modelo_Datos</x:Name>");
+        //            hw.WriteLine("<x:WorksheetOptions><x:DefaultRowHeight>285</x:DefaultRowHeight></x:WorksheetOptions>");
+        //            hw.WriteLine("</x:ExcelWorksheet>");
+        //            hw.WriteLine("</x:ExcelWorksheets>");
+        //            hw.WriteLine("</x:ExcelWorkbook>");
+        //            hw.WriteLine("</xml><![endif]-->");
+        //            hw.WriteLine("</head>");
+        //            hw.WriteLine("<body>");
+        //            hw.WriteLine("<table>");
 
-                    hw.WriteLine("<tr>");
-                    string[] headers = { "CUIT", "Nombre", "Apellido", "Domicilio", "Denominacion" };
+        //            hw.WriteLine("<tr>");
+        //            string[] headers = { "CUIT", "Nombre", "Apellido", "Domicilio", "Denominacion" };
 
-                    foreach (string header in headers)
-                    {
-                        hw.WriteLine($"<td>{header}</td>");
-                    }
-                    hw.WriteLine("</tr>");
+        //            foreach (string header in headers)
+        //            {
+        //                hw.WriteLine($"<td>{header}</td>");
+        //            }
+        //            hw.WriteLine("</tr>");
 
-                    hw.WriteLine("</table>");
-                    Response.Write(sw.ToString());
-                }
-            }
+        //            hw.WriteLine("</table>");
+        //            Response.Write(sw.ToString());
+        //        }
+        //    }
 
-            Response.End();
-        }
+        //    Response.End();
+        //}
+
+
+
+        ///////////////////////////////////////////////////
+        //[System.Web.Services.WebMethod]
+        //public static string ImportarExcel(string base64File, string fileName)
+        //{
+        //    try
+        //    {
+        //        string urlBase = ConfigurationManager.AppSettings["urlBase"];
+
+        //        // Convertir base64 a bytes
+        //        byte[] fileBytes = Convert.FromBase64String(base64File);
+
+        //        var options = new RestClientOptions(urlBase)
+        //        {
+        //            MaxTimeout = -1,
+        //            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+        //        };
+
+        //        var client = new RestClient(options);
+        //        var request = new RestRequest("api/excel/parse", Method.Post);
+
+        //        // Agregar el archivo como multipart/form-data
+        //        request.AddFile("file", fileBytes, fileName);
+
+        //        RestResponse response = client.Execute(request);
+
+        //        if (response.IsSuccessful && !string.IsNullOrEmpty(response.Content))
+        //        {
+        //            return response.Content;
+        //        }
+        //        else
+        //        {
+        //            return "{\"error\": \"Error al procesar el archivo\"}";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return "{\"error\": \"" + ex.Message + "\"}";
+        //    }
+        //}
 
     }
 }

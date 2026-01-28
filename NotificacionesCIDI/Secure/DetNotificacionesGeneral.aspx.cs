@@ -212,6 +212,97 @@ namespace NotificacionesCIDI.Secure
         }
 
 
+        //protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string contenidoPlantilla = Convert.ToString(Session["plantilla"]);
+        //        int nroEmision = Convert.ToInt32(Session["nro_emision"]);
+        //        int subsistema = Convert.ToInt32(Session["subsistema"]);
+        //        string subsistemaNombre = GetSubsistema(subsistema);
+        //        List<DAL.DetNotificacionGeneral> lstCompleted = CargarDetallesNotificacionesCompleta(nroEmision);
+        //        List<DAL.DetNotificacionGeneral> lstSeleccionados = new List<DAL.DetNotificacionGeneral>();
+        //        string denominacion = null;
+
+        //        foreach (GridViewRow row in gvNotGeneral.Rows)
+        //        {
+        //            CheckBox cb = (CheckBox)row.FindControl("chkSelect");
+        //            if (cb != null && cb.Checked)
+        //            {
+        //                int nroNotificacion = Convert.ToInt32(row.Cells[1].Text);
+        //                denominacion = row.Cells[3].Text;
+        //                var registroEncontrado = lstCompleted.FirstOrDefault(item => item.Nro_Notificacion == nroNotificacion);
+        //                if (registroEncontrado != null)
+        //                {
+        //                    lstSeleccionados.Add(registroEncontrado);
+        //                }
+        //            }
+        //        }
+
+        //        string nombre, apellido;
+        //        foreach (var item in lstSeleccionados)
+        //        {
+        //            if (item.Cuit.Trim() != null && item.Cuit.Trim().Length == 11)
+        //            {
+        //                string nombreCompleto = item.Nombre;
+        //                SepararNombreApellido(nombreCompleto, out nombre, out apellido);
+        //                string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit,denominacion );
+        //                EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion,subsistemaNombre);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+
+
+        //protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string contenidoPlantilla = Convert.ToString(Session["plantilla"]);
+        //        int nroEmision = Convert.ToInt32(Session["nro_emision"]);
+        //        int subsistema = Convert.ToInt32(Session["subsistema"]);
+        //        string subsistemaNombre = GetSubsistema(subsistema);
+        //        List<DAL.DetNotificacionGeneral> lstCompleted = CargarDetallesNotificacionesCompleta(nroEmision);
+        //        List<DAL.DetNotificacionGeneral> lstSeleccionados = new List<DAL.DetNotificacionGeneral>();
+        //        string denominacion = null;
+
+        //        foreach (GridViewRow row in gvNotGeneral.Rows)
+        //        {
+        //            CheckBox cb = (CheckBox)row.FindControl("chkSelect");
+        //            if (cb != null && cb.Checked)
+        //            {
+        //                int nroNotificacion = Convert.ToInt32(row.Cells[1].Text);
+        //                denominacion = row.Cells[3].Text;
+        //                var registroEncontrado = lstCompleted.FirstOrDefault(item => item.Nro_Notificacion == nroNotificacion);
+        //                if (registroEncontrado != null)
+        //                {
+        //                    lstSeleccionados.Add(registroEncontrado);
+        //                }
+        //            }
+        //        }
+
+        //        string nombre, apellido;
+        //        foreach (var item in lstSeleccionados)
+        //        {
+        //            if (item.Cuit.Trim() != null && item.Cuit.Trim().Length == 11)
+        //            {
+        //                string nombreCompleto = item.Nombre;
+        //                SepararNombreApellido(nombreCompleto, out nombre, out apellido);
+        //                string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit, denominacion);
+        //                EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion, subsistemaNombre);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
         protected void btnGenerarNoti_ServerClick(object sender, EventArgs e)
         {
             try
@@ -220,9 +311,9 @@ namespace NotificacionesCIDI.Secure
                 int nroEmision = Convert.ToInt32(Session["nro_emision"]);
                 int subsistema = Convert.ToInt32(Session["subsistema"]);
                 string subsistemaNombre = GetSubsistema(subsistema);
+
                 List<DAL.DetNotificacionGeneral> lstCompleted = CargarDetallesNotificacionesCompleta(nroEmision);
                 List<DAL.DetNotificacionGeneral> lstSeleccionados = new List<DAL.DetNotificacionGeneral>();
-                string denominacion = null;
 
                 foreach (GridViewRow row in gvNotGeneral.Rows)
                 {
@@ -230,7 +321,6 @@ namespace NotificacionesCIDI.Secure
                     if (cb != null && cb.Checked)
                     {
                         int nroNotificacion = Convert.ToInt32(row.Cells[1].Text);
-                        denominacion = row.Cells[3].Text;
                         var registroEncontrado = lstCompleted.FirstOrDefault(item => item.Nro_Notificacion == nroNotificacion);
                         if (registroEncontrado != null)
                         {
@@ -239,15 +329,28 @@ namespace NotificacionesCIDI.Secure
                     }
                 }
 
-                string nombre, apellido;
                 foreach (var item in lstSeleccionados)
                 {
                     if (item.Cuit.Trim() != null && item.Cuit.Trim().Length == 11)
                     {
-                        string nombreCompleto = item.Nombre;
-                        SepararNombreApellido(nombreCompleto, out nombre, out apellido);
-                        string contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit,denominacion );
-                        EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion,subsistemaNombre);
+                        string contenidoPersonalizado;
+
+                        // Detectar si el campo Nombre contiene JSON o es un nombre tradicional
+                        if (EsFormatoJson(item.Nombre))
+                        {
+                            // Usar el nuevo método de reemplazo dinámico
+                            contenidoPersonalizado = ReemplazarVariablesDinamicas(contenidoPlantilla, item.Nombre);
+                        }
+                        else
+                        {
+                            // Usar el método tradicional (para mantener compatibilidad con datos antiguos)
+                            string nombre, apellido;
+                            string nombreCompleto = item.Nombre;
+                            SepararNombreApellido(nombreCompleto, out nombre, out apellido);
+                            contenidoPersonalizado = ReemplazarVariables(contenidoPlantilla, nombre, apellido, item.Cuit, item.Dominio);
+                        }
+
+                        EnviarNotificacion(contenidoPersonalizado, item.Cuit, nroEmision, item.Nro_Notificacion, subsistemaNombre);
                     }
                 }
             }
@@ -256,6 +359,72 @@ namespace NotificacionesCIDI.Secure
                 throw ex;
             }
         }
+
+        // Método auxiliar para detectar si es JSON
+        private bool EsFormatoJson(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return false;
+
+            texto = texto.Trim();
+            return (texto.StartsWith("{") && texto.EndsWith("}")) ||
+                   (texto.StartsWith("[") && texto.EndsWith("]"));
+        }
+
+        private string ReemplazarVariablesDinamicas(string plantilla, string objetoJson)
+        {
+            try
+            {
+                // Deserializar el JSON a un diccionario
+                var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(objetoJson);
+
+                string resultado = plantilla;
+
+                // Reemplazar cada variable en la plantilla
+                foreach (var variable in variables)
+                {
+                    string key = variable.Key.Trim();
+                    string value = variable.Value ?? "";
+
+                    // Buscar y reemplazar con diferentes variaciones de la key
+                    // Esto maneja casos como {CUIT}, {cuit}, {Cuit}, {DATOS }, { DATOS}, etc.
+                    resultado = ReemplazarVariableConVariaciones(resultado, key, value);
+                }
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                // Si hay error al deserializar, intentar usar el método antiguo como fallback
+                return plantilla;
+            }
+        }
+
+        private string ReemplazarVariableConVariaciones(string texto, string nombreVariable, string valor)
+        {
+            // Reemplazar con el nombre exacto
+            texto = texto.Replace("{" + nombreVariable + "}", valor);
+
+            // Reemplazar con espacios antes/después (ej: { DATOS }, {DATOS })
+            texto = texto.Replace("{ " + nombreVariable + " }", valor);
+            texto = texto.Replace("{" + nombreVariable + " }", valor);
+            texto = texto.Replace("{ " + nombreVariable + "}", valor);
+
+            // Reemplazar en minúsculas
+            texto = texto.Replace("{" + nombreVariable.ToLower() + "}", valor);
+
+            // Reemplazar con primera letra mayúscula
+            if (nombreVariable.Length > 0)
+            {
+                string capitalized = char.ToUpper(nombreVariable[0]) + nombreVariable.Substring(1).ToLower();
+                texto = texto.Replace("{" + capitalized + "}", valor);
+            }
+
+            return texto;
+        }
+
+
+
 
         // Tuve que colocar este switch ya que el endpoint arriba no me trae PERSONAL y GENERAL
         private string GetSubsistema(object subsistema)
